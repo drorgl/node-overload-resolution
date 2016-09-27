@@ -21,30 +21,36 @@ overload_resolution::overload_resolution() {
 }
 
 
-void overload_resolution::register_type(v8::Local<v8::FunctionTemplate> functionTemplate, const char * name) {
+void overload_resolution::register_type(v8::Local<v8::FunctionTemplate> functionTemplate, const char * ns, const char * name) {
 	assert(_types.count(name) == 0 && "type name already exists");
 
 	auto ot = std::make_shared< object_type>();
 	ot->function_template .Reset(functionTemplate);
+	ot->ns = ns;
 	ot->name = name;
 	_types[name] = ot;
 }
 
-void overload_resolution::addOverload(const char * ns, const char * name, std::vector<std::shared_ptr<overload_info>> arguments, Nan::FunctionCallback callback) {
+void overload_resolution::addOverload(const char * ns, const char * className, const char * name, std::vector<std::shared_ptr<overload_info>> arguments, Nan::FunctionCallback callback) {
 	if (!_namespaces.count(ns)) {
 		_namespaces[ns] = o_r_namespace();
 		_namespaces[ns].name = ns;
 	}
+
+	if (!_namespaces[ns].classes.count(className)) {
+		_namespaces[ns].classes[className] = std::make_shared<o_r_class>();
+		_namespaces[ns].classes[className]->className = className;
+	}
 	
-	if (!_namespaces[ns].functions.count(name)) {
-		_namespaces[ns].functions[name] = std::vector<std::shared_ptr<o_r_function>>();
+	if (!_namespaces[ns].classes[className]->functions.count(name)) {
+		_namespaces[ns].classes[className]->functions[name] = std::vector<std::shared_ptr<o_r_function>>();
 	}
 	
 	auto f = std::make_shared<o_r_function>();
 	f->function = callback;
 	f->functionName = name;
 	f->parameters = arguments;
-	_namespaces[ns].functions[name].push_back(f);
+	_namespaces[ns].classes[className]->functions[name].push_back(f);
 }
 
 
@@ -161,12 +167,12 @@ bool overload_resolution::isConvertibleTo(v8::Local<v8::Value> param, const char
 	}
 
 	//if converting to primitive from a primitive, it is possible
-	if (_primitive_types.count(type) && _primitive_types.count(determineType(param))) {
+	if (_primitive_types.count(type) > 0 && _primitive_types.count(determineType(param)) > 0) {
 		return true;
 	}
 
 	//check prototypical inheritance
-	if (_types.count(type)) {
+	if (_types.count(type) > 0) {
 		if (Nan::New<v8::FunctionTemplate>(_types[type]->function_template)->HasInstance(param)) {
 			return true;
 		}
@@ -184,12 +190,18 @@ int overload_resolution::MatchOverload(o_r_function *func, Nan::NAN_METHOD_ARGS_
 	int parameterLength = std::max((int)func->parameters.size(), info.Length());
 	int rank = 0;
 
-
+	//in case there are no parameters and a candidate doesn't have any parameters, they most likely meant that overload
+	if ((info.Length() == 0) && (func->parameters.size() == 0)) {
+		return 1;
+	}
 
 	for (auto i = 0; i < parameterLength; i++) {
 		int local_rank = 0;
 		auto iparam = (info.Length() >= i) ? info[i] : Nan::Undefined();
 		auto fparam = (func->parameters.size() > i) ? func->parameters.at(i) : nullptr;
+
+		
+		
 
 		if (fparam == nullptr) {
 			break;
@@ -231,10 +243,28 @@ int overload_resolution::MatchOverload(o_r_function *func, Nan::NAN_METHOD_ARGS_
 }
 
 
-void overload_resolution::executeBestOverload(const char * ns, const char * name, Nan::NAN_METHOD_ARGS_TYPE info) {
+void overload_resolution::executeBestOverload(const char * ns, const char * className, const char * name, Nan::NAN_METHOD_ARGS_TYPE info) {
 	std::vector<std::pair<int, o_r_function *>> candidates;
 
-	auto implementations = _namespaces[ns].functions[name];
+	if (_namespaces.count(ns) ==0 || _namespaces[ns].classes.count(className) == 0) {
+		std::string errclass = "";
+		if (ns != NULL) {
+			errclass = ns;
+			errclass += "::";
+		}
+		if (className != NULL) {
+			errclass += className;
+			errclass += "::";
+		}
+
+		if (name != NULL) {
+			errclass += name;
+		}
+
+		errclass = "no overload for namespace or class " + errclass;
+		return Nan::ThrowError(errclass.c_str());
+	}
+	auto implementations = _namespaces[ns].classes[className]->functions[name];
 
 	for (auto i = 0; i < implementations.size(); i++) {
 		auto check = implementations[i];
@@ -255,7 +285,7 @@ void overload_resolution::executeBestOverload(const char * ns, const char * name
 		return bestOverload->second->function(info);
 	}
 
-	return Nan::ThrowError("not overload fulfills the parameters passed");
+	return Nan::ThrowError("no overload fulfills the parameters passed");
 }
 
 
@@ -265,10 +295,6 @@ Nan::NAN_METHOD_RETURN_TYPE overload_resolution::execute(const char * name_space
 	std::string className = "";
 	bool isStatic = false;
 
-	std::string mangled = "";
-
-	
-	
 	if (info.This()->IsFunction()) {
 		//static
 		className = *Nan::Utf8String(info.This().As<v8::Function>()->GetName());
@@ -279,11 +305,12 @@ Nan::NAN_METHOD_RETURN_TYPE overload_resolution::execute(const char * name_space
 		className = *Nan::Utf8String(info.This()->GetConstructorName());
 	}
 
-	//combine class + function + is_static to name
-	if (className != "Object") {
-		mangled = className + "::" + ((isStatic) ? "_" : "");
+	//if the className is Object, it means its not a member
+	if (className == "Object") {
+		className = "";
 	}
-	mangled  += functionName;
 
-	return executeBestOverload(name_space, mangled.c_str(), info);
+	functionName = ((isStatic) ? "_" : "") + functionName;
+
+	return executeBestOverload(name_space,className.c_str(), functionName.c_str(), info);
 }

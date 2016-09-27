@@ -97,6 +97,7 @@
 //
 struct object_type {
 	Nan::Persistent<v8::FunctionTemplate, Nan::CopyablePersistentTraits<v8::FunctionTemplate>> function_template;
+	const char * ns;
 	const char * name;
 };
 
@@ -126,9 +127,14 @@ struct o_r_function {
 	std::vector<std::shared_ptr<overload_info>> parameters;
 };
 
+struct o_r_class {
+	const char * className;
+	std::map<std::string, std::vector<std::shared_ptr< o_r_function>>> functions;
+};
+
 struct o_r_namespace {
 	const char * name;
-	std::map<std::string, std::vector<std::shared_ptr< o_r_function>>> functions;
+	std::map<std::string, std::shared_ptr< o_r_class>> classes;
 };
 //
 class overload_resolution {
@@ -152,14 +158,14 @@ public:
 	//function should be registerType
 	//should add to it all the basics, string, number, integer, boolean, array, object(?), buffer (?), function (is it possible to know the function signature?), promises(?)
 	//in case of array, which type is inside it, what to do if multiple types are in the array?
-	void register_type(v8::Local<v8::FunctionTemplate> functionTemplate, const char * name);
+	void register_type(v8::Local<v8::FunctionTemplate> functionTemplate, const char * ns, const char * name);
 
 	template <typename TDerived>
-	void register_type(const char * name) {
+	void register_type(const char * ns, const char * name) {
 		_structured_factory.register_type<TDerived>(name);
 	}
 
-	void addOverload(const char * ns, const char * name, std::vector<std::shared_ptr<overload_info>> arguments, Nan::FunctionCallback callback);
+	void addOverload(const char * ns, const char * className, const char * functionName, std::vector<std::shared_ptr<overload_info>> arguments, Nan::FunctionCallback callback);
 
 	const char * determineType(v8::Local<v8::Value> param);
 
@@ -172,7 +178,7 @@ public:
 	//3. discard non-matching options
 	int MatchOverload(o_r_function *func, Nan::NAN_METHOD_ARGS_TYPE info);
 
-	void executeBestOverload(const char * ns, const char * name, Nan::NAN_METHOD_ARGS_TYPE info);
+	void executeBestOverload(const char * ns, const char * className, const char * name, Nan::NAN_METHOD_ARGS_TYPE info);
 	
 	Nan::NAN_METHOD_RETURN_TYPE execute(const char * name_space, Nan::NAN_METHOD_ARGS_TYPE info);
 

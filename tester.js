@@ -152,5 +152,38 @@ tape('function overload 1 parameter, no defaults', function (t) {
     t.end();
 });
 
+
+
 //TODO: test member/static functions
+
+tape('member function overload 1 parameter, no defaults', function (t) {
+    t.doesNotThrow(function () {
+        let bc = new addon.base_class();
+        t.equal(bc.base_function(1), ".number", "number");
+        t.equal(bc.base_function(1), ".number", "number");
+        t.equal(bc.base_function(1.1), ".number", "number double");
+        t.equal(bc.base_function(2 ^ 33), ".number", "number long");
+        t.equal(bc.base_function("1"), ".string", "string");
+        t.equal(bc.base_function(true), ".bool", "boolean");
+        t.equal(bc.base_function(new Date()), ".date", "date");
+        t.equal(bc.base_function(function () { }), ".function", "function");
+        t.equal(bc.base_function(new Buffer(0)), ".buffer", "buffer");
+        t.equal(bc.base_function(new Map()), ".map", "map");
+        t.equal(bc.base_function(new Set()), ".set", "set");
+        t.equal(bc.base_function(Promise.resolve(0)), ".promise", "promise");
+        t.equal(bc.base_function(new Proxy({}, {})), ".proxy", "promise");
+        t.equal(bc.base_function(new RegExp("[a-z]")), ".regexp", "regexp");
+        t.equal(bc.base_function(new addon.base_class()), ".base_class", "base_class");
+        t.equal(bc.base_function(new addon.derived_class()), ".derived_class", "derived_class");
+        t.equal(bc.base_function({ "prop1": "val1", "prop2": "val2" }), ".struct_A", "propstruct");
+        t.equal(bc.base_function(), ".no_parameters_testers", "no_params");
+    });
+    t.end();
+});
+
+//TODO: test class inheritance chain calls
+//e.g. derived class overload implements function x and base class overload implement function x, which will be called when and on which parameters? 
+//overload should be across class graph, otherwise no true inheritance will be implemented.
+//also, what happens when calling function inherited from base but not overloaded in derived?
+
 //TODO: test multiple parameters
