@@ -16,7 +16,7 @@ void derived_class::Init(Handle<Object> target, std::shared_ptr<overload_resolut
 	Nan::SetPrototypeMethod(ctor, "derived_function", derived_function);
 
 	target->Set(Nan::New("derived_class").ToLocalChecked(), ctor->GetFunction());
-	overload->register_type(ctor, "derived_class");
+	overload->register_type(ctor,"", "derived_class");
 };
 
 NAN_METHOD(derived_class::New) {
