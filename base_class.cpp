@@ -62,46 +62,46 @@ namespace base_class_general_callback {
 
 
 	NAN_METHOD(base_class::base_function_number) {
-		info.GetReturnValue().Set(Nan::New<v8::String>(".number").ToLocalChecked());
+		info.GetReturnValue().Set(Nan::New<v8::String>("base_class.base_function.number").ToLocalChecked());
 	}
 	NAN_METHOD(base_class::base_function_string) {
-		info.GetReturnValue().Set(Nan::New<v8::String>(".string").ToLocalChecked());
+		info.GetReturnValue().Set(Nan::New<v8::String>("base_class.base_function.string").ToLocalChecked());
 	}
 	NAN_METHOD(base_class::base_function_bool) {
-		info.GetReturnValue().Set(Nan::New<v8::String>(".bool").ToLocalChecked());
+		info.GetReturnValue().Set(Nan::New<v8::String>("base_class.base_function.bool").ToLocalChecked());
 	}
 	NAN_METHOD(base_class::base_function_date) {
-		info.GetReturnValue().Set(Nan::New<v8::String>(".date").ToLocalChecked());
+		info.GetReturnValue().Set(Nan::New<v8::String>("base_class.base_function.date").ToLocalChecked());
 	}
 	NAN_METHOD(base_class::base_function_function) {
-		info.GetReturnValue().Set(Nan::New<v8::String>(".function").ToLocalChecked());
+		info.GetReturnValue().Set(Nan::New<v8::String>("base_class.base_function.function").ToLocalChecked());
 	}
 	NAN_METHOD(base_class::base_function_buffer) {
-		info.GetReturnValue().Set(Nan::New<v8::String>(".buffer").ToLocalChecked());
+		info.GetReturnValue().Set(Nan::New<v8::String>("base_class.base_function.buffer").ToLocalChecked());
 	}
 	NAN_METHOD(base_class::base_function_map) {
-		info.GetReturnValue().Set(Nan::New<v8::String>(".map").ToLocalChecked());
+		info.GetReturnValue().Set(Nan::New<v8::String>("base_class.base_function.map").ToLocalChecked());
 	}
 	NAN_METHOD(base_class::base_function_set) {
-		info.GetReturnValue().Set(Nan::New<v8::String>(".set").ToLocalChecked());
+		info.GetReturnValue().Set(Nan::New<v8::String>("base_class.base_function.set").ToLocalChecked());
 	}
 	NAN_METHOD(base_class::base_function_promise) {
-		info.GetReturnValue().Set(Nan::New<v8::String>(".promise").ToLocalChecked());
+		info.GetReturnValue().Set(Nan::New<v8::String>("base_class.base_function.promise").ToLocalChecked());
 	}
 	NAN_METHOD(base_class::base_function_proxy) {
-		info.GetReturnValue().Set(Nan::New<v8::String>(".proxy").ToLocalChecked());
+		info.GetReturnValue().Set(Nan::New<v8::String>("base_class.base_function.proxy").ToLocalChecked());
 	}
 	NAN_METHOD(base_class::base_function_regexp) {
-		info.GetReturnValue().Set(Nan::New<v8::String>(".regexp").ToLocalChecked());
+		info.GetReturnValue().Set(Nan::New<v8::String>("base_class.base_function.regexp").ToLocalChecked());
 	}
 	NAN_METHOD(base_class::base_function_base_class) {
-		info.GetReturnValue().Set(Nan::New<v8::String>(".base_class").ToLocalChecked());
+		info.GetReturnValue().Set(Nan::New<v8::String>("base_class.base_function.base_class").ToLocalChecked());
 	}
 	NAN_METHOD(base_class::base_function_derived_class) {
-		info.GetReturnValue().Set(Nan::New<v8::String>(".derived_class").ToLocalChecked());
+		info.GetReturnValue().Set(Nan::New<v8::String>("base_class.base_function.derived_class").ToLocalChecked());
 	}
 	NAN_METHOD(base_class::base_function_struct_A) {
-		info.GetReturnValue().Set(Nan::New<v8::String>(".struct_A").ToLocalChecked());
+		info.GetReturnValue().Set(Nan::New<v8::String>("base_class.base_function.struct_A").ToLocalChecked());
 	}
 
 
