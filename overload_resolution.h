@@ -21,6 +21,8 @@
 
 #include "factory.h"
 
+#include "IStructuredObject.h"
+
 ////overload resolution module
 //
 ////on constructor, register each function signature and c++ function that implements it
@@ -112,13 +114,7 @@ struct overload_info {
 };
 
 
-//Interface?....
 
-class IStructuredObject {
-public:
-	virtual bool parse(v8::Local<v8::Value> obj);
-	virtual v8::Local<v8::Value> ToObject();
-};
 
 
 
