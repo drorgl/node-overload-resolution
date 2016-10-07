@@ -358,6 +358,10 @@ Nan::NAN_METHOD_RETURN_TYPE overload_resolution::execute(const char * name_space
 
 	std::vector<std::string> prototypeClassChain;
 	getPrototypeChain(info.This(), prototypeClassChain);
+	if (prototypeClassChain.size() == 0) {
+		//for functions without prototype chain, it means they are in the global namespace
+		prototypeClassChain.push_back("");
+	}
 
 	return executeBestOverload(name_space, prototypeClassChain, functionName.c_str(), info);
 }
