@@ -202,7 +202,7 @@ int overload_resolution::MatchOverload(o_r_function *func, Nan::NAN_METHOD_ARGS_
 
 	for (auto i = 0; i < parameterLength; i++) {
 		int local_rank = 0;
-		auto iparam = (info.Length() >= i) ? info[i] : Nan::Undefined();
+		auto iparam = (info.Length() > i) ? info[i] : Nan::Undefined();
 		auto fparam = (func->parameters.size() > i) ? func->parameters.at(i) : nullptr;
 
 		
@@ -219,7 +219,8 @@ int overload_resolution::MatchOverload(o_r_function *func, Nan::NAN_METHOD_ARGS_
 		
 
 		//check if the function parameter and info parameter types are convertible
-		if (isConvertibleTo(iparam, fparam->type)) {
+		//make sure undefined was actually passed so conversion to boolean won't be used
+		if ((info.Length() > i) && isConvertibleTo(iparam, fparam->type)) {
 			local_rank += 2;
 		}
 
