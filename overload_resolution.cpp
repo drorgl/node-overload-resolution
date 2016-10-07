@@ -32,23 +32,28 @@ void overload_resolution::register_type(v8::Local<v8::FunctionTemplate> function
 }
 
 void overload_resolution::addOverload(const char * ns, const char * className, const char * name, std::vector<std::shared_ptr<overload_info>> arguments, Nan::FunctionCallback callback) {
+	//check if namespace exists, if not, create
 	if (!_namespaces.count(ns)) {
 		_namespaces[ns] = o_r_namespace();
 		_namespaces[ns].name = ns;
 	}
 
+	//check if class exists, if not, create
 	if (!_namespaces[ns].classes.count(className)) {
 		_namespaces[ns].classes[className] = std::make_shared<o_r_class>();
 		_namespaces[ns].classes[className]->className = className;
 	}
 	
+	//check functions collection exists, if not, create
 	if (!_namespaces[ns].classes[className]->functions.count(name)) {
 		_namespaces[ns].classes[className]->functions[name] = std::vector<std::shared_ptr<o_r_function>>();
 	}
 	
+	//add function to functions collection
 	auto f = std::make_shared<o_r_function>();
 	f->function = callback;
 	f->functionName = name;
+	f->className = className;
 	f->parameters = arguments;
 	_namespaces[ns].classes[className]->functions[name].push_back(f);
 }
@@ -242,29 +247,68 @@ int overload_resolution::MatchOverload(o_r_function *func, Nan::NAN_METHOD_ARGS_
 	return rank;
 }
 
+void overload_resolution::getPrototypeChain(v8::Local<v8::Value> param, std::vector<std::string> &chain) {
+	if (!param->IsObject()) {
+		return;
+	}
 
-void overload_resolution::executeBestOverload(const char * ns, const char * className, const char * name, Nan::NAN_METHOD_ARGS_TYPE info) {
+	auto pobject = param.As<v8::Object>();
+
+	std::string constructorName = *Nan::Utf8String(pobject->GetConstructorName());
+	if (constructorName == "Object") {
+		return;
+	}
+
+	chain.push_back(constructorName);
+	getPrototypeChain(pobject->GetPrototype(), chain);
+}
+
+void overload_resolution::executeBestOverload(const char * ns, std::vector<std::string> &classNames, const char * name, Nan::NAN_METHOD_ARGS_TYPE info) {
 	std::vector<std::pair<int, o_r_function *>> candidates;
 
-	if (_namespaces.count(ns) ==0 || _namespaces[ns].classes.count(className) == 0) {
+	std::vector < std::shared_ptr< o_r_class>> classes;
+
+	for (std::vector<std::string>::iterator cit = classNames.begin(); cit < classNames.end(); cit++) {
+		if (_namespaces.count(ns) == 0 || _namespaces[ns].classes.count(*cit) > 0) {
+			classes.push_back(_namespaces[ns].classes[*cit]);
+		}
+	}
+
+	//TODO: classNames are ordered by class inheritance, from derived to base
+	// need to iterate over them and if two functions have the same rank, give priority to derived.
+
+	if (classes.size() == 0) {
+
 		std::string errclass = "";
 		if (ns != NULL) {
 			errclass = ns;
 			errclass += "::";
 		}
-		if (className != NULL) {
-			errclass += className;
-			errclass += "::";
-		}
+
+		errclass += "(" + std::accumulate(std::begin(classNames), std::end(classNames), std::string(), [](std::string &ss, std::string &s) {return ss.empty() ? s : ss + "," + s; }) + ")";
+
 
 		if (name != NULL) {
+			errclass += "::";
 			errclass += name;
 		}
 
 		errclass = "no overload for namespace or class " + errclass;
 		return Nan::ThrowError(errclass.c_str());
 	}
-	auto implementations = _namespaces[ns].classes[className]->functions[name];
+
+	
+	std::vector<std::shared_ptr< o_r_function>> implementations;
+
+	//copy all class functions by name from all descendant classes
+	for (std::vector<std::string>::iterator cit = classNames.begin(); cit < classNames.end(); cit++) {
+		if (_namespaces.count(ns) == 0 || _namespaces[ns].classes.count(*cit) > 0) {
+			auto functions = _namespaces[ns].classes[*cit]->functions[name];
+
+			implementations.insert(std::end(implementations), std::begin(functions), std::end(functions));
+		}
+	}
+
 
 	for (auto i = 0; i < implementations.size(); i++) {
 		auto check = implementations[i];
@@ -312,5 +356,8 @@ Nan::NAN_METHOD_RETURN_TYPE overload_resolution::execute(const char * name_space
 
 	functionName = ((isStatic) ? "_" : "") + functionName;
 
-	return executeBestOverload(name_space,className.c_str(), functionName.c_str(), info);
+	std::vector<std::string> prototypeClassChain;
+	getPrototypeChain(info.This(), prototypeClassChain);
+
+	return executeBestOverload(name_space, prototypeClassChain, functionName.c_str(), info);
 }

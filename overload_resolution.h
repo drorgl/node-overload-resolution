@@ -16,6 +16,9 @@
 
 #include <memory>
 
+#include <iterator>
+#include <numeric>
+
 #include "factory.h"
 
 ////overload resolution module
@@ -124,6 +127,7 @@ public:
 struct o_r_function {
 	Nan::FunctionCallback function;
 	const char * functionName;
+	const char * className;
 	std::vector<std::shared_ptr<overload_info>> parameters;
 };
 
@@ -171,6 +175,7 @@ public:
 
 	bool isConvertibleTo(v8::Local<v8::Value> param, const char * type);
 
+	void getPrototypeChain(v8::Local<v8::Value> param, std::vector<std::string> &chain);
 
 	//parse the registered functions, find possible matches:
 	//1. by name
@@ -178,7 +183,7 @@ public:
 	//3. discard non-matching options
 	int MatchOverload(o_r_function *func, Nan::NAN_METHOD_ARGS_TYPE info);
 
-	void executeBestOverload(const char * ns, const char * className, const char * name, Nan::NAN_METHOD_ARGS_TYPE info);
+	void executeBestOverload(const char * ns, std::vector<std::string> & className, const char * name, Nan::NAN_METHOD_ARGS_TYPE info);
 	
 	Nan::NAN_METHOD_RETURN_TYPE execute(const char * name_space, Nan::NAN_METHOD_ARGS_TYPE info);
 
