@@ -211,4 +211,7 @@ tape('derived member function overload 1 parameter, no defaults', function (t) {
     t.end();
 });
 
+//TODO: test structs, succes, fail, multiple
+
+
 //TODO: test multiple parameters

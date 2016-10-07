@@ -2,13 +2,6 @@
 
 std::set<std::string> overload_resolution::_primitive_types = {"Number","String","Boolean"};
 
-bool IStructuredObject::parse(v8::Local<v8::Value> obj) {
-	return false;
-}
-
-v8::Local<v8::Value> IStructuredObject::ToObject() {
-	return Nan::Null();
-}
 
 overload_info::overload_info(const char * parameterName, const char * type, v8::Local<v8::Value> defaultValue) {
 	this->parameterName = parameterName;

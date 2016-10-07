@@ -14,6 +14,12 @@
 		, "derived_class.h"
 		, "derived_class.cpp"
 		
+		, "struct_A.h"
+		, "struct_A.cpp"
+		
+		, "IStructuredObject.h"
+		, "IStructuredObject.cpp"
+		
 		, "or_tester.h"
 		
 		, "factory.h"
