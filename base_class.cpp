@@ -57,7 +57,7 @@ namespace base_class_general_callback {
 	}
 
 	NAN_METHOD(base_class::base_function) {
-		info.GetReturnValue().Set(Nan::True());
+		info.GetReturnValue().Set(Nan::New<v8::String>("base_class.base_function.no_parameters_testers").ToLocalChecked());
 	}
 
 
