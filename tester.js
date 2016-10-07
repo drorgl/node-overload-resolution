@@ -159,24 +159,24 @@ tape('function overload 1 parameter, no defaults', function (t) {
 tape('member function overload 1 parameter, no defaults', function (t) {
     t.doesNotThrow(function () {
         let bc = new addon.base_class();
-        t.equal(bc.base_function(1), ".number", "number");
-        t.equal(bc.base_function(1), ".number", "number");
-        t.equal(bc.base_function(1.1), ".number", "number double");
-        t.equal(bc.base_function(2 ^ 33), ".number", "number long");
-        t.equal(bc.base_function("1"), ".string", "string");
-        t.equal(bc.base_function(true), ".bool", "boolean");
-        t.equal(bc.base_function(new Date()), ".date", "date");
-        t.equal(bc.base_function(function () { }), ".function", "function");
-        t.equal(bc.base_function(new Buffer(0)), ".buffer", "buffer");
-        t.equal(bc.base_function(new Map()), ".map", "map");
-        t.equal(bc.base_function(new Set()), ".set", "set");
-        t.equal(bc.base_function(Promise.resolve(0)), ".promise", "promise");
-        t.equal(bc.base_function(new Proxy({}, {})), ".proxy", "promise");
-        t.equal(bc.base_function(new RegExp("[a-z]")), ".regexp", "regexp");
-        t.equal(bc.base_function(new addon.base_class()), ".base_class", "base_class");
-        t.equal(bc.base_function(new addon.derived_class()), ".derived_class", "derived_class");
-        t.equal(bc.base_function({ "prop1": "val1", "prop2": "val2" }), ".struct_A", "propstruct");
-        t.equal(bc.base_function(), ".no_parameters_testers", "no_params");
+        t.equal(bc.base_function(1), "base_class.base_function.number", "number");
+        t.equal(bc.base_function(1), "base_class.base_function.number", "number");
+        t.equal(bc.base_function(1.1), "base_class.base_function.number", "number double");
+        t.equal(bc.base_function(2 ^ 33), "base_class.base_function.number", "number long");
+        t.equal(bc.base_function("1"), "base_class.base_function.string", "string");
+        t.equal(bc.base_function(true), "base_class.base_function.bool", "boolean");
+        t.equal(bc.base_function(new Date()), "base_class.base_function.date", "date");
+        t.equal(bc.base_function(function () { }), "base_class.base_function.function", "function");
+        t.equal(bc.base_function(new Buffer(0)), "base_class.base_function.buffer", "buffer");
+        t.equal(bc.base_function(new Map()), "base_class.base_function.map", "map");
+        t.equal(bc.base_function(new Set()), "base_class.base_function.set", "set");
+        t.equal(bc.base_function(Promise.resolve(0)), "base_class.base_function.promise", "promise");
+        t.equal(bc.base_function(new Proxy({}, {})), "base_class.base_function.proxy", "promise");
+        t.equal(bc.base_function(new RegExp("[a-z]")), "base_class.base_function.regexp", "regexp");
+        t.equal(bc.base_function(new addon.base_class()), "base_class.base_function.base_class", "base_class");
+        t.equal(bc.base_function(new addon.derived_class()), "base_class.base_function.derived_class", "derived_class");
+        t.equal(bc.base_function({ "prop1": "val1", "prop2": "val2" }), "base_class.base_function.struct_A", "propstruct");
+        t.equal(bc.base_function(), "base_class.base_function.no_parameters_testers", "no_params");
     });
     t.end();
 });
@@ -185,5 +185,30 @@ tape('member function overload 1 parameter, no defaults', function (t) {
 //e.g. derived class overload implements function x and base class overload implement function x, which will be called when and on which parameters? 
 //overload should be across class graph, otherwise no true inheritance will be implemented.
 //also, what happens when calling function inherited from base but not overloaded in derived?
+
+tape('derived member function overload 1 parameter, no defaults', function (t) {
+    t.doesNotThrow(function () {
+        let bc = new addon.derived_class();
+        t.equal(bc.base_function(1), "derived_class.base_function.number", "number");
+        t.equal(bc.base_function(1), "derived_class.base_function.number", "number");
+        t.equal(bc.base_function(1.1), "derived_class.base_function.number", "number double");
+        t.equal(bc.base_function(2 ^ 33), "derived_class.base_function.number", "number long");
+        t.equal(bc.base_function("1"), "derived_class.base_function.string", "string");
+        t.equal(bc.base_function(true), "derived_class.base_function.bool", "boolean");
+        t.equal(bc.base_function(new Date()), "derived_class.base_function.date", "date");
+        t.equal(bc.base_function(function () { }), "derived_class.base_function.function", "function");
+        t.equal(bc.base_function(new Buffer(0)), "derived_class.base_function.buffer", "buffer");
+        t.equal(bc.base_function(new Map()), "derived_class.base_function.map", "map");
+        t.equal(bc.base_function(new Set()), "derived_class.base_function.set", "set");
+        t.equal(bc.base_function(Promise.resolve(0)), "derived_class.base_function.promise", "promise");
+        t.equal(bc.base_function(new Proxy({}, {})), "derived_class.base_function.proxy", "promise");
+        t.equal(bc.base_function(new RegExp("[a-z]")), "derived_class.base_function.regexp", "regexp");
+        t.equal(bc.base_function(new addon.base_class()), "derived_class.base_function.base_class", "base_class");
+        t.equal(bc.base_function(new addon.derived_class()), "derived_class.base_function.derived_class", "derived_class");
+        t.equal(bc.base_function({ "prop1": "val1", "prop2": "val2" }), "derived_class.base_function.struct_A", "propstruct");
+        t.equal(bc.base_function(), "derived_class.base_function.no_parameters_testers", "no_params");
+    });
+    t.end();
+});
 
 //TODO: test multiple parameters
