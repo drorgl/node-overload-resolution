@@ -137,6 +137,9 @@ struct o_r_namespace {
 	std::map<std::string, std::shared_ptr< o_r_class>> classes;
 };
 //
+
+class IStructuredObject;
+
 class overload_resolution {
 private:
 	static std::set<std::string> _primitive_types; 
@@ -183,6 +186,9 @@ public:
 	
 	Nan::NAN_METHOD_RETURN_TYPE execute(const char * name_space, Nan::NAN_METHOD_ARGS_TYPE info);
 
+
+	bool verifyObject(std::vector<std::shared_ptr<overload_info>> props, v8::Local<v8::Value> val);
+	Nan::MaybeLocal<v8::Value> GetFromObject(v8::Local<v8::Value> obj, const char * key);
 };
 
 #endif

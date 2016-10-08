@@ -17,6 +17,9 @@
 		, "struct_A.h"
 		, "struct_A.cpp"
 		
+		, "struct_B.h"
+		, "struct_B.cpp"
+		
 		, "IStructuredObject.h"
 		, "IStructuredObject.cpp"
 		

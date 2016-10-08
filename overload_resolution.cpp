@@ -138,7 +138,8 @@ const char * overload_resolution::determineType(v8::Local<v8::Value> param) {
 
 	auto structured = _structured_factory.all();
 	for (auto i = 0; i < structured.size(); i++) {
-		if (structured[i].second.parse(param)) {
+		if (structured[i].second->verify(this,param)){
+		//if (structured[i].second.parse(param)) {
 			return structured[i].first;
 		}
 	}
@@ -358,4 +359,78 @@ Nan::NAN_METHOD_RETURN_TYPE overload_resolution::execute(const char * name_space
 	}
 
 	return executeBestOverload(name_space, prototypeClassChain, functionName.c_str(), info);
+}
+
+bool overload_resolution::verifyObject(std::vector<std::shared_ptr<overload_info>> props, v8::Local<v8::Value> val) {
+	auto mctx = Nan::GetCurrentContext();
+
+	if (val->IsMap()) {
+		
+		auto omap = val.As<v8::Map>();
+		for (std::vector<std::shared_ptr<overload_info>>::iterator pit = props.begin(); pit < props.end(); pit++) {
+			auto oi = *pit;
+
+			bool mapHasValue = false;
+
+			//check the map has a key
+			if (omap->Has(mctx, Nan::New<v8::String>(oi->parameterName).ToLocalChecked()).FromMaybe(mapHasValue) && !mapHasValue) {
+				return false;
+			}
+
+			auto mval = omap->Get(mctx, Nan::New<v8::String>(oi->parameterName).ToLocalChecked());
+
+			//check there is a value
+			if (!Nan::New(oi->defaultValue)->IsUndefined() && mval.IsEmpty()) {
+				return false;
+			}
+			if ((oi->type != determineType(mval.ToLocalChecked())) &&
+				!isConvertibleTo(mval.ToLocalChecked(),oi->type)
+				) {
+				return false;
+			}
+		}
+		return true;
+
+	}
+	else if (val->IsObject()) {
+		auto obj = val.As<v8::Object>();
+		for (std::vector<std::shared_ptr<overload_info>>::iterator pit = props.begin(); pit < props.end(); pit++) {
+			auto oi = *pit;
+
+			if (!obj->HasOwnProperty(Nan::New<v8::String>(oi->parameterName).ToLocalChecked())) {
+				return false;
+			}
+
+			auto oval = obj->Get(mctx, Nan::New<v8::String>(oi->parameterName).ToLocalChecked());
+
+			//check there is a value
+			if (!Nan::New(oi->defaultValue)->IsUndefined() && oval.IsEmpty()) {
+				return false;
+			}
+			if ((oi->type != determineType(oval.ToLocalChecked()))
+				//&& !isConvertibleTo(oval.ToLocalChecked(), oi->type) //check convertible values?
+				) {
+				return false;
+			}
+		}
+		return true;
+
+	}
+
+	return false;
+}
+
+
+MaybeLocal<v8::Value>  overload_resolution::GetFromObject(v8::Local<v8::Value> obj, const char * key) {
+	auto mctx = Nan::GetCurrentContext();
+
+	if (obj->IsMap()) {
+		return obj.As<v8::Map>()->Get(mctx, Nan::New<v8::String>(key).ToLocalChecked());
+	}
+	else if (obj->IsObject()) {
+		return obj.As<v8::Object>()->Get(mctx, Nan::New<v8::String>(key).ToLocalChecked());
+	}
+	else {
+		return Nan::Undefined();
+	}
 }
