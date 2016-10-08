@@ -212,6 +212,21 @@ tape('derived member function overload 1 parameter, no defaults', function (t) {
 });
 
 //TODO: test structs, succes, fail, multiple
+tape('function overload - structs', function (t) {
+    t.doesNotThrow(function () {
+        t.equal(addon.structs_testers(), "structs_testers.no_parameters", " no parameters")
+        t.equal(addon.structs_testers({ "prop1": "1", "prop2": "2" }), "structs_testers.struct_A", "struct_A");
+        t.equal(addon.structs_testers({ "prop1": "1", "prop2": 2 }), "structs_testers.struct_B", " struct_B");
+
+        t.equal(addon.structs_testers({ "prop1": "1", "prop2": "2" }, { "prop1": "1", "prop2": "2" }), "structs_testers.struct_A_struct_A", "struct_A struct_A");
+        t.equal(addon.structs_testers({ "prop1": "1", "prop2": 2 }, { "prop1": "1", "prop2": 2 }), "structs_testers.struct_B_struct_B", " struct_B struct_B");
+
+        t.equal(addon.structs_testers({ "prop1": "1", "prop2": "2" }, { "prop1": "1", "prop2": 2 }), "structs_testers.struct_A_struct_B", "struct_A struct_B");
+        t.equal(addon.structs_testers({ "prop1": "1", "prop2": 2 }, { "prop1": "1", "prop2": "2" }), "structs_testers.struct_B_struct_A", " struct_B struct_A");
+
+    });
+    t.end();
+});
 
 
 //TODO: test multiple parameters
