@@ -9,6 +9,8 @@ using namespace v8;
 #include "struct_B.h"
 
 #include "or_tester.h"
+#include "or_struct_tester.h"
+#include "or_two_parameters_tester.h"
 
 
 NAN_METHOD(testfunction_no_overload_resolution) {
@@ -16,6 +18,7 @@ NAN_METHOD(testfunction_no_overload_resolution) {
 }
 
 void init(Handle<Object> target) {
+	assert(false);
 	auto overload = std::make_shared<overload_resolution>();
 
 	overload->register_type<IStructuredObject>("", "IStructuredObject");
@@ -26,7 +29,9 @@ void init(Handle<Object> target) {
 
 	base_class::Init(target,overload);
 	derived_class::Init(target,overload);
-	RegisterORTesters(target, overload);
+	or_tester::RegisterORTesters(target, overload);
+	or_struct_tester::RegisterORTesters(target, overload);
+	or_two_parameters_tester::RegisterORTesters(target, overload);
 }
 
 NODE_MODULE(hello, init);
