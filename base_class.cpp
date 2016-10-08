@@ -32,6 +32,7 @@ namespace base_class_general_callback {
 		overload->addOverload("", "base_class","base_function", { std::make_shared<overload_info>("a","base_class",Nan::Undefined()) }, base_function_base_class);
 		overload->addOverload("", "base_class","base_function", { std::make_shared<overload_info>("a","derived_class",Nan::Undefined()) }, base_function_derived_class);
 		overload->addOverload("", "base_class","base_function", { std::make_shared<overload_info>("a","struct_A",Nan::Undefined()) },      base_function_struct_A);
+		overload->addOverload("", "base_class", "base_function", { std::make_shared<overload_info>("a","struct_B",Nan::Undefined()) }, base_function_struct_B);
 
 
 		base_class_general_callback::overload = overload;
@@ -100,8 +101,12 @@ namespace base_class_general_callback {
 	NAN_METHOD(base_class::base_function_derived_class) {
 		info.GetReturnValue().Set(Nan::New<v8::String>("base_class.base_function.derived_class").ToLocalChecked());
 	}
+
 	NAN_METHOD(base_class::base_function_struct_A) {
 		info.GetReturnValue().Set(Nan::New<v8::String>("base_class.base_function.struct_A").ToLocalChecked());
 	}
 
+	NAN_METHOD(base_class::base_function_struct_B) {
+		info.GetReturnValue().Set(Nan::New<v8::String>("base_class.base_function.struct_B").ToLocalChecked());
+	}
 

@@ -24,6 +24,8 @@
 		, "IStructuredObject.cpp"
 		
 		, "or_tester.h"
+		, "or_struct_tester.h"
+		, "or_two_parameters_tester.h"
 		
 		, "factory.h"
 		, "README.md"
