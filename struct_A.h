@@ -13,16 +13,23 @@
 #include <string>
 #include "IStructuredObject.h"
 
+#include "overload_resolution.h"
+
 using namespace v8;
 
 
 
 class struct_A : public IStructuredObject {
+private:
+	static std::vector<std::shared_ptr<overload_info>> _definition;
+
 public:
 	std::string prop1;
 	std::string prop2;
 
-	 bool parse(v8::Local<v8::Value> obj);
+	virtual bool verify(overload_resolution * ovres, v8::Local<v8::Value> obj);
+	virtual bool parse(overload_resolution * ovres, v8::Local<v8::Value> obj);
+
 	 v8::Local<v8::Value> ToObject();
 };
 

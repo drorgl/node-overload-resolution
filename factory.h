@@ -17,7 +17,7 @@ public:
 		_createFuncs[name] = &createFunc<TDerived>;
 	}
 
-	T* create(const char * name) {
+	std::shared_ptr<T> create(const char * name) {
 		typename std::map<const char *, PCreateFunc>::const_iterator it = _createFuncs.find(name);
 		if (it != _createFuncs.end()) {
 			return it.value()();
@@ -26,22 +26,26 @@ public:
 	}
 
 	//TODO: implement
-	std::vector<std::pair<const char *, T>> all() {
-		std::vector<std::pair<const char *, T>> v;
-		/*for (std::map<const char *, PCreateFunc>::iterator it = _createFuncs.begin(); it != _createFuncs.end(); ++it) {
-			v.push_back(std::pair<const char *, T>(it->first(), it->second->value()()));
-		}*/
+	std::vector<std::pair<const char *, std::shared_ptr<T>>> all() {
+		std::vector<std::pair<const char *, std::shared_ptr<T>>> v;
+		for (std::map<const char *, PCreateFunc>::const_iterator it =std::begin(_createFuncs); it != std::end( _createFuncs); ++it) {
+
+			v.push_back(std::pair<const char *, std::shared_ptr<T>>(it->first, it->second()));
+
+		}
 		return v;
 	}
 
 private:
 	template <typename TDerived>
-	static T* createFunc()
+	static std::shared_ptr<T> createFunc()
 	{
-		return new TDerived();
+		return std::make_shared<TDerived>();
 	}
 
-	typedef T* (*PCreateFunc)();
+	typedef std::shared_ptr<T> (*PCreateFunc)();
+
+
 	std::map<const char *, PCreateFunc> _createFuncs;
 };
 
