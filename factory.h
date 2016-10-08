@@ -25,7 +25,6 @@ public:
 		return nullptr;
 	}
 
-	//TODO: implement
 	std::vector<std::pair<const char *, std::shared_ptr<T>>> all() {
 		std::vector<std::pair<const char *, std::shared_ptr<T>>> v;
 		for (std::map<const char *, PCreateFunc>::const_iterator it =std::begin(_createFuncs); it != std::end( _createFuncs); ++it) {

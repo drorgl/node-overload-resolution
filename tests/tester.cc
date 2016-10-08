@@ -18,7 +18,6 @@ NAN_METHOD(testfunction_no_overload_resolution) {
 }
 
 void init(Handle<Object> target) {
-	assert(false);
 	auto overload = std::make_shared<overload_resolution>();
 
 	overload->register_type<IStructuredObject>("", "IStructuredObject");
