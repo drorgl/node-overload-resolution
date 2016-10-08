@@ -17,11 +17,8 @@
 
 using namespace v8;
 
-
-
-//Interface?....
-
 class overload_resolution;
+
 
 class IStructuredObject {
 

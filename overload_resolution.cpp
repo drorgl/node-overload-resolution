@@ -139,18 +139,14 @@ const char * overload_resolution::determineType(v8::Local<v8::Value> param) {
 	auto structured = _structured_factory.all();
 	for (auto i = 0; i < structured.size(); i++) {
 		if (structured[i].second->verify(this,param)){
-		//if (structured[i].second.parse(param)) {
 			return structured[i].first;
 		}
 	}
 
 	//should not happen, unexpected object was passed!
-
 	if (param->IsObject()) {
 		return "Object";
 	}
-
-	//OR
 
 	return "Unknown";
 }
