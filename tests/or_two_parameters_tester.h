@@ -1,6 +1,6 @@
 #ifndef _O_R_TWO_PARAMETERS_TESTER_H_
 #define _O_R_TWO_PARAMETERS_TESTER_H_
-#include "overload_resolution.h"
+#include "../overload_resolution.h"
 using namespace v8;
 
 namespace or_two_parameters_tester {

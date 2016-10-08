@@ -7,13 +7,13 @@
 #include <node_version.h>
 #include <node_buffer.h>
 #include <string.h>
-#include "node_modules/nan/nan.h"
+//#include "node_modules/nan/nan.h"
 
 #include <memory>
 #include <string>
-#include "IStructuredObject.h"
+#include "../IStructuredObject.h"
 
-#include "overload_resolution.h"
+#include "../overload_resolution.h"
 
 using namespace v8;
 
