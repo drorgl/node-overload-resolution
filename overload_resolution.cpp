@@ -264,7 +264,7 @@ void overload_resolution::executeBestOverload(const char * ns, std::vector<std::
 	std::vector < std::shared_ptr< o_r_class>> classes;
 
 	for (std::vector<std::string>::iterator cit = classNames.begin(); cit < classNames.end(); cit++) {
-		if (_namespaces.count(ns) == 0 || _namespaces[ns].classes.count(*cit) > 0) {
+		if (_namespaces.count(ns) > 0 && _namespaces[ns].classes.count(*cit) > 0) {
 			classes.push_back(_namespaces[ns].classes[*cit]);
 		}
 	}
@@ -297,7 +297,7 @@ void overload_resolution::executeBestOverload(const char * ns, std::vector<std::
 
 	//copy all class functions by name from all descendant classes
 	for (std::vector<std::string>::iterator cit = classNames.begin(); cit < classNames.end(); cit++) {
-		if (_namespaces.count(ns) == 0 || _namespaces[ns].classes.count(*cit) > 0) {
+		if (_namespaces.count(ns) > 0 && _namespaces[ns].classes.count(*cit) > 0) {
 			auto functions = _namespaces[ns].classes[*cit]->functions[name];
 
 			implementations.insert(std::end(implementations), std::begin(functions), std::end(functions));
