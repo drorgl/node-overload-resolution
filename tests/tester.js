@@ -78,7 +78,7 @@ var aoDebug = null;
 
 if (addon == null) {
     try {
-        addon = require('./build/Release/tester');
+        addon = require('../build/Release/tester');
     } catch (e) {
         aoRelease = e;
     }
@@ -86,7 +86,7 @@ if (addon == null) {
 
 if (addon == null) {
     try {
-        addon = require('./build/Debug/tester');
+        addon = require('../build/Debug/tester');
     } catch (e) {
         aoDebug = e;
     }
@@ -203,18 +203,18 @@ var dataTypes = [
         value: [],
         name: "array"
     }
-     , {
-         value: {},
-         name: "object"
-     }
-     , {
-         value: null,
-         name: "null"
-     }
-     , {
-         value: undefined,
-         name: "undefined"
-     }
+     //, {
+     //    value: {},
+     //    name: "object"
+     //}
+     //, {
+     //    value: null,
+     //    name: "null"
+     //}
+     //, {
+     //    value: undefined,
+     //    name: "undefined"
+     //}
 ];
 
 
@@ -303,3 +303,5 @@ tape('function overload 2 parameter, no defaults', function (t) {
 });
 
 //TODO: test parameter defaults
+// what to do if multiple overloads have the same parameter, different types with defaults? this is invalid..
+

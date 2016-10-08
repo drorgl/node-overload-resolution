@@ -6,7 +6,8 @@
   "version": "0.0.1",
   "scripts": {
     "configure": "node-gyp configure",
-    "install": "node-gyp configure; node-gyp build"
+    "install": "node-gyp configure; node-gyp build",
+	"test":"node tests/tester.js"
   },
   "dependencies": {
     "chalk": "^1.1.3",
