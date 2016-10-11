@@ -260,7 +260,7 @@ tape('derived member function overload 1 parameter, no defaults', function (t) {
         t.equal(bc.base_function(), "derived_class.base_function.no_parameters_testers", "no_params");
 
         for (var dt of dataTypes) {
-            t.equal(bc.base_function(dt.value), "derived_class.base_function." + dt.name, "number_testers " + dt.name);
+            t.equal(bc.base_function(dt.value), "derived_class.base_function." + dt.name, "derived_class.base_function " + dt.name);
         }
         
     });
@@ -271,14 +271,14 @@ tape('derived member function overload 1 parameter, no defaults', function (t) {
 tape('function overload - structs', function (t) {
     t.doesNotThrow(function () {
         t.equal(addon.structs_testers(), "structs_testers.no_parameters", "no parameters")
-        t.equal(addon.structs_testers({ "prop1": "1", "prop2": "2" }), "structs_testers.struct_A", "struct_A");
-        t.equal(addon.structs_testers({ "prop1": "1", "prop2": 2 }), "structs_testers.struct_B", "struct_B");
+        t.equal(addon.structs_testers({ "prop1": "1", "prop2": "2" }), "structs_testers.struct_A", "structs_testers struct_A");
+        t.equal(addon.structs_testers({ "prop1": "1", "prop2": 2 }), "structs_testers.struct_B", "structs_testers struct_B");
 
-        t.equal(addon.structs_testers({ "prop1": "1", "prop2": "2" }, { "prop1": "1", "prop2": "2" }), "structs_testers.struct_A_struct_A", "struct_A struct_A");
-        t.equal(addon.structs_testers({ "prop1": "1", "prop2": 2 }, { "prop1": "1", "prop2": 2 }), "structs_testers.struct_B_struct_B", "struct_B struct_B");
+        t.equal(addon.structs_testers({ "prop1": "1", "prop2": "2" }, { "prop1": "1", "prop2": "2" }), "structs_testers.struct_A_struct_A", "structs_testers struct_A struct_A");
+        t.equal(addon.structs_testers({ "prop1": "1", "prop2": 2 }, { "prop1": "1", "prop2": 2 }), "structs_testers.struct_B_struct_B", "structs_testers struct_B struct_B");
 
-        t.equal(addon.structs_testers({ "prop1": "1", "prop2": "2" }, { "prop1": "1", "prop2": 2 }), "structs_testers.struct_A_struct_B", "struct_A struct_B");
-        t.equal(addon.structs_testers({ "prop1": "1", "prop2": 2 }, { "prop1": "1", "prop2": "2" }), "structs_testers.struct_B_struct_A", "struct_B struct_A");
+        t.equal(addon.structs_testers({ "prop1": "1", "prop2": "2" }, { "prop1": "1", "prop2": 2 }), "structs_testers.struct_A_struct_B", "structs_testers struct_A struct_B");
+        t.equal(addon.structs_testers({ "prop1": "1", "prop2": 2 }, { "prop1": "1", "prop2": "2" }), "structs_testers.struct_B_struct_A", "structs_testers struct_B struct_A");
 
     });
     t.end();
@@ -294,13 +294,15 @@ tape('function overload 2 parameter, no defaults', function (t) {
 
         for (var dt1 of dataTypes) {
             for (var dt2 of dataTypes) {
-                t.equal(addon.two_testers(dt1.value, dt2.value), "." + dt1.name + "." + dt2.name, "number_testers " + dt1.name + " " + dt2.name);
+                t.equal(addon.two_testers(dt1.value, dt2.value), "." + dt1.name + "." + dt2.name, "two_testers " + dt1.name + " " + dt2.name);
             }
         }
 
     });
     t.end();
 });
+
+//TODO: test array types
 
 //TODO: test parameter defaults
 // what to do if multiple overloads have the same parameter, different types with defaults? this is invalid..

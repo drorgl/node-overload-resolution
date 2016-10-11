@@ -72,6 +72,10 @@ namespace or_tester {
 		info.GetReturnValue().Set(Nan::New(".struct_B").ToLocalChecked());
 	}
 
+	NAN_METHOD(number_testers_array) {
+		info.GetReturnValue().Set(Nan::New(".array").ToLocalChecked());
+	}
+
 	NAN_METHOD(number_testers) {
 		info.GetReturnValue().Set(Nan::New(".no_parameters").ToLocalChecked());
 	}
@@ -104,6 +108,8 @@ namespace or_tester {
 		info.GetReturnValue().Set(Nan::New("structs_testers.struct_B_struct_B").ToLocalChecked());
 	}
 
+
+
 	void RegisterORTesters(Handle<Object> target, std::shared_ptr<overload_resolution> overload) {
 		auto loverload = overload;
 		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","Number",Nan::Undefined()) }, number_testers_number);
@@ -121,6 +127,7 @@ namespace or_tester {
 		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","derived_class",Nan::Undefined()) }, number_testers_derived_class);
 		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","struct_A",Nan::Undefined()) }, number_testers_struct_A);
 		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","struct_B",Nan::Undefined()) }, number_testers_struct_B);
+		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","Array",Nan::Undefined()) }, number_testers_array);
 		overload->addOverload("or_tester", "", "number_testers", {}, number_testers);
 
 		general_callback::overload = overload;
