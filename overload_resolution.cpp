@@ -26,6 +26,24 @@ void overload_resolution::register_type(v8::Local<v8::FunctionTemplate> function
 	_types[name] = ot;
 }
 
+
+void overload_resolution::split_generic_types(std::string type, std::set<std::string> &types) {
+	auto genericBegin = type.find("<");
+	if (genericBegin == std::string::npos) {
+		types.insert(type);
+		return;
+	}
+
+	auto genericEnd = type.find_last_of(">");
+
+	assert(genericEnd != std::string::npos && "generic types should be between <>");
+
+	auto genericType = type.substr(0, genericBegin);
+	types.insert(genericType);
+	auto between = type.substr(genericBegin + 1, genericEnd - genericBegin -1);
+	split_generic_types(between, types);
+}
+
 bool overload_resolution::validate_type_registrations() {
 	for (std::map<std::string, o_r_namespace>::iterator ns = std::begin(_namespaces); ns != std::end(_namespaces); ns++) {
 		//for each namespace
@@ -41,12 +59,19 @@ bool overload_resolution::validate_type_registrations() {
 
 						if ((_types.count(type) == 0 ) &&
 							(!_structured_factory.has_type(type)) && 
-							(_primitive_types.count(type) == 0)
-							//TODO: add handling for "generic" arrays (??)
-							)
+							(_primitive_types.count(type) == 0))
 						{
-							//printf("type not found: %s", olinfo->get()->type);
-							return false;
+							//if normal type checking failed, do a generic type checking
+							std::set<std::string> types;
+							split_generic_types(type, types);
+
+							for (std::set<std::string>::iterator separate_type = std::begin(types); separate_type != std::end(types); separate_type++) {
+								if ((_types.count(*separate_type) == 0) &&
+									(!_structured_factory.has_type(separate_type->c_str())) &&
+									(_primitive_types.count(*separate_type) == 0)){
+									return false;
+								}
+							}
 						}
 					}
 				}
@@ -83,11 +108,31 @@ void overload_resolution::addOverload(const char * ns, const char * className, c
 	_namespaces[ns].classes[className]->functions[name].push_back(f);
 }
 
+void overload_resolution::get_array_types(v8::Local<v8::Value> arr, std::set<std::string> &types) {
+	auto v8arr = arr.As<v8::Array>();
+	for (auto i = 0; i < v8arr->Length(); i++) {
+		types.insert(determineType(v8arr->Get(i)));
+	}
+}
 
-const char * overload_resolution::determineType(v8::Local<v8::Value> param) {
+std::string overload_resolution::determineType(v8::Local<v8::Value> param) {
 	if (param->IsArray()) {
-		//TODO: Array of what??
-		return "Array";
+		std::set <std::string> arrtypes;
+		get_array_types(param, arrtypes);
+
+		//if type is determined, that means that only one type was in the array
+		//no values (no type) or more than one type in the array would not return a type
+		if (arrtypes.size() == 1) {
+			std::string s;
+			s = "Array<";
+			s += *arrtypes.begin();
+			s += ">";
+			return s;
+		}
+		else {
+			return "Array";
+		}
+		
 	}
 
 	if (param->IsArrayBuffer() || param->IsArrayBufferView() || param->IsTypedArray()) {

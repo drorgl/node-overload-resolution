@@ -76,6 +76,8 @@ struct object_type {
 	const char * name;
 };
 
+
+
 struct overload_info {
 	const char * parameterName;
 	const char * type;
@@ -137,6 +139,11 @@ private:
 	//new (rvec: _matx.Vec<T>, t ? : _matx.Vec<T> /* = Vec3::all(0)*/) : Affine3<T>;
 	//new (vals: Array<T>) : Affine3<T>;
 
+	void get_array_types(v8::Local<v8::Value> arr, std::set<std::string> &types);
+
+
+	//takes a generic type in the form of Array<Number> or Array<Array<Number> and returns the list of separate types for type validation
+	void split_generic_types(std::string type, std::set<std::string> &types);
 public:
 	overload_resolution();
 
@@ -157,7 +164,7 @@ public:
 	void addOverload(const char * ns, const char * className, const char * functionName, std::vector<std::shared_ptr<overload_info>> arguments, Nan::FunctionCallback callback);
 
 	//determines the type of param, primitives, registered types, registered structs
-	const char * determineType(v8::Local<v8::Value> param);
+	std::string determineType(v8::Local<v8::Value> param);
 
 	//checks if param type is convertible to type
 	bool isConvertibleTo(v8::Local<v8::Value> param, const char * type);

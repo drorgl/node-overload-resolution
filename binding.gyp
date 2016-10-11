@@ -20,6 +20,7 @@
 		, "tests/or_tester.h"
 		, "tests/or_struct_tester.h"
 		, "tests/or_two_parameters_tester.h"
+		, "tests/or_array_tester.h"
 		
 		
 		, "overload_resolution.h"
