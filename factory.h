@@ -17,6 +17,10 @@ public:
 		_createFuncs[name] = &createFunc<TDerived>;
 	}
 
+	bool has_type(const char * name) {
+		return (_createFuncs.count(name) > 0);
+	}
+
 	std::shared_ptr<T> create(const char * name) {
 		typename std::map<const char *, PCreateFunc>::const_iterator it = _createFuncs.find(name);
 		if (it != _createFuncs.end()) {

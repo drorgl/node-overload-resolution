@@ -31,6 +31,8 @@ void init(Handle<Object> target) {
 	or_tester::RegisterORTesters(target, overload);
 	or_struct_tester::RegisterORTesters(target, overload);
 	or_two_parameters_tester::RegisterORTesters(target, overload);
+
+	assert(overload->validate_type_registrations());
 }
 
 NODE_MODULE(hello, init);
