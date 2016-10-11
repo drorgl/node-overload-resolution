@@ -288,7 +288,7 @@ tape('function overload - structs', function (t) {
 
 
 
-//TODO: test multiple parameters
+//test multiple parameters
 tape('function overload 2 parameter, no defaults', function (t) {
     t.doesNotThrow(function () {
 
@@ -302,8 +302,59 @@ tape('function overload 2 parameter, no defaults', function (t) {
     t.end();
 });
 
-//TODO: test array types
+//test array types, array types overloads, array types defaults, array<struct>, array<array<struct>>
+tape('function overload for arrays, no defaults', function (t) {
+    t.doesNotThrow(function () {
+        t.equal(addon.array_testers(), ".no_parameters_testers", "array_testers()");
 
-//TODO: test parameter defaults
-// what to do if multiple overloads have the same parameter, different types with defaults? this is invalid..
+        for (var dt of dataTypes) {
+            t.equal(addon.array_testers([dt.value]), ".array<" + dt.name + ">", "array_testers array<" + dt.name + ">");
+        }
+
+        for (var dt of dataTypes) {
+            t.equal(addon.array_testers([[dt.value]]), ".array<array<" + dt.name + ">>", "array_testers array<array<" + dt.name + ">>");
+        }
+
+        //test array with multiple types
+
+        for (var dt1 of dataTypes) {
+            for (var dt2 of dataTypes) {
+                if (dt1.name != dt2.name) {
+                    t.equal(addon.array_testers([dt1.value, dt2.value]), ".array", "array_testers array (multiple types - " + dt1.name +"," + dt2.name + ")");
+                }
+            }
+        }
+
+        for (var dt1 of dataTypes) {
+            for (var dt2 of dataTypes) {
+                if (dt1.name != dt2.name) {
+                    t.equal(addon.array_testers([[dt1.value, dt2.value]]), ".array<array>", "array_testers array<array> (multiple types - " + dt1.name + "," + dt2.name + ")");
+                }
+            }
+        }
+
+        for (var dt1 of dataTypes) {
+            for (var dt2 of dataTypes) {
+                if (dt1 != dt2) {
+                    t.equal(addon.array_testers([[dt1.value], dt2.value]), ".array", "array_testers array<array> (multiple types - " + dt1.name + "," + dt2.name + ")");
+                }
+            }
+        }
+
+        //test array with multiple values of the same type
+
+        for (var dt of dataTypes) {
+            t.equal(addon.array_testers([dt.value, dt.value]), ".array<" + dt.name + ">", "array_testers array<" + dt.name + ">");
+        }
+
+        for (var dt of dataTypes) {
+            t.equal(addon.array_testers([[dt.value,dt.value]]), ".array<array<" + dt.name + ">>", "array_testers array<array<" + dt.name + ">>");
+        }
+
+    });
+    t.end();
+});
+
+////TODO: test parameter defaults
+//// what to do if multiple overloads have the same parameter, different types with defaults? this is invalid..
 

@@ -11,11 +11,14 @@ using namespace v8;
 #include "or_tester.h"
 #include "or_struct_tester.h"
 #include "or_two_parameters_tester.h"
+#include "or_array_tester.h"
 
 
 NAN_METHOD(testfunction_no_overload_resolution) {
 	info.GetReturnValue().Set(Nan::New<v8::String>("testfunction_no_overload_resolution").ToLocalChecked());
 }
+
+
 
 void init(Handle<Object> target) {
 	auto overload = std::make_shared<overload_resolution>();
@@ -31,6 +34,7 @@ void init(Handle<Object> target) {
 	or_tester::RegisterORTesters(target, overload);
 	or_struct_tester::RegisterORTesters(target, overload);
 	or_two_parameters_tester::RegisterORTesters(target, overload);
+	or_array_tester::RegisterORTesters(target, overload);
 
 	assert(overload->validate_type_registrations());
 }

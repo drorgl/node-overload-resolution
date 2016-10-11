@@ -11,29 +11,29 @@ class Factory
 {
 public:
 	template <typename TDerived>
-	void register_type(const char * name)
+	void register_type(std::string name)
 	{
 		static_assert(std::is_base_of<T, TDerived>::value, "Factory::register_type doesn't accept this type because doesn't derive from base class");
 		_createFuncs[name] = &createFunc<TDerived>;
 	}
 
-	bool has_type(const char * name) {
-		return (_createFuncs.count(name) > 0);
+	bool has_type(std::string name) {
+		return (_createFuncs .find(name) != std::end(_createFuncs));
 	}
 
-	std::shared_ptr<T> create(const char * name) {
-		typename std::map<const char *, PCreateFunc>::const_iterator it = _createFuncs.find(name);
+	std::shared_ptr<T> create(std::string name) {
+		typename std::map<std::string, PCreateFunc>::const_iterator it = _createFuncs.find(name);
 		if (it != _createFuncs.end()) {
 			return it.value()();
 		}
 		return nullptr;
 	}
 
-	std::vector<std::pair<const char *, std::shared_ptr<T>>> all() {
-		std::vector<std::pair<const char *, std::shared_ptr<T>>> v;
-		for (std::map<const char *, PCreateFunc>::const_iterator it =std::begin(_createFuncs); it != std::end( _createFuncs); ++it) {
+	std::vector<std::pair<std::string, std::shared_ptr<T>>> all() {
+		std::vector<std::pair<std::string, std::shared_ptr<T>>> v;
+		for (std::map<std::string, PCreateFunc>::const_iterator it =std::begin(_createFuncs); it != std::end( _createFuncs); ++it) {
 
-			v.push_back(std::pair<const char *, std::shared_ptr<T>>(it->first, it->second()));
+			v.push_back(std::pair<std::string, std::shared_ptr<T>>(it->first, it->second()));
 
 		}
 		return v;
@@ -49,7 +49,7 @@ private:
 	typedef std::shared_ptr<T> (*PCreateFunc)();
 
 
-	std::map<const char *, PCreateFunc> _createFuncs;
+	std::map<std::string, PCreateFunc> _createFuncs;
 };
 
 
