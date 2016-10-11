@@ -36,6 +36,7 @@ using namespace v8;
 		static NAN_METHOD(base_function_derived_class);
 		static NAN_METHOD(base_function_struct_A);
 		static NAN_METHOD(base_function_struct_B);
+		static NAN_METHOD(base_function_array);
 	};
 
 #endif

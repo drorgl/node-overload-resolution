@@ -2,7 +2,7 @@
 
 std::set<std::string> overload_resolution::_convertible_primitive_types = {"Number","String","Boolean"};
 
-std::set<std::string> overload_resolution::_primitive_types = {"Number","String","Boolean","Date","Buffer","Function","Map","Set","Null","Promise","Proxy","RegExp"};
+std::set<std::string> overload_resolution::_primitive_types = {"Number","String","Boolean","Date","Buffer","Function","Map","Set","Null","Promise","Proxy","RegExp","Array"};
 
 
 overload_info::overload_info(const char * parameterName, const char * type, v8::Local<v8::Value> defaultValue) {

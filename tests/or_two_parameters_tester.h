@@ -57,6 +57,9 @@ namespace or_two_parameters_tester {
 	NAN_METHOD(number_testers_number_struct_B) {
 		info.GetReturnValue().Set(Nan::New(".number.struct_B").ToLocalChecked());
 	}
+	NAN_METHOD(number_testers_number_array) {
+		info.GetReturnValue().Set(Nan::New(".number.array").ToLocalChecked());
+	}
 
 
 	NAN_METHOD(number_testers_string_number) {
@@ -103,6 +106,9 @@ namespace or_two_parameters_tester {
 	}
 	NAN_METHOD(number_testers_string_struct_B) {
 		info.GetReturnValue().Set(Nan::New(".string.struct_B").ToLocalChecked());
+	}
+	NAN_METHOD(number_testers_string_array) {
+		info.GetReturnValue().Set(Nan::New(".string.array").ToLocalChecked());
 	}
 
 
@@ -154,6 +160,9 @@ namespace or_two_parameters_tester {
 	NAN_METHOD(number_testers_bool_struct_B) {
 		info.GetReturnValue().Set(Nan::New(".bool.struct_B").ToLocalChecked());
 	}
+	NAN_METHOD(number_testers_bool_array) {
+		info.GetReturnValue().Set(Nan::New(".bool.array").ToLocalChecked());
+	}
 
 
 
@@ -202,6 +211,9 @@ namespace or_two_parameters_tester {
 	}
 	NAN_METHOD(number_testers_date_struct_B) {
 		info.GetReturnValue().Set(Nan::New(".date.struct_B").ToLocalChecked());
+	}
+	NAN_METHOD(number_testers_date_array) {
+		info.GetReturnValue().Set(Nan::New(".date.array").ToLocalChecked());
 	}
 
 
@@ -255,6 +267,9 @@ namespace or_two_parameters_tester {
 	NAN_METHOD(number_testers_function_struct_B) {
 		info.GetReturnValue().Set(Nan::New(".function.struct_B").ToLocalChecked());
 	}
+	NAN_METHOD(number_testers_function_array) {
+		info.GetReturnValue().Set(Nan::New(".function.array").ToLocalChecked());
+	}
 
 
 
@@ -304,6 +319,9 @@ namespace or_two_parameters_tester {
 	}
 	NAN_METHOD(number_testers_buffer_struct_B) {
 		info.GetReturnValue().Set(Nan::New(".buffer.struct_B").ToLocalChecked());
+	}
+	NAN_METHOD(number_testers_buffer_array) {
+		info.GetReturnValue().Set(Nan::New(".buffer.array").ToLocalChecked());
 	}
 
 
@@ -356,6 +374,9 @@ namespace or_two_parameters_tester {
 	NAN_METHOD(number_testers_map_struct_B) {
 		info.GetReturnValue().Set(Nan::New(".map.struct_B").ToLocalChecked());
 	}
+	NAN_METHOD(number_testers_map_array) {
+		info.GetReturnValue().Set(Nan::New(".map.array").ToLocalChecked());
+	}
 
 
 
@@ -405,6 +426,9 @@ namespace or_two_parameters_tester {
 	}
 	NAN_METHOD(number_testers_set_struct_B) {
 		info.GetReturnValue().Set(Nan::New(".set.struct_B").ToLocalChecked());
+	}
+	NAN_METHOD(number_testers_set_array) {
+		info.GetReturnValue().Set(Nan::New(".set.array").ToLocalChecked());
 	}
 
 
@@ -456,6 +480,9 @@ namespace or_two_parameters_tester {
 	NAN_METHOD(number_testers_promise_struct_B) {
 		info.GetReturnValue().Set(Nan::New(".promise.struct_B").ToLocalChecked());
 	}
+	NAN_METHOD(number_testers_promise_array) {
+		info.GetReturnValue().Set(Nan::New(".promise.array").ToLocalChecked());
+	}
 
 
 
@@ -505,6 +532,9 @@ namespace or_two_parameters_tester {
 	NAN_METHOD(number_testers_proxy_struct_B) {
 		info.GetReturnValue().Set(Nan::New(".proxy.struct_B").ToLocalChecked());
 	}
+	NAN_METHOD(number_testers_proxy_array) {
+		info.GetReturnValue().Set(Nan::New(".proxy.array").ToLocalChecked());
+	}
 
 
 
@@ -553,6 +583,9 @@ namespace or_two_parameters_tester {
 	}
 	NAN_METHOD(number_testers_regexp_struct_B) {
 		info.GetReturnValue().Set(Nan::New(".regexp.struct_B").ToLocalChecked());
+	}
+	NAN_METHOD(number_testers_regexp_array) {
+		info.GetReturnValue().Set(Nan::New(".regexp.array").ToLocalChecked());
 	}
 
 
@@ -604,6 +637,9 @@ namespace or_two_parameters_tester {
 	NAN_METHOD(number_testers_base_class_struct_B) {
 		info.GetReturnValue().Set(Nan::New(".base_class.struct_B").ToLocalChecked());
 	}
+	NAN_METHOD(number_testers_base_class_array) {
+		info.GetReturnValue().Set(Nan::New(".base_class.array").ToLocalChecked());
+	}
 
 
 
@@ -654,6 +690,9 @@ namespace or_two_parameters_tester {
 	NAN_METHOD(number_testers_derived_class_struct_B) {
 		info.GetReturnValue().Set(Nan::New(".derived_class.struct_B").ToLocalChecked());
 	}
+	NAN_METHOD(number_testers_derived_class_array) {
+		info.GetReturnValue().Set(Nan::New(".derived_class.array").ToLocalChecked());
+	}
 
 
 
@@ -702,6 +741,9 @@ namespace or_two_parameters_tester {
 	}
 	NAN_METHOD(number_testers_struct_A_struct_B) {
 		info.GetReturnValue().Set(Nan::New(".struct_A.struct_B").ToLocalChecked());
+	}
+	NAN_METHOD(number_testers_struct_A_array) {
+		info.GetReturnValue().Set(Nan::New(".struct_A.array").ToLocalChecked());
 	}
 
 
@@ -753,6 +795,61 @@ namespace or_two_parameters_tester {
 	NAN_METHOD(number_testers_struct_B_struct_B) {
 		info.GetReturnValue().Set(Nan::New(".struct_B.struct_B").ToLocalChecked());
 	}
+	NAN_METHOD(number_testers_struct_B_array) {
+		info.GetReturnValue().Set(Nan::New(".struct_B.array").ToLocalChecked());
+	}
+
+
+
+	NAN_METHOD(number_testers_array_number) {
+		info.GetReturnValue().Set(Nan::New(".array.number").ToLocalChecked());
+	}
+	NAN_METHOD(number_testers_array_string) {
+		info.GetReturnValue().Set(Nan::New(".array.string").ToLocalChecked());
+	}
+	NAN_METHOD(number_testers_array_bool) {
+		info.GetReturnValue().Set(Nan::New(".array.bool").ToLocalChecked());
+	}
+	NAN_METHOD(number_testers_array_date) {
+		info.GetReturnValue().Set(Nan::New(".array.date").ToLocalChecked());
+	}
+	NAN_METHOD(number_testers_array_function) {
+		info.GetReturnValue().Set(Nan::New(".array.function").ToLocalChecked());
+	}
+	NAN_METHOD(number_testers_array_buffer) {
+		info.GetReturnValue().Set(Nan::New(".array.buffer").ToLocalChecked());
+	}
+	NAN_METHOD(number_testers_array_map) {
+		info.GetReturnValue().Set(Nan::New(".array.map").ToLocalChecked());
+	}
+	NAN_METHOD(number_testers_array_set) {
+		info.GetReturnValue().Set(Nan::New(".array.set").ToLocalChecked());
+	}
+	NAN_METHOD(number_testers_array_promise) {
+		info.GetReturnValue().Set(Nan::New(".array.promise").ToLocalChecked());
+	}
+	NAN_METHOD(number_testers_array_proxy) {
+		info.GetReturnValue().Set(Nan::New(".array.proxy").ToLocalChecked());
+	}
+	NAN_METHOD(number_testers_array_regexp) {
+		info.GetReturnValue().Set(Nan::New(".array.regexp").ToLocalChecked());
+	}
+	NAN_METHOD(number_testers_array_base_class) {
+		info.GetReturnValue().Set(Nan::New(".array.base_class").ToLocalChecked());
+	}
+	NAN_METHOD(number_testers_array_derived_class) {
+		info.GetReturnValue().Set(Nan::New(".array.derived_class").ToLocalChecked());
+	}
+	NAN_METHOD(number_testers_array_struct_A) {
+		info.GetReturnValue().Set(Nan::New(".array.struct_A").ToLocalChecked());
+	}
+	NAN_METHOD(number_testers_array_struct_B) {
+		info.GetReturnValue().Set(Nan::New(".array.struct_B").ToLocalChecked());
+	}
+	NAN_METHOD(number_testers_array_array) {
+		info.GetReturnValue().Set(Nan::New(".array.array").ToLocalChecked());
+	}
+
 
 
 	NAN_METHOD(number_testers) {
@@ -778,6 +875,7 @@ namespace or_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Number",Nan::Undefined()),std::make_shared<overload_info>("a","derived_class",Nan::Undefined()) }, number_testers_number_derived_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Number",Nan::Undefined()),std::make_shared<overload_info>("a","struct_A",Nan::Undefined()) }, number_testers_number_struct_A);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Number",Nan::Undefined()),std::make_shared<overload_info>("a","struct_B",Nan::Undefined()) }, number_testers_number_struct_B);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Number",Nan::Undefined()),std::make_shared<overload_info>("a","Array",Nan::Undefined()) }, number_testers_number_array);
 
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","String",Nan::Undefined()),std::make_shared<overload_info>("a","Number",Nan::Undefined()) }, number_testers_string_number);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","String",Nan::Undefined()),std::make_shared<overload_info>("a","String",Nan::Undefined()) }, number_testers_string_string);
@@ -794,6 +892,7 @@ namespace or_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","String",Nan::Undefined()),std::make_shared<overload_info>("a","derived_class",Nan::Undefined()) }, number_testers_string_derived_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","String",Nan::Undefined()),std::make_shared<overload_info>("a","struct_A",Nan::Undefined()) }, number_testers_string_struct_A);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","String",Nan::Undefined()),std::make_shared<overload_info>("a","struct_B",Nan::Undefined()) }, number_testers_string_struct_B);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","String",Nan::Undefined()),std::make_shared<overload_info>("a","Array",Nan::Undefined()) }, number_testers_string_array);
 
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Boolean",Nan::Undefined()), std::make_shared<overload_info>("a","Number",Nan::Undefined()) }, number_testers_bool_number);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Boolean",Nan::Undefined()), std::make_shared<overload_info>("a","String",Nan::Undefined()) }, number_testers_bool_string);
@@ -810,6 +909,7 @@ namespace or_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Boolean",Nan::Undefined()), std::make_shared<overload_info>("a","derived_class",Nan::Undefined()) }, number_testers_bool_derived_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Boolean",Nan::Undefined()), std::make_shared<overload_info>("a","struct_A",Nan::Undefined()) }, number_testers_bool_struct_A);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Boolean",Nan::Undefined()), std::make_shared<overload_info>("a","struct_B",Nan::Undefined()) }, number_testers_bool_struct_B);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Boolean",Nan::Undefined()),std::make_shared<overload_info>("a","Array",Nan::Undefined()) }, number_testers_bool_array);
 
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Date",Nan::Undefined()),std::make_shared<overload_info>("a","Number",Nan::Undefined()) }, number_testers_date_number);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Date",Nan::Undefined()),std::make_shared<overload_info>("a","String",Nan::Undefined()) }, number_testers_date_string);
@@ -826,6 +926,7 @@ namespace or_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Date",Nan::Undefined()),std::make_shared<overload_info>("a","derived_class",Nan::Undefined()) }, number_testers_date_derived_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Date",Nan::Undefined()),std::make_shared<overload_info>("a","struct_A",Nan::Undefined()) }, number_testers_date_struct_A);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Date",Nan::Undefined()),std::make_shared<overload_info>("a","struct_B",Nan::Undefined()) }, number_testers_date_struct_B);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Date",Nan::Undefined()),std::make_shared<overload_info>("a","Array",Nan::Undefined()) }, number_testers_date_array);
 
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Function",Nan::Undefined()) , std::make_shared<overload_info>("a","Number",Nan::Undefined()) }, number_testers_function_number);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Function",Nan::Undefined()) , std::make_shared<overload_info>("a","String",Nan::Undefined()) }, number_testers_function_string);
@@ -842,6 +943,7 @@ namespace or_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Function",Nan::Undefined()) , std::make_shared<overload_info>("a","derived_class",Nan::Undefined()) }, number_testers_function_derived_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Function",Nan::Undefined()) , std::make_shared<overload_info>("a","struct_A",Nan::Undefined()) }, number_testers_function_struct_A);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Function",Nan::Undefined()) , std::make_shared<overload_info>("a","struct_B",Nan::Undefined()) }, number_testers_function_struct_B);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Function",Nan::Undefined()),std::make_shared<overload_info>("a","Array",Nan::Undefined()) }, number_testers_function_array);
 
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Buffer",Nan::Undefined()), std::make_shared<overload_info>("a","Number",Nan::Undefined()) }, number_testers_buffer_number);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Buffer",Nan::Undefined()), std::make_shared<overload_info>("a","String",Nan::Undefined()) }, number_testers_buffer_string);
@@ -858,6 +960,7 @@ namespace or_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Buffer",Nan::Undefined()), std::make_shared<overload_info>("a","derived_class",Nan::Undefined()) }, number_testers_buffer_derived_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Buffer",Nan::Undefined()), std::make_shared<overload_info>("a","struct_A",Nan::Undefined()) }, number_testers_buffer_struct_A);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Buffer",Nan::Undefined()), std::make_shared<overload_info>("a","struct_B",Nan::Undefined()) }, number_testers_buffer_struct_B);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Buffer",Nan::Undefined()),std::make_shared<overload_info>("a","Array",Nan::Undefined()) }, number_testers_buffer_array);
 
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Map",Nan::Undefined()), std::make_shared<overload_info>("a","Number",Nan::Undefined()) }, number_testers_map_number);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Map",Nan::Undefined()), std::make_shared<overload_info>("a","String",Nan::Undefined()) }, number_testers_map_string);
@@ -874,6 +977,7 @@ namespace or_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Map",Nan::Undefined()), std::make_shared<overload_info>("a","derived_class",Nan::Undefined()) }, number_testers_map_derived_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Map",Nan::Undefined()), std::make_shared<overload_info>("a","struct_A",Nan::Undefined()) }, number_testers_map_struct_A);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Map",Nan::Undefined()), std::make_shared<overload_info>("a","struct_B",Nan::Undefined()) }, number_testers_map_struct_B);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Map",Nan::Undefined()),std::make_shared<overload_info>("a","Array",Nan::Undefined()) }, number_testers_map_array);
 
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Set",Nan::Undefined()), std::make_shared<overload_info>("a","Number",Nan::Undefined()) }, number_testers_set_number);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Set",Nan::Undefined()), std::make_shared<overload_info>("a","String",Nan::Undefined()) }, number_testers_set_string);
@@ -890,6 +994,7 @@ namespace or_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Set",Nan::Undefined()), std::make_shared<overload_info>("a","derived_class",Nan::Undefined()) }, number_testers_set_derived_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Set",Nan::Undefined()), std::make_shared<overload_info>("a","struct_A",Nan::Undefined()) }, number_testers_set_struct_A);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Set",Nan::Undefined()), std::make_shared<overload_info>("a","struct_B",Nan::Undefined()) }, number_testers_set_struct_B);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Set",Nan::Undefined()),std::make_shared<overload_info>("a","Array",Nan::Undefined()) }, number_testers_set_array);
 
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Promise",Nan::Undefined()), std::make_shared<overload_info>("a","Number",Nan::Undefined()) }, number_testers_promise_number);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Promise",Nan::Undefined()), std::make_shared<overload_info>("a","String",Nan::Undefined()) }, number_testers_promise_string);
@@ -906,6 +1011,7 @@ namespace or_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Promise",Nan::Undefined()), std::make_shared<overload_info>("a","derived_class",Nan::Undefined()) }, number_testers_promise_derived_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Promise",Nan::Undefined()), std::make_shared<overload_info>("a","struct_A",Nan::Undefined()) }, number_testers_promise_struct_A);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Promise",Nan::Undefined()), std::make_shared<overload_info>("a","struct_B",Nan::Undefined()) }, number_testers_promise_struct_B);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Promise",Nan::Undefined()),std::make_shared<overload_info>("a","Array",Nan::Undefined()) }, number_testers_promise_array);
 
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Proxy",Nan::Undefined()), std::make_shared<overload_info>("a","Number",Nan::Undefined()) }, number_testers_proxy_number);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Proxy",Nan::Undefined()), std::make_shared<overload_info>("a","String",Nan::Undefined()) }, number_testers_proxy_string);
@@ -922,6 +1028,7 @@ namespace or_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Proxy",Nan::Undefined()), std::make_shared<overload_info>("a","derived_class",Nan::Undefined()) }, number_testers_proxy_derived_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Proxy",Nan::Undefined()), std::make_shared<overload_info>("a","struct_A",Nan::Undefined()) }, number_testers_proxy_struct_A);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Proxy",Nan::Undefined()), std::make_shared<overload_info>("a","struct_B",Nan::Undefined()) }, number_testers_proxy_struct_B);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Proxy",Nan::Undefined()),std::make_shared<overload_info>("a","Array",Nan::Undefined()) }, number_testers_proxy_array);
 
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","RegExp",Nan::Undefined()), std::make_shared<overload_info>("a","Number",Nan::Undefined()) }, number_testers_regexp_number);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","RegExp",Nan::Undefined()), std::make_shared<overload_info>("a","String",Nan::Undefined()) }, number_testers_regexp_string);
@@ -938,6 +1045,7 @@ namespace or_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","RegExp",Nan::Undefined()), std::make_shared<overload_info>("a","derived_class",Nan::Undefined()) }, number_testers_regexp_derived_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","RegExp",Nan::Undefined()), std::make_shared<overload_info>("a","struct_A",Nan::Undefined()) }, number_testers_regexp_struct_A);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","RegExp",Nan::Undefined()), std::make_shared<overload_info>("a","struct_B",Nan::Undefined()) }, number_testers_regexp_struct_B);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","RegExp",Nan::Undefined()),std::make_shared<overload_info>("a","Array",Nan::Undefined()) }, number_testers_regexp_array);
 
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","base_class",Nan::Undefined()), std::make_shared<overload_info>("a","Number",Nan::Undefined()) }, number_testers_base_class_number);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","base_class",Nan::Undefined()), std::make_shared<overload_info>("a","String",Nan::Undefined()) }, number_testers_base_class_string);
@@ -954,6 +1062,7 @@ namespace or_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","base_class",Nan::Undefined()), std::make_shared<overload_info>("a","derived_class",Nan::Undefined()) }, number_testers_base_class_derived_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","base_class",Nan::Undefined()), std::make_shared<overload_info>("a","struct_A",Nan::Undefined()) }, number_testers_base_class_struct_A);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","base_class",Nan::Undefined()), std::make_shared<overload_info>("a","struct_B",Nan::Undefined()) }, number_testers_base_class_struct_B);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","base_class",Nan::Undefined()),std::make_shared<overload_info>("a","Array",Nan::Undefined()) }, number_testers_base_class_array);
 
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","derived_class",Nan::Undefined()), std::make_shared<overload_info>("a","Number",Nan::Undefined()) }, number_testers_derived_class_number);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","derived_class",Nan::Undefined()), std::make_shared<overload_info>("a","String",Nan::Undefined()) }, number_testers_derived_class_string);
@@ -970,6 +1079,7 @@ namespace or_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","derived_class",Nan::Undefined()), std::make_shared<overload_info>("a","derived_class",Nan::Undefined()) }, number_testers_derived_class_derived_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","derived_class",Nan::Undefined()), std::make_shared<overload_info>("a","struct_A",Nan::Undefined()) }, number_testers_derived_class_struct_A);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","derived_class",Nan::Undefined()), std::make_shared<overload_info>("a","struct_B",Nan::Undefined()) }, number_testers_derived_class_struct_B);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","derived_class",Nan::Undefined()),std::make_shared<overload_info>("a","Array",Nan::Undefined()) }, number_testers_derived_class_array);
 
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","struct_A",Nan::Undefined()), std::make_shared<overload_info>("a","Number",Nan::Undefined()) }, number_testers_struct_A_number);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","struct_A",Nan::Undefined()), std::make_shared<overload_info>("a","String",Nan::Undefined()) }, number_testers_struct_A_string);
@@ -986,6 +1096,7 @@ namespace or_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","struct_A",Nan::Undefined()), std::make_shared<overload_info>("a","derived_class",Nan::Undefined()) }, number_testers_struct_A_derived_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","struct_A",Nan::Undefined()), std::make_shared<overload_info>("a","struct_A",Nan::Undefined()) }, number_testers_struct_A_struct_A);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","struct_A",Nan::Undefined()), std::make_shared<overload_info>("a","struct_B",Nan::Undefined()) }, number_testers_struct_A_struct_B);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","struct_A",Nan::Undefined()),std::make_shared<overload_info>("a","Array",Nan::Undefined()) }, number_testers_struct_A_array);
 
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","struct_B",Nan::Undefined()), std::make_shared<overload_info>("a","Number",Nan::Undefined()) }, number_testers_struct_B_number);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","struct_B",Nan::Undefined()), std::make_shared<overload_info>("a","String",Nan::Undefined()) }, number_testers_struct_B_string);
@@ -1002,6 +1113,24 @@ namespace or_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","struct_B",Nan::Undefined()), std::make_shared<overload_info>("a","derived_class",Nan::Undefined()) }, number_testers_struct_B_derived_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","struct_B",Nan::Undefined()), std::make_shared<overload_info>("a","struct_A",Nan::Undefined()) }, number_testers_struct_B_struct_A);
 		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","struct_B",Nan::Undefined()), std::make_shared<overload_info>("a","struct_B",Nan::Undefined()) }, number_testers_struct_B_struct_B);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","struct_B",Nan::Undefined()), std::make_shared<overload_info>("a","Array",Nan::Undefined()) }, number_testers_struct_B_array);
+
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Array",Nan::Undefined()), std::make_shared<overload_info>("a","Number",Nan::Undefined()) }, number_testers_array_number);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Array",Nan::Undefined()), std::make_shared<overload_info>("a","String",Nan::Undefined()) }, number_testers_array_string);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Array",Nan::Undefined()), std::make_shared<overload_info>("a","Boolean",Nan::Undefined()) }, number_testers_array_bool);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Array",Nan::Undefined()), std::make_shared<overload_info>("a","Date",Nan::Undefined()) }, number_testers_array_date);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Array",Nan::Undefined()), std::make_shared<overload_info>("a","Function",Nan::Undefined()) }, number_testers_array_function);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Array",Nan::Undefined()), std::make_shared<overload_info>("a","Buffer",Nan::Undefined()) }, number_testers_array_buffer);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Array",Nan::Undefined()), std::make_shared<overload_info>("a","Map",Nan::Undefined()) }, number_testers_array_map);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Array",Nan::Undefined()), std::make_shared<overload_info>("a","Set",Nan::Undefined()) }, number_testers_array_set);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Array",Nan::Undefined()), std::make_shared<overload_info>("a","Promise",Nan::Undefined()) }, number_testers_array_promise);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Array",Nan::Undefined()), std::make_shared<overload_info>("a","Proxy",Nan::Undefined()) }, number_testers_array_proxy);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Array",Nan::Undefined()), std::make_shared<overload_info>("a","RegExp",Nan::Undefined()) }, number_testers_array_regexp);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Array",Nan::Undefined()), std::make_shared<overload_info>("a","base_class",Nan::Undefined()) }, number_testers_array_base_class);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Array",Nan::Undefined()), std::make_shared<overload_info>("a","derived_class",Nan::Undefined()) }, number_testers_array_derived_class);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Array",Nan::Undefined()), std::make_shared<overload_info>("a","struct_A",Nan::Undefined()) }, number_testers_array_struct_A);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Array",Nan::Undefined()), std::make_shared<overload_info>("a","struct_B",Nan::Undefined()) }, number_testers_array_struct_B);
+		overload->addOverload("or_two_tester", "", "two_testers", { std::make_shared<overload_info>("a","Array",Nan::Undefined()), std::make_shared<overload_info>("a","Array",Nan::Undefined()) }, number_testers_array_array);
 
 
 

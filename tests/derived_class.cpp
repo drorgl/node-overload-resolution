@@ -31,6 +31,7 @@ void derived_class::Init(Handle<Object> target, std::shared_ptr<overload_resolut
 	overload->addOverload("", "derived_class", "base_function", { std::make_shared<overload_info>("a","derived_class",Nan::Undefined()) }, base_function_derived_class);
 	overload->addOverload("", "derived_class", "base_function", { std::make_shared<overload_info>("a","struct_A",Nan::Undefined()) }, base_function_struct_A);
 	overload->addOverload("", "derived_class", "base_function", { std::make_shared<overload_info>("a","struct_B",Nan::Undefined()) }, base_function_struct_B);
+	overload->addOverload("", "derived_class", "base_function", { std::make_shared<overload_info>("a","Array",Nan::Undefined()) }, base_function_array);
 
 
 	target->Set(Nan::New("derived_class").ToLocalChecked(), ctor->GetFunction());
@@ -105,4 +106,8 @@ NAN_METHOD(derived_class::base_function_struct_A) {
 
 NAN_METHOD(derived_class::base_function_struct_B) {
 	info.GetReturnValue().Set(Nan::New<v8::String>("derived_class.base_function.struct_B").ToLocalChecked());
+}
+
+NAN_METHOD(derived_class::base_function_array) {
+	info.GetReturnValue().Set(Nan::New<v8::String>("derived_class.base_function.array").ToLocalChecked());
 }
