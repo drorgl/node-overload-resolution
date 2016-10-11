@@ -1,6 +1,8 @@
 #include "overload_resolution.h"
 
-std::set<std::string> overload_resolution::_primitive_types = {"Number","String","Boolean"};
+std::set<std::string> overload_resolution::_convertible_primitive_types = {"Number","String","Boolean"};
+
+std::set<std::string> overload_resolution::_primitive_types = {"Number","String","Boolean","Date","Buffer","Function","Map","Set","Null","Promise","Proxy","RegExp"};
 
 
 overload_info::overload_info(const char * parameterName, const char * type, v8::Local<v8::Value> defaultValue) {
@@ -22,6 +24,36 @@ void overload_resolution::register_type(v8::Local<v8::FunctionTemplate> function
 	ot->ns = ns;
 	ot->name = name;
 	_types[name] = ot;
+}
+
+bool overload_resolution::validate_type_registrations() {
+	for (std::map<std::string, o_r_namespace>::iterator ns = std::begin(_namespaces); ns != std::end(_namespaces); ns++) {
+		//for each namespace
+		for (std::map<std::string, std::shared_ptr< o_r_class>>::iterator cls = std::begin(ns->second.classes); cls != std::end(ns->second.classes); cls++) {
+			//for each class 
+			for (std::map<std::string, std::vector<std::shared_ptr< o_r_function>>>::iterator fn = std::begin(cls->second->functions); fn != std::end(cls->second->functions); fn++) {
+				//for each function
+				for (std::vector<std::shared_ptr< o_r_function>>::iterator fnoverload = std::begin(fn->second); fnoverload != std::end(fn->second); fnoverload++) {
+					//for each function overload
+					for (std::vector<std::shared_ptr<overload_info>>::iterator olinfo = std::begin(fnoverload->get()->parameters); olinfo != std::end(fnoverload->get()->parameters); olinfo++) {
+						//for each overload parameter
+						auto type = olinfo->get()->type;
+
+						if ((_types.count(type) == 0 ) &&
+							(!_structured_factory.has_type(type)) && 
+							(_primitive_types.count(type) == 0)
+							//TODO: add handling for "generic" arrays (??)
+							)
+						{
+							//printf("type not found: %s", olinfo->get()->type);
+							return false;
+						}
+					}
+				}
+			}
+		}
+	}
+	return true;
 }
 
 void overload_resolution::addOverload(const char * ns, const char * className, const char * name, std::vector<std::shared_ptr<overload_info>> arguments, Nan::FunctionCallback callback) {
@@ -162,7 +194,8 @@ bool overload_resolution::isConvertibleTo(v8::Local<v8::Value> param, const char
 	}
 
 	//if converting to primitive from a primitive, it is possible
-	if (_primitive_types.count(type) > 0 && _primitive_types.count(determineType(param)) > 0) {
+	//TODO: not always, a string can be converted to number only if it contains a number
+	if (_convertible_primitive_types.count(type) > 0 && _convertible_primitive_types.count(determineType(param)) > 0) {
 		return true;
 	}
 

@@ -69,37 +69,7 @@
 ////	throw ML::Exception("Cannot fit " + cstr(val) + " into an integer");
 //
 //
-////https://image.slidesharecdn.com/howtowritenodejsmodule-120415103400-phpapp01/95/how-to-write-nodejs-module-78-728.jpg?cb=1334486513
-////v8 type checking
-////IsArray()
-////IsBoolean()
-////IsDate()
-////IsExternal()
-////IsFalse()
-////IsFunction()
-////IsInt32()
-////IsNull()
-////IsNumber()
-////IsObject()
-////IsString()
-////IsTrue()
-////IsUint32()
-////IsUndefined()
-//
-////v8 type conversion
-////bool BooleanValue()
-////int32_t Int32Value()
-////int64_t IntegerValue()
-////double NumberValue()
-////Local<Boolean> ToBoolean()
-////Utf8Value / AsciiValue Local<String> ToString()
-////Local<Int32> ToInt32()
-////Local<Integer> ToInteger()
-////Local<Number> ToNumber()
-////Get/Set/Has/Delete Local<Object> ToObject()
-////Local<Uint32> ToUint32()
-//
-//
+
 struct object_type {
 	Nan::Persistent<v8::FunctionTemplate, Nan::CopyablePersistentTraits<v8::FunctionTemplate>> function_template;
 	const char * ns;
@@ -142,12 +112,24 @@ class IStructuredObject;
 
 class overload_resolution {
 private:
-	static std::set<std::string> _primitive_types; 
+	//list of primitive types for conversion checking
+	static std::set<std::string> _convertible_primitive_types; 
+
+	//list of primitive types for type validation
+	static std::set<std::string> _primitive_types;
+	
+	//factory for structs, used to instantiate the appropriate struct when required or generate all structs when determining type
+	//TODO: improve the struct checking process, its inefficient to create all structs for each type checking (that didn't meet primitive or classes names)
 	Factory<IStructuredObject> _structured_factory;
+	
+	//type registry
 	std::map<std::string, std::shared_ptr<object_type>> _types;
 
 	//overload_info _emptyOverloadInfo;
+
+	//overload registry
 	std::map<std::string, o_r_namespace> _namespaces;
+
 	//new() : Affine3<T>;
 	//new (affine: _matx.Matx<T>) : Affine3<T>;
 	//new (data: _mat.Mat, t ? : _matx.Vec<T> /*= Vec3::all(0)*/) : Affine3<T>;
@@ -163,17 +145,24 @@ public:
 	//in case of array, which type is inside it, what to do if multiple types are in the array?
 	void register_type(v8::Local<v8::FunctionTemplate> functionTemplate, const char * ns, const char * name);
 
+	//register struct
 	template <typename TDerived>
 	void register_type(const char * ns, const char * name) {
 		_structured_factory.register_type<TDerived>(name);
 	}
 
+	bool validate_type_registrations();
+
+	//adds an overload function
 	void addOverload(const char * ns, const char * className, const char * functionName, std::vector<std::shared_ptr<overload_info>> arguments, Nan::FunctionCallback callback);
 
+	//determines the type of param, primitives, registered types, registered structs
 	const char * determineType(v8::Local<v8::Value> param);
 
+	//checks if param type is convertible to type
 	bool isConvertibleTo(v8::Local<v8::Value> param, const char * type);
 
+	//retrieve a list of class names up the prototype chain
 	void getPrototypeChain(v8::Local<v8::Value> param, std::vector<std::string> &chain);
 
 	//parse the registered functions, find possible matches:
@@ -184,10 +173,13 @@ public:
 
 	void executeBestOverload(const char * ns, std::vector<std::string> & className, const char * name, Nan::NAN_METHOD_ARGS_TYPE info);
 	
+	//catch-all function, looks up the function in the overloads collections and executing the right one
 	Nan::NAN_METHOD_RETURN_TYPE execute(const char * name_space, Nan::NAN_METHOD_ARGS_TYPE info);
 
-
+	//verifies an object/map structure against a list of properties
 	bool verifyObject(std::vector<std::shared_ptr<overload_info>> props, v8::Local<v8::Value> val);
+
+	//gets a value from an object/map
 	Nan::MaybeLocal<v8::Value> GetFromObject(v8::Local<v8::Value> obj, const char * key);
 };
 
