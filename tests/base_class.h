@@ -4,18 +4,21 @@
 #include <memory>
 #include <string>
 #include "../overload_resolution.h"
-using namespace v8;
+
+
 
 
 	class base_class : public Nan::ObjectWrap {
 	private:
 
 	public:
-		static void Init(Handle<Object> target, std::shared_ptr<overload_resolution> overload);
+		static void Init(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload);
 
 		std::shared_ptr<std::string> _data;
 
-		static Nan::Persistent<FunctionTemplate> constructor;
+		static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+		static v8::Local<v8::Object> New();
 
 		static NAN_METHOD(New);
 

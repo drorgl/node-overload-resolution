@@ -19,5 +19,13 @@ bool struct_A::parse(overload_resolution * ovres, v8::Local<v8::Value> obj) {
 
 
 v8::Local<v8::Value> struct_A::ToObject() {
-	return Nan::Undefined();
+	auto retval = Nan::New<v8::Object>();
+	retval->Set(Nan::New<v8::String>("prop1").ToLocalChecked(), Nan::New<v8::String>(this->prop1).ToLocalChecked());
+	retval->Set(Nan::New<v8::String>("prop2").ToLocalChecked(), Nan::New<v8::String>(this->prop2).ToLocalChecked());
+	return retval;
+}
+
+v8::Local<v8::Object> struct_A::New() {
+	struct_A a;
+	return a.ToObject().As<v8::Object>();
 }

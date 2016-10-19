@@ -15,8 +15,6 @@
 
 #include "../overload_resolution.h"
 
-using namespace v8;
-
 
 
 class struct_B : public IStructuredObject {
@@ -31,6 +29,8 @@ public:
 	virtual bool parse(overload_resolution * ovres, v8::Local<v8::Value> obj);
 
 	 v8::Local<v8::Value> ToObject();
+
+	 static v8::Local<v8::Object> New();
 };
 
 

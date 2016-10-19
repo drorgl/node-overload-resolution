@@ -15,7 +15,6 @@
 
 #include "overload_resolution.h"
 
-using namespace v8;
 
 class overload_resolution;
 

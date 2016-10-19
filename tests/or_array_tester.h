@@ -1,7 +1,6 @@
 #ifndef _O_R_ARRAY_TESTER_H_
 #define _O_R_ARRAY_TESTER_H_
 #include "../overload_resolution.h"
-using namespace v8;
 
 namespace or_array_tester {
 
@@ -124,7 +123,7 @@ NAN_METHOD(array_testers) {
 }
 
 
-	void RegisterORTesters(Handle<Object> target, std::shared_ptr<overload_resolution> overload) {
+	void RegisterORTesters(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
 		auto loverload = overload;
 		overload->addOverload("or_array_tester", "", "array_testers", { std::make_shared<overload_info>("a","Array",Nan::Undefined()) }, array_testers_array);
 		overload->addOverload("or_array_tester", "", "array_testers", { std::make_shared<overload_info>("a","Array<Number>",Nan::Undefined()) }, array_testers_array_number);

@@ -1,7 +1,6 @@
 #ifndef _O_R_TESTER_H_
 #define _O_R_TESTER_H_
 #include "../overload_resolution.h"
-using namespace v8;
 
 namespace or_tester {
 
@@ -110,7 +109,7 @@ namespace or_tester {
 
 
 
-	void RegisterORTesters(Handle<Object> target, std::shared_ptr<overload_resolution> overload) {
+	void RegisterORTesters(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
 		auto loverload = overload;
 		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","Number",Nan::Undefined()) }, number_testers_number);
 		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","String",Nan::Undefined()) }, number_testers_string);

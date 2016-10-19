@@ -232,7 +232,7 @@ tape('function overload 1 parameter, no defaults', function (t) {
 
 
 
-//TODO: test member/static functions
+//test member/static functions
 
 tape('member function overload 1 parameter, no defaults', function (t) {
     t.doesNotThrow(function () {
@@ -355,6 +355,20 @@ tape('function overload for arrays, no defaults', function (t) {
     t.end();
 });
 
-////TODO: test parameter defaults
-//// what to do if multiple overloads have the same parameter, different types with defaults? this is invalid..
+//TODO: test parameter defaults
+// what to do if multiple overloads have the same parameter, different types with defaults? this is invalid..
+//TODO: test the default value is used!
 
+tape('function overload 1 parameter, 2nd parameter default', function (t) {
+    t.doesNotThrow(function () {
+        for (var dt1 of dataTypes) {
+            var default_func = new Function("addon, val", "return addon.default_testers_" + dt1.name + "(val)");
+            t.equal(default_func(addon), ".no_params", "default testers " + dt1.name + ", no parameters");
+            for (var dt2 of dataTypes) {
+                t.equal(default_func(addon, dt2.value) ,  "." + dt2.name + "." + dt1.name, "default testers " + dt2.name + ", default (2nd parameter):" + dt1.name );
+            }
+        }
+
+    });
+    t.end();
+});
