@@ -1,7 +1,5 @@
 #include "../overload_resolution.h"
 
-using namespace v8;
-
 #include "base_class.h"
 #include "derived_class.h"
 
@@ -12,6 +10,7 @@ using namespace v8;
 #include "or_struct_tester.h"
 #include "or_two_parameters_tester.h"
 #include "or_array_tester.h"
+#include "or_default_tester.h"
 
 
 NAN_METHOD(testfunction_no_overload_resolution) {
@@ -19,8 +18,21 @@ NAN_METHOD(testfunction_no_overload_resolution) {
 }
 
 
+//strong types research
+template <typename T>
+class MyClass {
+public:
+	static const char *name; // Not private
+							 // ...
+};
 
-void init(Handle<Object> target) {
+#define DECLARE_MY_CLASS(x) template<> const char *MyClass<x>::name = #x;
+
+DECLARE_MY_CLASS(int);
+DECLARE_MY_CLASS(std::vector<std::string>);
+
+
+void init(v8::Handle<v8::Object> target) {
 	auto overload = std::make_shared<overload_resolution>();
 
 	overload->register_type<IStructuredObject>("", "IStructuredObject");
@@ -35,8 +47,36 @@ void init(Handle<Object> target) {
 	or_struct_tester::RegisterORTesters(target, overload);
 	or_two_parameters_tester::RegisterORTesters(target, overload);
 	or_array_tester::RegisterORTesters(target, overload);
+	or_default_parameters_tester::RegisterORTesters(target, overload);
 
 	assert(overload->validate_type_registrations());
+
+
+	//test strong type parameters
+	//printf(MyClass<int>::name);
+	//printf("\r\n");
+	//printf(MyClass<std::vector<std::string>>::name);
+	//printf("\r\n");
+	//DECLARE_TYPE_NAME(std::vector<std::string>);
+
+
+	//printf(gettype<std::vector<std::string>>());
+	//printf("\r\n");
+
+	//printf(typeid(std::vector<std::string>).name());
+	//printf("\r\n");
+	//printf(typeid(v8::Object).name());
+	//printf("\r\n");
+
+
+	//array<string>
+	//array<int>
+	//array<array<int>>
+	//array<array<number>>
+	//array<array<struct_A>>
+	//overload->addOverload("", "derived_class", "base_function", { std::make_shared<overload_info>("a","Array<Number>",Nan::Undefined()) }, base_function_number);
+	//overload->addOverload("", "derived_class", "base_function", { std::make_shared<overload_info>("a","Array<Array<Number>>",Nan::Undefined()) }, base_function_number);
+
 }
 
 NODE_MODULE(hello, init);

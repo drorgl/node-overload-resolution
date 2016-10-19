@@ -263,10 +263,12 @@ int overload_resolution::MatchOverload(o_r_function *func, Nan::NAN_METHOD_ARGS_
 	int parameterLength = std::max((int)func->parameters.size(), info.Length());
 	int rank = 0;
 
-	//in case there are no parameters and a candidate doesn't have any parameters, they most likely meant that overload
-	if ((info.Length() == 0) && (func->parameters.size() == 0)) {
+	//in case there are no parameters to this function, its always a possible candidate, though low priority
+	if ((func->parameters.size() == 0)) {
 		return 1;
 	}
+
+
 
 	for (auto i = 0; i < parameterLength; i++) {
 		int local_rank = 0;
@@ -282,14 +284,14 @@ int overload_resolution::MatchOverload(o_r_function *func, Nan::NAN_METHOD_ARGS_
 		
 		//check if the function parameter and info parameter types are the same
 		if (fparam->type == determineType(iparam)) {
-			local_rank += 4;
+			local_rank += 2^10;
 		}
 		
 
 		//check if the function parameter and info parameter types are convertible
 		//make sure undefined was actually passed so conversion to boolean won't be used
 		if ((info.Length() > i) && isConvertibleTo(iparam, fparam->type)) {
-			local_rank += 2;
+			local_rank += 2^2;
 		}
 
 		//TODO: check conversion of prototype types, give higher score to closer conversions, if base/descendant, prefer the exact type.
@@ -298,8 +300,11 @@ int overload_resolution::MatchOverload(o_r_function *func, Nan::NAN_METHOD_ARGS_
 
 		//TODO: check interface/structures?
 
-		//TODO: check default values - rethink!
-		if (! Nan::New<v8::Value>(fparam->defaultValue)->IsUndefined()){
+		//if no default value and no supplied parameter, this should not match
+		if (iparam->IsUndefined() && Nan::New(fparam->defaultValue)->IsUndefined()){
+			return -1;
+		}
+		else {
 			local_rank += 1;
 		}
 
@@ -495,7 +500,7 @@ bool overload_resolution::verifyObject(std::vector<std::shared_ptr<overload_info
 }
 
 
-MaybeLocal<v8::Value>  overload_resolution::GetFromObject(v8::Local<v8::Value> obj, const char * key) {
+v8::MaybeLocal<v8::Value>  overload_resolution::GetFromObject(v8::Local<v8::Value> obj, const char * key) {
 	auto mctx = Nan::GetCurrentContext();
 
 	if (obj->IsMap()) {

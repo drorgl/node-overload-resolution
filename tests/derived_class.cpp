@@ -2,10 +2,10 @@
 
 #include "base_class.h"
 
-Nan::Persistent<FunctionTemplate> derived_class::constructor;
+Nan::Persistent<v8::FunctionTemplate> derived_class::constructor;
 
-void derived_class::Init(Handle<Object> target, std::shared_ptr<overload_resolution> overload) {
-	Local<FunctionTemplate> ctor = Nan::New<FunctionTemplate>(derived_class::New);
+void derived_class::Init(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
+	v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(derived_class::New);
 	constructor.Reset(ctor);
 	ctor->InstanceTemplate()->SetInternalFieldCount(1);
 	ctor->SetClassName(Nan::New("derived_class").ToLocalChecked());
@@ -37,6 +37,12 @@ void derived_class::Init(Handle<Object> target, std::shared_ptr<overload_resolut
 	target->Set(Nan::New("derived_class").ToLocalChecked(), ctor->GetFunction());
 	overload->register_type(ctor,"", "derived_class");
 };
+
+v8::Local<v8::Object> derived_class::New() {
+	auto retval = Nan::NewInstance(Nan::GetFunction(Nan::New<v8::FunctionTemplate>(derived_class::constructor)).ToLocalChecked()).ToLocalChecked();
+
+	return retval;
+}
 
 NAN_METHOD(derived_class::New) {
 
