@@ -5,7 +5,7 @@ std::set<std::string> overload_resolution::_convertible_primitive_types = {"Numb
 std::set<std::string> overload_resolution::_primitive_types = {"Number","String","Boolean","Date","Buffer","Function","Map","Set","Null","Promise","Proxy","RegExp","Array"};
 
 
-overload_info::overload_info(const char * parameterName, const char * type, v8::Local<v8::Value> defaultValue) {
+overload_info::overload_info(const std::string parameterName, const std::string type, v8::Local<v8::Value> defaultValue) {
 	this->parameterName = parameterName;
 	this->type = type;
 	this->defaultValue.Reset(defaultValue);
@@ -16,7 +16,7 @@ overload_resolution::overload_resolution() {
 }
 
 
-void overload_resolution::register_type(v8::Local<v8::FunctionTemplate> functionTemplate, const char * ns, const char * name) {
+void overload_resolution::register_type(v8::Local<v8::FunctionTemplate> functionTemplate, const std::string ns, const std::string name) {
 	assert(_types.count(name) == 0 && "type name already exists");
 
 	auto ot = std::make_shared< object_type>();
@@ -45,9 +45,9 @@ void overload_resolution::split_generic_types(std::string type, std::set<std::st
 }
 
 bool overload_resolution::validate_type_registrations() {
-	for (std::map<std::string, o_r_namespace>::iterator ns = std::begin(_namespaces); ns != std::end(_namespaces); ns++) {
+	for (std::map<std::string, std::shared_ptr<o_r_namespace>>::iterator ns = std::begin(_namespaces); ns != std::end(_namespaces); ns++) {
 		//for each namespace
-		for (std::map<std::string, std::shared_ptr< o_r_class>>::iterator cls = std::begin(ns->second.classes); cls != std::end(ns->second.classes); cls++) {
+		for (std::map<std::string, std::shared_ptr< o_r_class>>::iterator cls = std::begin(ns->second->classes); cls != std::end(ns->second->classes); cls++) {
 			//for each class 
 			for (std::map<std::string, std::vector<std::shared_ptr< o_r_function>>>::iterator fn = std::begin(cls->second->functions); fn != std::end(cls->second->functions); fn++) {
 				//for each function
@@ -69,7 +69,7 @@ bool overload_resolution::validate_type_registrations() {
 								if ((_types.count(*separate_type) == 0) &&
 									(!_structured_factory.has_type(separate_type->c_str())) &&
 									(_primitive_types.count(*separate_type) == 0)){
-									printf("cannot find type %s in %s::%s::%s", separate_type->c_str(),ns->second.name,cls->second->className, (*fnoverload)->functionName);
+									printf("cannot find type %s in %s::%s::%s", separate_type->c_str(),ns->second->name,cls->second->className, (*fnoverload)->functionName);
 									return false;
 								}
 							}
@@ -82,22 +82,22 @@ bool overload_resolution::validate_type_registrations() {
 	return true;
 }
 
-void overload_resolution::addOverload(const char * ns, const char * className, const char * name, std::vector<std::shared_ptr<overload_info>> arguments, Nan::FunctionCallback callback) {
+void overload_resolution::addOverload(const std::string ns, const std::string className, const std::string name, std::vector<std::shared_ptr<overload_info>> arguments, Nan::FunctionCallback callback) {
 	//check if namespace exists, if not, create
 	if (!_namespaces.count(ns)) {
-		_namespaces[ns] = o_r_namespace();
-		_namespaces[ns].name = ns;
+		_namespaces[ns] = std::make_shared<o_r_namespace>();
+		_namespaces[ns]->name = ns;
 	}
 
 	//check if class exists, if not, create
-	if (!_namespaces[ns].classes.count(className)) {
-		_namespaces[ns].classes[className] = std::make_shared<o_r_class>();
-		_namespaces[ns].classes[className]->className = className;
+	if (!_namespaces[ns]->classes.count(className)) {
+		_namespaces[ns]->classes[className] = std::make_shared<o_r_class>();
+		_namespaces[ns]->classes[className]->className = className;
 	}
 	
 	//check functions collection exists, if not, create
-	if (!_namespaces[ns].classes[className]->functions.count(name)) {
-		_namespaces[ns].classes[className]->functions[name] = std::vector<std::shared_ptr<o_r_function>>();
+	if (!_namespaces[ns]->classes[className]->functions.count(name)) {
+		_namespaces[ns]->classes[className]->functions[name] = std::vector<std::shared_ptr<o_r_function>>();
 	}
 	
 	//add function to functions collection
@@ -106,7 +106,7 @@ void overload_resolution::addOverload(const char * ns, const char * className, c
 	f->functionName = name;
 	f->className = className;
 	f->parameters = arguments;
-	_namespaces[ns].classes[className]->functions[name].push_back(f);
+	_namespaces[ns]->classes[className]->functions[name].push_back(f);
 }
 
 void overload_resolution::get_array_types(v8::Local<v8::Value> arr, std::set<std::string> &types) {
@@ -201,7 +201,7 @@ std::string overload_resolution::determineType(v8::Local<v8::Value> param) {
 	//might be able to optimize with FindInstanceInPrototypeChain
 	for (it = _types.begin(); it != _types.end(); it++) {
 		if (Nan::New<v8::FunctionTemplate>(it->second-> function_template)->HasInstance(param)) {
-			if (strcmp(*Nan::Utf8String(param.As<v8::Object>()->GetConstructorName()), it->second->name) == 0) {
+			if (strcmp(*Nan::Utf8String(param.As<v8::Object>()->GetConstructorName()), it->second->name.c_str()) == 0) {
 				return it->second->name;
 			}
 			else {
@@ -229,7 +229,7 @@ std::string overload_resolution::determineType(v8::Local<v8::Value> param) {
 	return "Unknown";
 }
 
-bool overload_resolution::isConvertibleTo(v8::Local<v8::Value> param, const char * type) {
+bool overload_resolution::isConvertibleTo(v8::Local<v8::Value> param, const std::string type) {
 	//if converting to number, check that the numbervalue is not nan
 	if (type == "Number") {
 		if (std::isnan(param->NumberValue())) {
@@ -260,7 +260,7 @@ bool overload_resolution::isConvertibleTo(v8::Local<v8::Value> param, const char
 	return false;
 }
 
-int overload_resolution::MatchOverload(o_r_function *func, Nan::NAN_METHOD_ARGS_TYPE info) {
+int overload_resolution::MatchOverload(std::shared_ptr<o_r_function> func, Nan::NAN_METHOD_ARGS_TYPE info) {
 	int parameterLength = std::max((int)func->parameters.size(), info.Length());
 	int rank = 0;
 
@@ -338,14 +338,14 @@ void overload_resolution::getPrototypeChain(v8::Local<v8::Value> param, std::vec
 	getPrototypeChain(pobject->GetPrototype(), chain);
 }
 
-void overload_resolution::executeBestOverload(const char * ns, std::vector<std::string> &classNames, const char * name, Nan::NAN_METHOD_ARGS_TYPE info) {
-	std::vector<std::pair<int, o_r_function *>> candidates;
+void overload_resolution::executeBestOverload(const std::string ns, std::vector<std::string> &classNames, const std::string name, Nan::NAN_METHOD_ARGS_TYPE info) {
+	std::vector<std::pair<int,std::weak_ptr< o_r_function>>> candidates;
 
 	std::vector < std::shared_ptr< o_r_class>> classes;
 
 	for (std::vector<std::string>::iterator cit = classNames.begin(); cit < classNames.end(); cit++) {
-		if (_namespaces.count(ns) > 0 && _namespaces[ns].classes.count(*cit) > 0) {
-			classes.push_back(_namespaces[ns].classes[*cit]);
+		if (_namespaces.count(ns) > 0 && _namespaces[ns]->classes.count(*cit) > 0) {
+			classes.push_back(_namespaces[ns]->classes[*cit]);
 		}
 	}
 
@@ -355,7 +355,7 @@ void overload_resolution::executeBestOverload(const char * ns, std::vector<std::
 	if (classes.size() == 0) {
 
 		std::string errclass = "";
-		if (ns != NULL) {
+		if (ns != "") {
 			errclass = ns;
 			errclass += "::";
 		}
@@ -363,7 +363,7 @@ void overload_resolution::executeBestOverload(const char * ns, std::vector<std::
 		errclass += "(" + std::accumulate(std::begin(classNames), std::end(classNames), std::string(), [](std::string &ss, std::string &s) {return ss.empty() ? s : ss + "," + s; }) + ")";
 
 
-		if (name != NULL) {
+		if (name != "") {
 			errclass += "::";
 			errclass += name;
 		}
@@ -377,8 +377,8 @@ void overload_resolution::executeBestOverload(const char * ns, std::vector<std::
 
 	//copy all class functions by name from all descendant classes
 	for (std::vector<std::string>::iterator cit = classNames.begin(); cit < classNames.end(); cit++) {
-		if (_namespaces.count(ns) > 0 && _namespaces[ns].classes.count(*cit) > 0) {
-			auto functions = _namespaces[ns].classes[*cit]->functions[name];
+		if (_namespaces.count(ns) > 0 && _namespaces[ns]->classes.count(*cit) > 0) {
+			auto functions = _namespaces[ns]->classes[*cit]->functions[name];
 
 			implementations.insert(std::end(implementations), std::begin(functions), std::end(functions));
 		}
@@ -387,12 +387,12 @@ void overload_resolution::executeBestOverload(const char * ns, std::vector<std::
 
 	for (auto i = 0; i < implementations.size(); i++) {
 		auto check = implementations[i];
-		assert((strcmp( check->functionName, name) == 0) && "function name must match");
+		assert(( check->functionName == name ) && "function name must match");
 
 		//check if the function parameter count equals the info parameters count, give a point in favor but only if reached maximum points
-		auto rank = MatchOverload(&*check, info);
+		auto rank = MatchOverload(check, info);
 		if (rank > 0) {
-			candidates.push_back(std::pair<int, o_r_function*>(rank, &*check));
+			candidates.push_back(std::pair<int,std::weak_ptr< o_r_function>>(rank, check));
 		}
 
 	}
@@ -400,15 +400,21 @@ void overload_resolution::executeBestOverload(const char * ns, std::vector<std::
 	//log the best one
 	//if none found, throw an exception that no overload satisfies the supplied parameters and the best overloaded candidate
 	if (candidates.size() > 0) {
-		auto bestOverload = std::max_element(candidates.begin(), candidates.end(), [](std::pair<int, o_r_function *> a, std::pair<int, o_r_function *> b) {return a.first < b.first; });
-		return bestOverload->second->function(info);
+		auto bestOverload = std::max_element(candidates.begin(), candidates.end(), [](std::pair<int,std::weak_ptr< o_r_function>> a, std::pair<int,std::weak_ptr< o_r_function>> b) {return a.first < b.first; });
+		if (auto bestOverloadFunction = bestOverload->second.lock()) { // Has to be copied into a shared_ptr before usage
+			return bestOverloadFunction->function(info);
+		}
+		else {
+			assert(false && "overloaded functio was removed, this error most likely means a buffer overflow");
+		}
+		
 	}
 
 	return Nan::ThrowError("no overload fulfills the parameters passed");
 }
 
 
-Nan::NAN_METHOD_RETURN_TYPE overload_resolution::execute(const char * name_space, Nan::NAN_METHOD_ARGS_TYPE info){
+Nan::NAN_METHOD_RETURN_TYPE overload_resolution::execute(const std::string name_space, Nan::NAN_METHOD_ARGS_TYPE info){
 	//assert(false);
 	std::string functionName = *Nan::Utf8String(info.Callee()->GetName());
 	std::string className = "";
@@ -501,7 +507,7 @@ bool overload_resolution::verifyObject(std::vector<std::shared_ptr<overload_info
 }
 
 
-v8::MaybeLocal<v8::Value>  overload_resolution::GetFromObject(v8::Local<v8::Value> obj, const char * key) {
+v8::MaybeLocal<v8::Value>  overload_resolution::GetFromObject(v8::Local<v8::Value> obj, const std::string key) {
 	auto mctx = Nan::GetCurrentContext();
 
 	if (obj->IsMap()) {
