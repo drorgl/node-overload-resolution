@@ -72,17 +72,17 @@
 
 struct object_type {
 	Nan::Persistent<v8::FunctionTemplate, Nan::CopyablePersistentTraits<v8::FunctionTemplate>> function_template;
-	const char * ns;
-	const char * name;
+	std::string ns;
+	std::string name;
 };
 
 
 
 struct overload_info {
-	const char * parameterName;
-	const char * type;
+	std::string parameterName;
+	std::string type;
 	Nan::Persistent<v8::Value, Nan::CopyablePersistentTraits<v8::Value>> defaultValue;
-	overload_info(const char * parameterName, const char * type, v8::Local<v8::Value> defaultValue);
+	overload_info(const std::string parameterName, const std::string type, v8::Local<v8::Value> defaultValue = Nan::Undefined());
 };
 
 
@@ -94,18 +94,18 @@ struct overload_info {
 
 struct o_r_function {
 	Nan::FunctionCallback function;
-	const char * functionName;
-	const char * className;
+	std::string functionName;
+	std::string className;
 	std::vector<std::shared_ptr<overload_info>> parameters;
 };
 
 struct o_r_class {
-	const char * className;
+	std::string className;
 	std::map<std::string, std::vector<std::shared_ptr< o_r_function>>> functions;
 };
 
 struct o_r_namespace {
-	const char * name;
+	std::string name;
 	std::map<std::string, std::shared_ptr< o_r_class>> classes;
 };
 //
@@ -130,7 +130,7 @@ private:
 	//overload_info _emptyOverloadInfo;
 
 	//overload registry
-	std::map<std::string, o_r_namespace> _namespaces;
+	std::map<std::string, std::shared_ptr<o_r_namespace>> _namespaces;
 
 	//new() : Affine3<T>;
 	//new (affine: _matx.Matx<T>) : Affine3<T>;
@@ -150,24 +150,24 @@ public:
 	//function should be registerType
 	//should add to it all the basics, string, number, integer, boolean, array, object(?), buffer (?), function (is it possible to know the function signature?), promises(?)
 	//in case of array, which type is inside it, what to do if multiple types are in the array?
-	void register_type(v8::Local<v8::FunctionTemplate> functionTemplate, const char * ns, const char * name);
+	void register_type(v8::Local<v8::FunctionTemplate> functionTemplate, const std::string ns, const std::string name);
 
 	//register struct
 	template <typename TDerived>
-	void register_type(const char * ns, const char * name) {
+	void register_type(const std::string ns, const std::string name) {
 		_structured_factory.register_type<TDerived>(name);
 	}
 
 	bool validate_type_registrations();
 
 	//adds an overload function
-	void addOverload(const char * ns, const char * className, const char * functionName, std::vector<std::shared_ptr<overload_info>> arguments, Nan::FunctionCallback callback);
+	void addOverload(const std::string ns, const std::string className, const std::string functionName, std::vector<std::shared_ptr<overload_info>> arguments, Nan::FunctionCallback callback);
 
 	//determines the type of param, primitives, registered types, registered structs
 	std::string determineType(v8::Local<v8::Value> param);
 
 	//checks if param type is convertible to type
-	bool isConvertibleTo(v8::Local<v8::Value> param, const char * type);
+	bool isConvertibleTo(v8::Local<v8::Value> param, const std::string type);
 
 	//retrieve a list of class names up the prototype chain
 	void getPrototypeChain(v8::Local<v8::Value> param, std::vector<std::string> &chain);
@@ -176,18 +176,18 @@ public:
 	//1. by name
 	//2. by passed parameters, give higher weight to passed parameters, lower weight to default parameters, even lower weight to convertible parameters
 	//3. discard non-matching options
-	int MatchOverload(o_r_function *func, Nan::NAN_METHOD_ARGS_TYPE info);
+	int MatchOverload(std::shared_ptr<o_r_function> func, Nan::NAN_METHOD_ARGS_TYPE info);
 
-	void executeBestOverload(const char * ns, std::vector<std::string> & className, const char * name, Nan::NAN_METHOD_ARGS_TYPE info);
+	void executeBestOverload(const std::string ns, std::vector<std::string> & className, const std::string name, Nan::NAN_METHOD_ARGS_TYPE info);
 	
 	//catch-all function, looks up the function in the overloads collections and executing the right one
-	Nan::NAN_METHOD_RETURN_TYPE execute(const char * name_space, Nan::NAN_METHOD_ARGS_TYPE info);
+	Nan::NAN_METHOD_RETURN_TYPE execute(const std::string name_space, Nan::NAN_METHOD_ARGS_TYPE info);
 
 	//verifies an object/map structure against a list of properties
 	bool verifyObject(std::vector<std::shared_ptr<overload_info>> props, v8::Local<v8::Value> val);
 
 	//gets a value from an object/map
-	Nan::MaybeLocal<v8::Value> GetFromObject(v8::Local<v8::Value> obj, const char * key);
+	Nan::MaybeLocal<v8::Value> GetFromObject(v8::Local<v8::Value> obj, const std::string key);
 };
 
 #endif
