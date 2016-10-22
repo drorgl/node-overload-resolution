@@ -31,6 +31,7 @@ public:
 	 v8::Local<v8::Value> ToObject();
 
 	 static v8::Local<v8::Object> New();
+	 static v8::Local<v8::Object> New(std::string prop1, int prop2);
 };
 
 

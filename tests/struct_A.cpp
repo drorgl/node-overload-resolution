@@ -29,3 +29,11 @@ v8::Local<v8::Object> struct_A::New() {
 	struct_A a;
 	return a.ToObject().As<v8::Object>();
 }
+
+
+v8::Local<v8::Object> struct_A::New(std::string prop1, std::string prop2) {
+	struct_A a;
+	a.prop1 = prop1;
+	a.prop2 = prop2;
+	return a.ToObject().As<v8::Object>();
+}

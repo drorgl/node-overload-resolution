@@ -17,6 +17,9 @@
 		, "tests/struct_B.h"
 		, "tests/struct_B.cpp"
 		
+        , "tests/constructor_class_tester.h"
+		, "tests/constructor_class_tester.cpp"
+
 		, "tests/or_tester.h"
 		, "tests/or_struct_tester.h"
 		, "tests/or_two_parameters_tester.h"
@@ -31,6 +34,7 @@
 		, "IStructuredObject.h"
 		, "IStructuredObject.cpp"
 		
+        , "FunctionCallbackInfo.h"
 		
 		, "factory.h"
 		, "README.md"

@@ -1,5 +1,6 @@
 #include "overload_resolution.h"
 
+
 std::set<std::string> overload_resolution::_convertible_primitive_types = {"Number","String","Boolean"};
 
 std::set<std::string> overload_resolution::_primitive_types = {"Number","String","Boolean","Date","Buffer","Function","Map","Set","Null","Promise","Proxy","RegExp","Array"};
@@ -82,7 +83,7 @@ bool overload_resolution::validate_type_registrations() {
 	return true;
 }
 
-void overload_resolution::addOverload(const std::string ns, const std::string className, const std::string name, std::vector<std::shared_ptr<overload_info>> arguments, Nan::FunctionCallback callback) {
+void overload_resolution::create_function_store(const std::string ns, const std::string className, const std::string functionName) {
 	//check if namespace exists, if not, create
 	if (!_namespaces.count(ns)) {
 		_namespaces[ns] = std::make_shared<o_r_namespace>();
@@ -94,21 +95,61 @@ void overload_resolution::addOverload(const std::string ns, const std::string cl
 		_namespaces[ns]->classes[className] = std::make_shared<o_r_class>();
 		_namespaces[ns]->classes[className]->className = className;
 	}
-	
+
 	//check functions collection exists, if not, create
-	if (!_namespaces[ns]->classes[className]->functions.count(name)) {
-		_namespaces[ns]->classes[className]->functions[name] = std::vector<std::shared_ptr<o_r_function>>();
+	if (!_namespaces[ns]->classes[className]->functions.count(functionName)) {
+		_namespaces[ns]->classes[className]->functions[functionName] = std::vector<std::shared_ptr<o_r_function>>();
 	}
+}
+
+void overload_resolution::addOverload(const std::string ns, const std::string className, const std::string name, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
+	std::string functionName = "+" + name;
+
+	create_function_store(ns, className, functionName);
 	
 	//add function to functions collection
 	auto f = std::make_shared<o_r_function>();
 	f->function = callback;
-	f->functionName = name;
+	f->functionName = functionName;
 	f->className = className;
 	f->parameters = arguments;
-	_namespaces[ns]->classes[className]->functions[name].push_back(f);
+	f->is_constructor = false;
+	f->is_static = false;
+	_namespaces[ns]->classes[className]->functions[functionName].push_back(f);
 }
 
+void overload_resolution::addStaticOverload(const std::string ns, const std::string className, const std::string name, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
+	std::string functionName = "-" + name;
+	create_function_store(ns, className, functionName);
+
+	//add function to functions collection
+	auto f = std::make_shared<o_r_function>();
+	f->function = callback;
+	f->functionName = functionName;
+	f->className = className;
+	f->parameters = arguments;
+	f->is_constructor = false;
+	f->is_static = true;
+	_namespaces[ns]->classes[className]->functions[functionName].push_back(f);
+}
+
+void overload_resolution::addOverloadConstructor(const std::string ns, const std::string className, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
+	//add ::constructor to function name, to avoid confusion if the class has classname as a function
+	std::string functionName = "%" + className;
+	create_function_store(ns, className, functionName);
+
+	//add function to functions collection
+	auto f = std::make_shared<o_r_function>();
+	f->function = callback;
+	f->functionName = functionName;
+	f->className = className;
+	f->parameters = arguments;
+	f->is_constructor = true;
+	f->is_static = false;
+	_namespaces[ns]->classes[className]->functions[functionName].push_back(f);
+}
+
+//TODO: possibly improve the performance by limiting the number of array object read
 void overload_resolution::get_array_types(v8::Local<v8::Value> arr, std::set<std::string> &types) {
 	auto v8arr = arr.As<v8::Array>();
 	for (auto i = 0; i < v8arr->Length(); i++) {
@@ -402,10 +443,48 @@ void overload_resolution::executeBestOverload(const std::string ns, std::vector<
 	if (candidates.size() > 0) {
 		auto bestOverload = std::max_element(candidates.begin(), candidates.end(), [](std::pair<int,std::weak_ptr< o_r_function>> a, std::pair<int,std::weak_ptr< o_r_function>> b) {return a.first < b.first; });
 		if (auto bestOverloadFunction = bestOverload->second.lock()) { // Has to be copied into a shared_ptr before usage
-			return bestOverloadFunction->function(info);
+
+			//auto fci = std::make_shared<or::FunctionCallbackInfo<v8::Value>>(info);
+			//auto retval = fci->GetReturnValue();
+
+			auto parametersLength = std::max(info.Length(), (int)bestOverloadFunction->parameters.size());
+
+			
+			//fci._param
+			//	//
+
+
+			//for (auto i = 0; i < bestOverloadFunction->parameters.size(); i++) {
+			//	
+			//	
+
+			//}
+			//v8::FunctionCallbackInfo<v8::Value> y(NULL,NULL,0,true);
+			//Nan::FunctionCallbackInfo<v8::Value> x(y,Nan::Undefined());
+
+			//NanOverrides::FunctionCallbackInfo<v8::Value> test(&info);
+			std::vector<v8::Local<v8::Value>> info_params;
+			for (auto i = 0; i < parametersLength; i++) {
+				if (info.Length() > i && !info[i]->IsUndefined()) {
+					info_params.push_back(info[i]);
+				}
+				else if (bestOverloadFunction->parameters.size() > i) {
+					info_params.push_back(Nan::New(bestOverloadFunction->parameters[i]->defaultValue));
+				}
+				else {
+					info_params.push_back(Nan::Undefined());
+				}
+			}
+
+
+			or::FunctionCallbackInfo<v8::Value> processed_info(info,info_params);
+			//auto retval2 = processed_info.GetReturnValue();
+
+
+			return bestOverloadFunction->function(processed_info);
 		}
 		else {
-			assert(false && "overloaded functio was removed, this error most likely means a buffer overflow");
+			assert(false && "overloaded function was removed, this error most likely means a buffer overflow");
 		}
 		
 	}
@@ -416,6 +495,8 @@ void overload_resolution::executeBestOverload(const std::string ns, std::vector<
 
 Nan::NAN_METHOD_RETURN_TYPE overload_resolution::execute(const std::string name_space, Nan::NAN_METHOD_ARGS_TYPE info){
 	//assert(false);
+	bool isConstructorCall = info.IsConstructCall();
+
 	std::string functionName = *Nan::Utf8String(info.Callee()->GetName());
 	std::string className = "";
 	bool isStatic = false;
@@ -434,11 +515,30 @@ Nan::NAN_METHOD_RETURN_TYPE overload_resolution::execute(const std::string name_
 	if (className == "Object") {
 		className = "";
 	}
+	
 
-	functionName = ((isStatic) ? "_" : "") + functionName;
+	
+	if (isStatic) {
+		functionName = "-" + functionName;
+	}else if (isConstructorCall) {
+		functionName = "%" + functionName;
+	}
+	else {
+		//if not static or constructor, its a member
+		functionName = "+" + functionName;
+	}
 
 	std::vector<std::string> prototypeClassChain;
-	getPrototypeChain(info.This(), prototypeClassChain);
+
+	//if call is static or constructor, only execute on class itself
+	if (isStatic || isConstructorCall) {
+		prototypeClassChain.push_back(className);
+	}
+	else {
+		getPrototypeChain(info.This(), prototypeClassChain);
+	}
+
+	
 	if (prototypeClassChain.size() == 0) {
 		//for functions without prototype chain, it means they are in the global namespace
 		prototypeClassChain.push_back("");

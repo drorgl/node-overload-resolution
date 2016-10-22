@@ -5,6 +5,7 @@
 
 #include "struct_A.h"
 #include "struct_B.h"
+#include "constructor_class_tester.h"
 
 #include "or_tester.h"
 #include "or_struct_tester.h"
@@ -33,6 +34,7 @@ DECLARE_MY_CLASS(std::vector<std::string>);
 
 
 void init(v8::Handle<v8::Object> target) {
+	assert(false);
 	auto overload = std::make_shared<overload_resolution>();
 
 	overload->register_type<IStructuredObject>("", "IStructuredObject");
@@ -43,6 +45,7 @@ void init(v8::Handle<v8::Object> target) {
 
 	base_class::Init(target,overload);
 	derived_class::Init(target,overload);
+	constructor_class_tester::Init(target, overload);
 	or_tester::RegisterORTesters(target, overload);
 	or_struct_tester::RegisterORTesters(target, overload);
 	or_two_parameters_tester::RegisterORTesters(target, overload);

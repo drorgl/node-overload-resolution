@@ -24,24 +24,24 @@ public:
 	static NAN_METHOD(derived_function);
 
 
-	static NAN_METHOD(base_function);
+	static POLY_METHOD(base_function);
 
-	static NAN_METHOD(base_function_number);
-	static NAN_METHOD(base_function_string);
-	static NAN_METHOD(base_function_bool);
-	static NAN_METHOD(base_function_date);
-	static NAN_METHOD(base_function_function);
-	static NAN_METHOD(base_function_buffer);
-	static NAN_METHOD(base_function_map);
-	static NAN_METHOD(base_function_set);
-	static NAN_METHOD(base_function_promise);
-	static NAN_METHOD(base_function_proxy);
-	static NAN_METHOD(base_function_regexp);
-	static NAN_METHOD(base_function_base_class);
-	static NAN_METHOD(base_function_derived_class);
-	static NAN_METHOD(base_function_struct_A);
-	static NAN_METHOD(base_function_struct_B);
-	static NAN_METHOD(base_function_array);
+	static POLY_METHOD(base_function_number);
+	static POLY_METHOD(base_function_string);
+	static POLY_METHOD(base_function_bool);
+	static POLY_METHOD(base_function_date);
+	static POLY_METHOD(base_function_function);
+	static POLY_METHOD(base_function_buffer);
+	static POLY_METHOD(base_function_map);
+	static POLY_METHOD(base_function_set);
+	static POLY_METHOD(base_function_promise);
+	static POLY_METHOD(base_function_proxy);
+	static POLY_METHOD(base_function_regexp);
+	static POLY_METHOD(base_function_base_class);
+	static POLY_METHOD(base_function_derived_class);
+	static POLY_METHOD(base_function_struct_A);
+	static POLY_METHOD(base_function_struct_B);
+	static POLY_METHOD(base_function_array);
 
 };
 
