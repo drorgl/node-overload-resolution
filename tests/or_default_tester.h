@@ -17,208 +17,290 @@ namespace or_default_parameters_tester {
 		}
 	}
 
-	NAN_METHOD(number_testers_number_number) {
-		info.GetReturnValue().Set(Nan::New(".number.number").ToLocalChecked());
+	v8::Local<v8::String> JSONstringify(v8::Local<v8::Value> val) {
+		auto global = Nan::GetCurrentContext()->Global();
+
+		auto JSON = global->Get(Nan::New<v8::String>("JSON").ToLocalChecked()).As<v8::Object>();
+		auto stringify = JSON->Get(Nan::New<v8::String>("stringify").ToLocalChecked()).As<v8::Function>();
+
+		v8::Local<v8::Value> args[] = { val };
+		v8::Local<v8::String> result = v8::Local<v8::String>::Cast(stringify->Call(JSON, 1, args));
+		return result;
+	}
+
+	std::string stringify(v8::Local<v8::Value> val) {
+		std::string retval = *Nan::Utf8String(JSONstringify(val));
+		return retval;
+	}
+
+	POLY_METHOD(number_testers_number_number) {
+		std::string retval = ".number(" + stringify(info[0]) + ").number(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_number_string) {
-		info.GetReturnValue().Set(Nan::New(".number.string").ToLocalChecked());
+	POLY_METHOD(number_testers_number_string) {
+		auto xx = info[0];
+		
+		std::string retval = ".number(" + stringify(info[0]) + ").string(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_number_bool) {
-		info.GetReturnValue().Set(Nan::New(".number.bool").ToLocalChecked());
+	POLY_METHOD(number_testers_number_bool) {
+		std::string retval = ".number(" + stringify(info[0]) + ").bool(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_number_date) {
-		info.GetReturnValue().Set(Nan::New(".number.date").ToLocalChecked());
+	POLY_METHOD(number_testers_number_date) {
+		std::string retval = ".number(" + stringify(info[0]) + ").date(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_number_function) {
-		info.GetReturnValue().Set(Nan::New(".number.function").ToLocalChecked());
+	POLY_METHOD(number_testers_number_function) {
+		std::string retval = ".number(" + stringify(info[0]) + ").function(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_number_buffer) {
-		info.GetReturnValue().Set(Nan::New(".number.buffer").ToLocalChecked());
+	POLY_METHOD(number_testers_number_buffer) {
+		std::string retval = ".number(" + stringify(info[0]) + ").buffer(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_number_map) {
-		info.GetReturnValue().Set(Nan::New(".number.map").ToLocalChecked());
+	POLY_METHOD(number_testers_number_map) {
+		std::string retval = ".number(" + stringify(info[0]) + ").map(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_number_set) {
-		info.GetReturnValue().Set(Nan::New(".number.set").ToLocalChecked());
+	POLY_METHOD(number_testers_number_set) {
+		std::string retval = ".number(" + stringify(info[0]) + ").set(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_number_promise) {
-		info.GetReturnValue().Set(Nan::New(".number.promise").ToLocalChecked());
+	POLY_METHOD(number_testers_number_promise) {
+		std::string retval = ".number(" + stringify(info[0]) + ").promise(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_number_proxy) {
-		info.GetReturnValue().Set(Nan::New(".number.proxy").ToLocalChecked());
+	POLY_METHOD(number_testers_number_proxy) {
+		std::string retval = ".number(" + stringify(info[0]) + ").proxy(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_number_regexp) {
-		info.GetReturnValue().Set(Nan::New(".number.regexp").ToLocalChecked());
+	POLY_METHOD(number_testers_number_regexp) {
+		std::string retval = ".number(" + stringify(info[0]) + ").regexp(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_number_base_class) {
-		info.GetReturnValue().Set(Nan::New(".number.base_class").ToLocalChecked());
+	POLY_METHOD(number_testers_number_base_class) {
+		std::string retval = ".number(" + stringify(info[0]) + ").base_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_number_derived_class) {
-		info.GetReturnValue().Set(Nan::New(".number.derived_class").ToLocalChecked());
+	POLY_METHOD(number_testers_number_derived_class) {
+		std::string retval = ".number(" + stringify(info[0]) + ").derived_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_number_struct_A) {
-		info.GetReturnValue().Set(Nan::New(".number.struct_A").ToLocalChecked());
+	POLY_METHOD(number_testers_number_struct_A) {
+		std::string retval = ".number(" + stringify(info[0]) + ").struct_A(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_number_struct_B) {
-		info.GetReturnValue().Set(Nan::New(".number.struct_B").ToLocalChecked());
+	POLY_METHOD(number_testers_number_struct_B) {
+		std::string retval = ".number(" + stringify(info[0]) + ").struct_B(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_number_array) {
-		info.GetReturnValue().Set(Nan::New(".number.array").ToLocalChecked());
+	POLY_METHOD(number_testers_number_array) {
+		std::string retval = ".number(" + stringify(info[0]) + ").array(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
 
 
-	NAN_METHOD(number_testers_string_number) {
-		info.GetReturnValue().Set(Nan::New(".string.number").ToLocalChecked());
+	POLY_METHOD(number_testers_string_number) {
+		std::string retval = ".string(" + stringify(info[0]) + ").number(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_string_string) {
-		info.GetReturnValue().Set(Nan::New(".string.string").ToLocalChecked());
+	POLY_METHOD(number_testers_string_string) {
+		std::string retval = ".string(" + stringify(info[0]) + ").string(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_string_bool) {
-		info.GetReturnValue().Set(Nan::New(".string.bool").ToLocalChecked());
+	POLY_METHOD(number_testers_string_bool) {
+		std::string retval = ".string(" + stringify(info[0]) + ").bool(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_string_date) {
-		info.GetReturnValue().Set(Nan::New(".string.date").ToLocalChecked());
+	POLY_METHOD(number_testers_string_date) {
+		std::string retval = ".string(" + stringify(info[0]) + ").date(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_string_function) {
-		info.GetReturnValue().Set(Nan::New(".string.function").ToLocalChecked());
+	POLY_METHOD(number_testers_string_function) {
+		std::string retval = ".string(" + stringify(info[0]) + ").function(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_string_buffer) {
-		info.GetReturnValue().Set(Nan::New(".string.buffer").ToLocalChecked());
+	POLY_METHOD(number_testers_string_buffer) {
+		std::string retval = ".string(" + stringify(info[0]) + ").buffer(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_string_map) {
-		info.GetReturnValue().Set(Nan::New(".string.map").ToLocalChecked());
+	POLY_METHOD(number_testers_string_map) {
+		std::string retval = ".string(" + stringify(info[0]) + ").map(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_string_set) {
-		info.GetReturnValue().Set(Nan::New(".string.set").ToLocalChecked());
+	POLY_METHOD(number_testers_string_set) {
+		std::string retval = ".string(" + stringify(info[0]) + ").set(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_string_promise) {
-		info.GetReturnValue().Set(Nan::New(".string.promise").ToLocalChecked());
+	POLY_METHOD(number_testers_string_promise) {
+		std::string retval = ".string(" + stringify(info[0]) + ").promise(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_string_proxy) {
-		info.GetReturnValue().Set(Nan::New(".string.proxy").ToLocalChecked());
+	POLY_METHOD(number_testers_string_proxy) {
+		std::string retval = ".string(" + stringify(info[0]) + ").proxy(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_string_regexp) {
-		info.GetReturnValue().Set(Nan::New(".string.regexp").ToLocalChecked());
+	POLY_METHOD(number_testers_string_regexp) {
+		std::string retval = ".string(" + stringify(info[0]) + ").regexp(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_string_base_class) {
-		info.GetReturnValue().Set(Nan::New(".string.base_class").ToLocalChecked());
+	POLY_METHOD(number_testers_string_base_class) {
+		std::string retval = ".string(" + stringify(info[0]) + ").base_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_string_derived_class) {
-		info.GetReturnValue().Set(Nan::New(".string.derived_class").ToLocalChecked());
+	POLY_METHOD(number_testers_string_derived_class) {
+		std::string retval = ".string(" + stringify(info[0]) + ").derived_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_string_struct_A) {
-		info.GetReturnValue().Set(Nan::New(".string.struct_A").ToLocalChecked());
+	POLY_METHOD(number_testers_string_struct_A) {
+		std::string retval = ".string(" + stringify(info[0]) + ").struct_A(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_string_struct_B) {
-		info.GetReturnValue().Set(Nan::New(".string.struct_B").ToLocalChecked());
+	POLY_METHOD(number_testers_string_struct_B) {
+		std::string retval = ".string(" + stringify(info[0]) + ").struct_B(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_string_array) {
-		info.GetReturnValue().Set(Nan::New(".string.array").ToLocalChecked());
+	POLY_METHOD(number_testers_string_array) {
+		std::string retval = ".string(" + stringify(info[0]) + ").array(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
 
 
 
 
 
-	NAN_METHOD(number_testers_bool_number) {
-		info.GetReturnValue().Set(Nan::New(".bool.number").ToLocalChecked());
+	POLY_METHOD(number_testers_bool_number) {
+		std::string retval = ".bool(" + stringify(info[0]) + ").number(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_bool_string) {
-		info.GetReturnValue().Set(Nan::New(".bool.string").ToLocalChecked());
+	POLY_METHOD(number_testers_bool_string) {
+		std::string retval = ".bool(" + stringify(info[0]) + ").string(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_bool_bool) {
-		info.GetReturnValue().Set(Nan::New(".bool.bool").ToLocalChecked());
+	POLY_METHOD(number_testers_bool_bool) {
+		std::string retval = ".bool(" + stringify(info[0]) + ").bool(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_bool_date) {
-		info.GetReturnValue().Set(Nan::New(".bool.date").ToLocalChecked());
+	POLY_METHOD(number_testers_bool_date) {
+		std::string retval = ".bool(" + stringify(info[0]) + ").date(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_bool_function) {
-		info.GetReturnValue().Set(Nan::New(".bool.function").ToLocalChecked());
+	POLY_METHOD(number_testers_bool_function) {
+		std::string retval = ".bool(" + stringify(info[0]) + ").function(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_bool_buffer) {
-		info.GetReturnValue().Set(Nan::New(".bool.buffer").ToLocalChecked());
+	POLY_METHOD(number_testers_bool_buffer) {
+		std::string retval = ".bool(" + stringify(info[0]) + ").buffer(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_bool_map) {
-		info.GetReturnValue().Set(Nan::New(".bool.map").ToLocalChecked());
+	POLY_METHOD(number_testers_bool_map) {
+		std::string retval = ".bool(" + stringify(info[0]) + ").map(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_bool_set) {
-		info.GetReturnValue().Set(Nan::New(".bool.set").ToLocalChecked());
+	POLY_METHOD(number_testers_bool_set) {
+		std::string retval = ".bool(" + stringify(info[0]) + ").set(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_bool_promise) {
-		info.GetReturnValue().Set(Nan::New(".bool.promise").ToLocalChecked());
+	POLY_METHOD(number_testers_bool_promise) {
+		std::string retval = ".bool(" + stringify(info[0]) + ").promise(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_bool_proxy) {
-		info.GetReturnValue().Set(Nan::New(".bool.proxy").ToLocalChecked());
+	POLY_METHOD(number_testers_bool_proxy) {
+		std::string retval = ".bool(" + stringify(info[0]) + ").proxy(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_bool_regexp) {
-		info.GetReturnValue().Set(Nan::New(".bool.regexp").ToLocalChecked());
+	POLY_METHOD(number_testers_bool_regexp) {
+		std::string retval = ".bool(" + stringify(info[0]) + ").regexp(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_bool_base_class) {
-		info.GetReturnValue().Set(Nan::New(".bool.base_class").ToLocalChecked());
+	POLY_METHOD(number_testers_bool_base_class) {
+		std::string retval = ".bool(" + stringify(info[0]) + ").base_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_bool_derived_class) {
-		info.GetReturnValue().Set(Nan::New(".bool.derived_class").ToLocalChecked());
+	POLY_METHOD(number_testers_bool_derived_class) {
+		std::string retval = ".bool(" + stringify(info[0]) + ").derived_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_bool_struct_A) {
-		info.GetReturnValue().Set(Nan::New(".bool.struct_A").ToLocalChecked());
+	POLY_METHOD(number_testers_bool_struct_A) {
+		std::string retval = ".bool(" + stringify(info[0]) + ").struct_A(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_bool_struct_B) {
-		info.GetReturnValue().Set(Nan::New(".bool.struct_B").ToLocalChecked());
+	POLY_METHOD(number_testers_bool_struct_B) {
+		std::string retval = ".bool(" + stringify(info[0]) + ").struct_B(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_bool_array) {
-		info.GetReturnValue().Set(Nan::New(".bool.array").ToLocalChecked());
+	POLY_METHOD(number_testers_bool_array) {
+		std::string retval = ".bool(" + stringify(info[0]) + ").array(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
 
 
 
 
-	NAN_METHOD(number_testers_date_number) {
-		info.GetReturnValue().Set(Nan::New(".date.number").ToLocalChecked());
+	POLY_METHOD(number_testers_date_number) {
+		std::string retval = ".date(" + stringify(info[0]) + ").number(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_date_string) {
-		info.GetReturnValue().Set(Nan::New(".date.string").ToLocalChecked());
+	POLY_METHOD(number_testers_date_string) {
+		std::string retval = ".date(" + stringify(info[0]) + ").string(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_date_bool) {
-		info.GetReturnValue().Set(Nan::New(".date.bool").ToLocalChecked());
+	POLY_METHOD(number_testers_date_bool) {
+		std::string retval = ".date(" + stringify(info[0]) + ").bool(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_date_date) {
-		info.GetReturnValue().Set(Nan::New(".date.date").ToLocalChecked());
+	POLY_METHOD(number_testers_date_date) {
+		std::string retval = ".date(" + stringify(info[0]) + ").date(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_date_function) {
-		info.GetReturnValue().Set(Nan::New(".date.function").ToLocalChecked());
+	POLY_METHOD(number_testers_date_function) {
+		std::string retval = ".date(" + stringify(info[0]) + ").function(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_date_buffer) {
-		info.GetReturnValue().Set(Nan::New(".date.buffer").ToLocalChecked());
+	POLY_METHOD(number_testers_date_buffer) {
+		std::string retval = ".date(" + stringify(info[0]) + ").buffer(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_date_map) {
-		info.GetReturnValue().Set(Nan::New(".date.map").ToLocalChecked());
+	POLY_METHOD(number_testers_date_map) {
+		std::string retval = ".date(" + stringify(info[0]) + ").map(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_date_set) {
-		info.GetReturnValue().Set(Nan::New(".date.set").ToLocalChecked());
+	POLY_METHOD(number_testers_date_set) {
+		std::string retval = ".date(" + stringify(info[0]) + ").set(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_date_promise) {
-		info.GetReturnValue().Set(Nan::New(".date.promise").ToLocalChecked());
+	POLY_METHOD(number_testers_date_promise) {
+		std::string retval = ".date(" + stringify(info[0]) + ").promise(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_date_proxy) {
-		info.GetReturnValue().Set(Nan::New(".date.proxy").ToLocalChecked());
+	POLY_METHOD(number_testers_date_proxy) {
+		std::string retval = ".date(" + stringify(info[0]) + ").proxy(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_date_regexp) {
-		info.GetReturnValue().Set(Nan::New(".date.regexp").ToLocalChecked());
+	POLY_METHOD(number_testers_date_regexp) {
+		std::string retval = ".date(" + stringify(info[0]) + ").regexp(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_date_base_class) {
-		info.GetReturnValue().Set(Nan::New(".date.base_class").ToLocalChecked());
+	POLY_METHOD(number_testers_date_base_class) {
+		std::string retval = ".date(" + stringify(info[0]) + ").base_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_date_derived_class) {
-		info.GetReturnValue().Set(Nan::New(".date.derived_class").ToLocalChecked());
+	POLY_METHOD(number_testers_date_derived_class) {
+		std::string retval = ".date(" + stringify(info[0]) + ").derived_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_date_struct_A) {
-		info.GetReturnValue().Set(Nan::New(".date.struct_A").ToLocalChecked());
+	POLY_METHOD(number_testers_date_struct_A) {
+		std::string retval = ".date(" + stringify(info[0]) + ").struct_A(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_date_struct_B) {
-		info.GetReturnValue().Set(Nan::New(".date.struct_B").ToLocalChecked());
+	POLY_METHOD(number_testers_date_struct_B) {
+		std::string retval = ".date(" + stringify(info[0]) + ").struct_B(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_date_array) {
-		info.GetReturnValue().Set(Nan::New(".date.array").ToLocalChecked());
+	POLY_METHOD(number_testers_date_array) {
+		std::string retval = ".date(" + stringify(info[0]) + ").array(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
 
 
@@ -227,106 +309,138 @@ namespace or_default_parameters_tester {
 
 
 
-	NAN_METHOD(number_testers_function_number) {
-		info.GetReturnValue().Set(Nan::New(".function.number").ToLocalChecked());
+	POLY_METHOD(number_testers_function_number) {
+		std::string retval = ".function(" + stringify(info[0]) + ").number(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_function_string) {
-		info.GetReturnValue().Set(Nan::New(".function.string").ToLocalChecked());
+	POLY_METHOD(number_testers_function_string) {
+		std::string retval = ".function(" + stringify(info[0]) + ").string(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_function_bool) {
-		info.GetReturnValue().Set(Nan::New(".function.bool").ToLocalChecked());
+	POLY_METHOD(number_testers_function_bool) {
+		std::string retval = ".function(" + stringify(info[0]) + ").bool(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_function_date) {
-		info.GetReturnValue().Set(Nan::New(".function.date").ToLocalChecked());
+	POLY_METHOD(number_testers_function_date) {
+		std::string retval = ".function(" + stringify(info[0]) + ").date(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_function_function) {
-		info.GetReturnValue().Set(Nan::New(".function.function").ToLocalChecked());
+	POLY_METHOD(number_testers_function_function) {
+		std::string retval = ".function(" + stringify(info[0]) + ").function(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_function_buffer) {
-		info.GetReturnValue().Set(Nan::New(".function.buffer").ToLocalChecked());
+	POLY_METHOD(number_testers_function_buffer) {
+		std::string retval = ".function(" + stringify(info[0]) + ").buffer(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_function_map) {
-		info.GetReturnValue().Set(Nan::New(".function.map").ToLocalChecked());
+	POLY_METHOD(number_testers_function_map) {
+		std::string retval = ".function(" + stringify(info[0]) + ").map(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_function_set) {
-		info.GetReturnValue().Set(Nan::New(".function.set").ToLocalChecked());
+	POLY_METHOD(number_testers_function_set) {
+		std::string retval = ".function(" + stringify(info[0]) + ").set(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_function_promise) {
-		info.GetReturnValue().Set(Nan::New(".function.promise").ToLocalChecked());
+	POLY_METHOD(number_testers_function_promise) {
+		std::string retval = ".function(" + stringify(info[0]) + ").promise(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_function_proxy) {
-		info.GetReturnValue().Set(Nan::New(".function.proxy").ToLocalChecked());
+	POLY_METHOD(number_testers_function_proxy) {
+		std::string retval = ".function(" + stringify(info[0]) + ").proxy(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_function_regexp) {
-		info.GetReturnValue().Set(Nan::New(".function.regexp").ToLocalChecked());
+	POLY_METHOD(number_testers_function_regexp) {
+		std::string retval = ".function(" + stringify(info[0]) + ").regexp(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_function_base_class) {
-		info.GetReturnValue().Set(Nan::New(".function.base_class").ToLocalChecked());
+	POLY_METHOD(number_testers_function_base_class) {
+		std::string retval = ".function(" + stringify(info[0]) + ").base_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_function_derived_class) {
-		info.GetReturnValue().Set(Nan::New(".function.derived_class").ToLocalChecked());
+	POLY_METHOD(number_testers_function_derived_class) {
+		std::string retval = ".function(" + stringify(info[0]) + ").derived_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_function_struct_A) {
-		info.GetReturnValue().Set(Nan::New(".function.struct_A").ToLocalChecked());
+	POLY_METHOD(number_testers_function_struct_A) {
+		std::string retval = ".function(" + stringify(info[0]) + ").struct_A(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_function_struct_B) {
-		info.GetReturnValue().Set(Nan::New(".function.struct_B").ToLocalChecked());
+	POLY_METHOD(number_testers_function_struct_B) {
+		std::string retval = ".function(" + stringify(info[0]) + ").struct_B(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_function_array) {
-		info.GetReturnValue().Set(Nan::New(".function.array").ToLocalChecked());
+	POLY_METHOD(number_testers_function_array) {
+		std::string retval = ".function(" + stringify(info[0]) + ").array(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
 
 
 
 
 
-	NAN_METHOD(number_testers_buffer_number) {
-		info.GetReturnValue().Set(Nan::New(".buffer.number").ToLocalChecked());
+	POLY_METHOD(number_testers_buffer_number) {
+		std::string retval = ".buffer(" + stringify(info[0]) + ").number(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_buffer_string) {
-		info.GetReturnValue().Set(Nan::New(".buffer.string").ToLocalChecked());
+	POLY_METHOD(number_testers_buffer_string) {
+		std::string retval = ".buffer(" + stringify(info[0]) + ").string(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_buffer_bool) {
-		info.GetReturnValue().Set(Nan::New(".buffer.bool").ToLocalChecked());
+	POLY_METHOD(number_testers_buffer_bool) {
+		std::string retval = ".buffer(" + stringify(info[0]) + ").bool(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_buffer_date) {
-		info.GetReturnValue().Set(Nan::New(".buffer.date").ToLocalChecked());
+	POLY_METHOD(number_testers_buffer_date) {
+		std::string retval = ".buffer(" + stringify(info[0]) + ").date(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_buffer_function) {
-		info.GetReturnValue().Set(Nan::New(".buffer.function").ToLocalChecked());
+	POLY_METHOD(number_testers_buffer_function) {
+		std::string retval = ".buffer(" + stringify(info[0]) + ").function(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_buffer_buffer) {
-		info.GetReturnValue().Set(Nan::New(".buffer.buffer").ToLocalChecked());
+	POLY_METHOD(number_testers_buffer_buffer) {
+		std::string retval = ".buffer(" + stringify(info[0]) + ").buffer(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_buffer_map) {
-		info.GetReturnValue().Set(Nan::New(".buffer.map").ToLocalChecked());
+	POLY_METHOD(number_testers_buffer_map) {
+		std::string retval = ".buffer(" + stringify(info[0]) + ").map(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_buffer_set) {
-		info.GetReturnValue().Set(Nan::New(".buffer.set").ToLocalChecked());
+	POLY_METHOD(number_testers_buffer_set) {
+		std::string retval = ".buffer(" + stringify(info[0]) + ").set(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_buffer_promise) {
-		info.GetReturnValue().Set(Nan::New(".buffer.promise").ToLocalChecked());
+	POLY_METHOD(number_testers_buffer_promise) {
+		std::string retval = ".buffer(" + stringify(info[0]) + ").promise(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_buffer_proxy) {
-		info.GetReturnValue().Set(Nan::New(".buffer.proxy").ToLocalChecked());
+	POLY_METHOD(number_testers_buffer_proxy) {
+		std::string retval = ".buffer(" + stringify(info[0]) + ").proxy(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_buffer_regexp) {
-		info.GetReturnValue().Set(Nan::New(".buffer.regexp").ToLocalChecked());
+	POLY_METHOD(number_testers_buffer_regexp) {
+		std::string retval = ".buffer(" + stringify(info[0]) + ").regexp(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_buffer_base_class) {
-		info.GetReturnValue().Set(Nan::New(".buffer.base_class").ToLocalChecked());
+	POLY_METHOD(number_testers_buffer_base_class) {
+		std::string retval = ".buffer(" + stringify(info[0]) + ").base_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_buffer_derived_class) {
-		info.GetReturnValue().Set(Nan::New(".buffer.derived_class").ToLocalChecked());
+	POLY_METHOD(number_testers_buffer_derived_class) {
+		std::string retval = ".buffer(" + stringify(info[0]) + ").derived_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_buffer_struct_A) {
-		info.GetReturnValue().Set(Nan::New(".buffer.struct_A").ToLocalChecked());
+	POLY_METHOD(number_testers_buffer_struct_A) {
+		std::string retval = ".buffer(" + stringify(info[0]) + ").struct_A(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_buffer_struct_B) {
-		info.GetReturnValue().Set(Nan::New(".buffer.struct_B").ToLocalChecked());
+	POLY_METHOD(number_testers_buffer_struct_B) {
+		std::string retval = ".buffer(" + stringify(info[0]) + ").struct_B(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_buffer_array) {
-		info.GetReturnValue().Set(Nan::New(".buffer.array").ToLocalChecked());
+	POLY_METHOD(number_testers_buffer_array) {
+		std::string retval = ".buffer(" + stringify(info[0]) + ").array(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
 
 
@@ -334,530 +448,690 @@ namespace or_default_parameters_tester {
 
 
 
-	NAN_METHOD(number_testers_map_number) {
-		info.GetReturnValue().Set(Nan::New(".map.number").ToLocalChecked());
+	POLY_METHOD(number_testers_map_number) {
+		std::string retval = ".map(" + stringify(info[0]) + ").number(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_map_string) {
-		info.GetReturnValue().Set(Nan::New(".map.string").ToLocalChecked());
+	POLY_METHOD(number_testers_map_string) {
+		std::string retval = ".map(" + stringify(info[0]) + ").string(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_map_bool) {
-		info.GetReturnValue().Set(Nan::New(".map.bool").ToLocalChecked());
+	POLY_METHOD(number_testers_map_bool) {
+		std::string retval = ".map(" + stringify(info[0]) + ").bool(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_map_date) {
-		info.GetReturnValue().Set(Nan::New(".map.date").ToLocalChecked());
+	POLY_METHOD(number_testers_map_date) {
+		std::string retval = ".map(" + stringify(info[0]) + ").date(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_map_function) {
-		info.GetReturnValue().Set(Nan::New(".map.function").ToLocalChecked());
+	POLY_METHOD(number_testers_map_function) {
+		std::string retval = ".map(" + stringify(info[0]) + ").function(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_map_buffer) {
-		info.GetReturnValue().Set(Nan::New(".map.buffer").ToLocalChecked());
+	POLY_METHOD(number_testers_map_buffer) {
+		std::string retval = ".map(" + stringify(info[0]) + ").buffer(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_map_map) {
-		info.GetReturnValue().Set(Nan::New(".map.map").ToLocalChecked());
+	POLY_METHOD(number_testers_map_map) {
+		std::string retval = ".map(" + stringify(info[0]) + ").map(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_map_set) {
-		info.GetReturnValue().Set(Nan::New(".map.set").ToLocalChecked());
+	POLY_METHOD(number_testers_map_set) {
+		std::string retval = ".map(" + stringify(info[0]) + ").set(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_map_promise) {
-		info.GetReturnValue().Set(Nan::New(".map.promise").ToLocalChecked());
+	POLY_METHOD(number_testers_map_promise) {
+		std::string retval = ".map(" + stringify(info[0]) + ").promise(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_map_proxy) {
-		info.GetReturnValue().Set(Nan::New(".map.proxy").ToLocalChecked());
+	POLY_METHOD(number_testers_map_proxy) {
+		std::string retval = ".map(" + stringify(info[0]) + ").proxy(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_map_regexp) {
-		info.GetReturnValue().Set(Nan::New(".map.regexp").ToLocalChecked());
+	POLY_METHOD(number_testers_map_regexp) {
+		std::string retval = ".map(" + stringify(info[0]) + ").regexp(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_map_base_class) {
-		info.GetReturnValue().Set(Nan::New(".map.base_class").ToLocalChecked());
+	POLY_METHOD(number_testers_map_base_class) {
+		std::string retval = ".map(" + stringify(info[0]) + ").base_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_map_derived_class) {
-		info.GetReturnValue().Set(Nan::New(".map.derived_class").ToLocalChecked());
+	POLY_METHOD(number_testers_map_derived_class) {
+		std::string retval = ".map(" + stringify(info[0]) + ").derived_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_map_struct_A) {
-		info.GetReturnValue().Set(Nan::New(".map.struct_A").ToLocalChecked());
+	POLY_METHOD(number_testers_map_struct_A) {
+		std::string retval = ".map(" + stringify(info[0]) + ").struct_A(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_map_struct_B) {
-		info.GetReturnValue().Set(Nan::New(".map.struct_B").ToLocalChecked());
+	POLY_METHOD(number_testers_map_struct_B) {
+		std::string retval = ".map(" + stringify(info[0]) + ").struct_B(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_map_array) {
-		info.GetReturnValue().Set(Nan::New(".map.array").ToLocalChecked());
+	POLY_METHOD(number_testers_map_array) {
+		std::string retval = ".map(" + stringify(info[0]) + ").array(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
 
 
 
 
 
-	NAN_METHOD(number_testers_set_number) {
-		info.GetReturnValue().Set(Nan::New(".set.number").ToLocalChecked());
+	POLY_METHOD(number_testers_set_number) {
+		std::string retval = ".set(" + stringify(info[0]) + ").number(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_set_string) {
-		info.GetReturnValue().Set(Nan::New(".set.string").ToLocalChecked());
+	POLY_METHOD(number_testers_set_string) {
+		std::string retval = ".set(" + stringify(info[0]) + ").string(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_set_bool) {
-		info.GetReturnValue().Set(Nan::New(".set.bool").ToLocalChecked());
+	POLY_METHOD(number_testers_set_bool) {
+		std::string retval = ".set(" + stringify(info[0]) + ").bool(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_set_date) {
-		info.GetReturnValue().Set(Nan::New(".set.date").ToLocalChecked());
+	POLY_METHOD(number_testers_set_date) {
+		std::string retval = ".set(" + stringify(info[0]) + ").date(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_set_function) {
-		info.GetReturnValue().Set(Nan::New(".set.function").ToLocalChecked());
+	POLY_METHOD(number_testers_set_function) {
+		std::string retval = ".set(" + stringify(info[0]) + ").function(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_set_buffer) {
-		info.GetReturnValue().Set(Nan::New(".set.buffer").ToLocalChecked());
+	POLY_METHOD(number_testers_set_buffer) {
+		std::string retval = ".set(" + stringify(info[0]) + ").buffer(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_set_map) {
-		info.GetReturnValue().Set(Nan::New(".set.map").ToLocalChecked());
+	POLY_METHOD(number_testers_set_map) {
+		std::string retval = ".set(" + stringify(info[0]) + ").map(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_set_set) {
-		info.GetReturnValue().Set(Nan::New(".set.set").ToLocalChecked());
+	POLY_METHOD(number_testers_set_set) {
+		std::string retval = ".set(" + stringify(info[0]) + ").set(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_set_promise) {
-		info.GetReturnValue().Set(Nan::New(".set.promise").ToLocalChecked());
+	POLY_METHOD(number_testers_set_promise) {
+		std::string retval = ".set(" + stringify(info[0]) + ").promise(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_set_proxy) {
-		info.GetReturnValue().Set(Nan::New(".set.proxy").ToLocalChecked());
+	POLY_METHOD(number_testers_set_proxy) {
+		std::string retval = ".set(" + stringify(info[0]) + ").proxy(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_set_regexp) {
-		info.GetReturnValue().Set(Nan::New(".set.regexp").ToLocalChecked());
+	POLY_METHOD(number_testers_set_regexp) {
+		std::string retval = ".set(" + stringify(info[0]) + ").regexp(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_set_base_class) {
-		info.GetReturnValue().Set(Nan::New(".set.base_class").ToLocalChecked());
+	POLY_METHOD(number_testers_set_base_class) {
+		std::string retval = ".set(" + stringify(info[0]) + ").base_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_set_derived_class) {
-		info.GetReturnValue().Set(Nan::New(".set.derived_class").ToLocalChecked());
+	POLY_METHOD(number_testers_set_derived_class) {
+		std::string retval = ".set(" + stringify(info[0]) + ").derived_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_set_struct_A) {
-		info.GetReturnValue().Set(Nan::New(".set.struct_A").ToLocalChecked());
+	POLY_METHOD(number_testers_set_struct_A) {
+		std::string retval = ".set(" + stringify(info[0]) + ").struct_A(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_set_struct_B) {
-		info.GetReturnValue().Set(Nan::New(".set.struct_B").ToLocalChecked());
+	POLY_METHOD(number_testers_set_struct_B) {
+		std::string retval = ".set(" + stringify(info[0]) + ").struct_B(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_set_array) {
-		info.GetReturnValue().Set(Nan::New(".set.array").ToLocalChecked());
+	POLY_METHOD(number_testers_set_array) {
+		std::string retval = ".set(" + stringify(info[0]) + ").array(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
 
 
 
 
 
-	NAN_METHOD(number_testers_promise_number) {
-		info.GetReturnValue().Set(Nan::New(".promise.number").ToLocalChecked());
+	POLY_METHOD(number_testers_promise_number) {
+		std::string retval = ".promise(" + stringify(info[0]) + ").number(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_promise_string) {
-		info.GetReturnValue().Set(Nan::New(".promise.string").ToLocalChecked());
+	POLY_METHOD(number_testers_promise_string) {
+		std::string retval = ".promise(" + stringify(info[0]) + ").string(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_promise_bool) {
-		info.GetReturnValue().Set(Nan::New(".promise.bool").ToLocalChecked());
+	POLY_METHOD(number_testers_promise_bool) {
+		std::string retval = ".promise(" + stringify(info[0]) + ").bool(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_promise_date) {
-		info.GetReturnValue().Set(Nan::New(".promise.date").ToLocalChecked());
+	POLY_METHOD(number_testers_promise_date) {
+		std::string retval = ".promise(" + stringify(info[0]) + ").date(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_promise_function) {
-		info.GetReturnValue().Set(Nan::New(".promise.function").ToLocalChecked());
+	POLY_METHOD(number_testers_promise_function) {
+		std::string retval = ".promise(" + stringify(info[0]) + ").function(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_promise_buffer) {
-		info.GetReturnValue().Set(Nan::New(".promise.buffer").ToLocalChecked());
+	POLY_METHOD(number_testers_promise_buffer) {
+		std::string retval = ".promise(" + stringify(info[0]) + ").buffer(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_promise_map) {
-		info.GetReturnValue().Set(Nan::New(".promise.map").ToLocalChecked());
+	POLY_METHOD(number_testers_promise_map) {
+		std::string retval = ".promise(" + stringify(info[0]) + ").map(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_promise_set) {
-		info.GetReturnValue().Set(Nan::New(".promise.set").ToLocalChecked());
+	POLY_METHOD(number_testers_promise_set) {
+		std::string retval = ".promise(" + stringify(info[0]) + ").set(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_promise_promise) {
-		info.GetReturnValue().Set(Nan::New(".promise.promise").ToLocalChecked());
+	POLY_METHOD(number_testers_promise_promise) {
+		std::string retval = ".promise(" + stringify(info[0]) + ").promise(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_promise_proxy) {
-		info.GetReturnValue().Set(Nan::New(".promise.proxy").ToLocalChecked());
+	POLY_METHOD(number_testers_promise_proxy) {
+		std::string retval = ".promise(" + stringify(info[0]) + ").proxy(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_promise_regexp) {
-		info.GetReturnValue().Set(Nan::New(".promise.regexp").ToLocalChecked());
+	POLY_METHOD(number_testers_promise_regexp) {
+		std::string retval = ".promise(" + stringify(info[0]) + ").regexp(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_promise_base_class) {
-		info.GetReturnValue().Set(Nan::New(".promise.base_class").ToLocalChecked());
+	POLY_METHOD(number_testers_promise_base_class) {
+		std::string retval = ".promise(" + stringify(info[0]) + ").base_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_promise_derived_class) {
-		info.GetReturnValue().Set(Nan::New(".promise.derived_class").ToLocalChecked());
+	POLY_METHOD(number_testers_promise_derived_class) {
+		std::string retval = ".promise(" + stringify(info[0]) + ").derived_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_promise_struct_A) {
-		info.GetReturnValue().Set(Nan::New(".promise.struct_A").ToLocalChecked());
+	POLY_METHOD(number_testers_promise_struct_A) {
+		std::string retval = ".promise(" + stringify(info[0]) + ").struct_A(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_promise_struct_B) {
-		info.GetReturnValue().Set(Nan::New(".promise.struct_B").ToLocalChecked());
+	POLY_METHOD(number_testers_promise_struct_B) {
+		std::string retval = ".promise(" + stringify(info[0]) + ").struct_B(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_promise_array) {
-		info.GetReturnValue().Set(Nan::New(".promise.array").ToLocalChecked());
+	POLY_METHOD(number_testers_promise_array) {
+		std::string retval = ".promise(" + stringify(info[0]) + ").array(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
 
 
 
 
-	NAN_METHOD(number_testers_proxy_number) {
-		info.GetReturnValue().Set(Nan::New(".proxy.number").ToLocalChecked());
+	POLY_METHOD(number_testers_proxy_number) {
+		std::string retval = ".proxy(" + stringify(info[0]) + ").number(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_proxy_string) {
-		info.GetReturnValue().Set(Nan::New(".proxy.string").ToLocalChecked());
+	POLY_METHOD(number_testers_proxy_string) {
+		std::string retval = ".proxy(" + stringify(info[0]) + ").string(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_proxy_bool) {
-		info.GetReturnValue().Set(Nan::New(".proxy.bool").ToLocalChecked());
+	POLY_METHOD(number_testers_proxy_bool) {
+		std::string retval = ".proxy(" + stringify(info[0]) + ").bool(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_proxy_date) {
-		info.GetReturnValue().Set(Nan::New(".proxy.date").ToLocalChecked());
+	POLY_METHOD(number_testers_proxy_date) {
+		std::string retval = ".proxy(" + stringify(info[0]) + ").date(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_proxy_function) {
-		info.GetReturnValue().Set(Nan::New(".proxy.function").ToLocalChecked());
+	POLY_METHOD(number_testers_proxy_function) {
+		std::string retval = ".proxy(" + stringify(info[0]) + ").function(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_proxy_buffer) {
-		info.GetReturnValue().Set(Nan::New(".proxy.buffer").ToLocalChecked());
+	POLY_METHOD(number_testers_proxy_buffer) {
+		std::string retval = ".proxy(" + stringify(info[0]) + ").buffer(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_proxy_map) {
-		info.GetReturnValue().Set(Nan::New(".proxy.map").ToLocalChecked());
+	POLY_METHOD(number_testers_proxy_map) {
+		std::string retval = ".proxy(" + stringify(info[0]) + ").map(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_proxy_set) {
-		info.GetReturnValue().Set(Nan::New(".proxy.set").ToLocalChecked());
+	POLY_METHOD(number_testers_proxy_set) {
+		std::string retval = ".proxy(" + stringify(info[0]) + ").set(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_proxy_promise) {
-		info.GetReturnValue().Set(Nan::New(".proxy.promise").ToLocalChecked());
+	POLY_METHOD(number_testers_proxy_promise) {
+		std::string retval = ".proxy(" + stringify(info[0]) + ").promise(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_proxy_proxy) {
-		info.GetReturnValue().Set(Nan::New(".proxy.proxy").ToLocalChecked());
+	POLY_METHOD(number_testers_proxy_proxy) {
+		std::string retval = ".proxy(" + stringify(info[0]) + ").proxy(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_proxy_regexp) {
-		info.GetReturnValue().Set(Nan::New(".proxy.regexp").ToLocalChecked());
+	POLY_METHOD(number_testers_proxy_regexp) {
+		std::string retval = ".proxy(" + stringify(info[0]) + ").regexp(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_proxy_base_class) {
-		info.GetReturnValue().Set(Nan::New(".proxy.base_class").ToLocalChecked());
+	POLY_METHOD(number_testers_proxy_base_class) {
+		std::string retval = ".proxy(" + stringify(info[0]) + ").base_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_proxy_derived_class) {
-		info.GetReturnValue().Set(Nan::New(".proxy.derived_class").ToLocalChecked());
+	POLY_METHOD(number_testers_proxy_derived_class) {
+		std::string retval = ".proxy(" + stringify(info[0]) + ").derived_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_proxy_struct_A) {
-		info.GetReturnValue().Set(Nan::New(".proxy.struct_A").ToLocalChecked());
+	POLY_METHOD(number_testers_proxy_struct_A) {
+		std::string retval = ".proxy(" + stringify(info[0]) + ").struct_A(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_proxy_struct_B) {
-		info.GetReturnValue().Set(Nan::New(".proxy.struct_B").ToLocalChecked());
+	POLY_METHOD(number_testers_proxy_struct_B) {
+		std::string retval = ".proxy(" + stringify(info[0]) + ").struct_B(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_proxy_array) {
-		info.GetReturnValue().Set(Nan::New(".proxy.array").ToLocalChecked());
+	POLY_METHOD(number_testers_proxy_array) {
+		std::string retval = ".proxy(" + stringify(info[0]) + ").array(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
 
 
 
 
-	NAN_METHOD(number_testers_regexp_number) {
-		info.GetReturnValue().Set(Nan::New(".regexp.number").ToLocalChecked());
+	POLY_METHOD(number_testers_regexp_number) {
+		std::string retval = ".regexp(" + stringify(info[0]) + ").number(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_regexp_string) {
-		info.GetReturnValue().Set(Nan::New(".regexp.string").ToLocalChecked());
+	POLY_METHOD(number_testers_regexp_string) {
+		std::string retval = ".regexp(" + stringify(info[0]) + ").string(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_regexp_bool) {
-		info.GetReturnValue().Set(Nan::New(".regexp.bool").ToLocalChecked());
+	POLY_METHOD(number_testers_regexp_bool) {
+		std::string retval = ".regexp(" + stringify(info[0]) + ").bool(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_regexp_date) {
-		info.GetReturnValue().Set(Nan::New(".regexp.date").ToLocalChecked());
+	POLY_METHOD(number_testers_regexp_date) {
+		std::string retval = ".regexp(" + stringify(info[0]) + ").date(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_regexp_function) {
-		info.GetReturnValue().Set(Nan::New(".regexp.function").ToLocalChecked());
+	POLY_METHOD(number_testers_regexp_function) {
+		std::string retval = ".regexp(" + stringify(info[0]) + ").function(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_regexp_buffer) {
-		info.GetReturnValue().Set(Nan::New(".regexp.buffer").ToLocalChecked());
+	POLY_METHOD(number_testers_regexp_buffer) {
+		std::string retval = ".regexp(" + stringify(info[0]) + ").buffer(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_regexp_map) {
-		info.GetReturnValue().Set(Nan::New(".regexp.map").ToLocalChecked());
+	POLY_METHOD(number_testers_regexp_map) {
+		std::string retval = ".regexp(" + stringify(info[0]) + ").map(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_regexp_set) {
-		info.GetReturnValue().Set(Nan::New(".regexp.set").ToLocalChecked());
+	POLY_METHOD(number_testers_regexp_set) {
+		std::string retval = ".regexp(" + stringify(info[0]) + ").set(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_regexp_promise) {
-		info.GetReturnValue().Set(Nan::New(".regexp.promise").ToLocalChecked());
+	POLY_METHOD(number_testers_regexp_promise) {
+		std::string retval = ".regexp(" + stringify(info[0]) + ").promise(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_regexp_proxy) {
-		info.GetReturnValue().Set(Nan::New(".regexp.proxy").ToLocalChecked());
+	POLY_METHOD(number_testers_regexp_proxy) {
+		std::string retval = ".regexp(" + stringify(info[0]) + ").proxy(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_regexp_regexp) {
-		info.GetReturnValue().Set(Nan::New(".regexp.regexp").ToLocalChecked());
+	POLY_METHOD(number_testers_regexp_regexp) {
+		std::string retval = ".regexp(" + stringify(info[0]) + ").regexp(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_regexp_base_class) {
-		info.GetReturnValue().Set(Nan::New(".regexp.base_class").ToLocalChecked());
+	POLY_METHOD(number_testers_regexp_base_class) {
+		std::string retval = ".regexp(" + stringify(info[0]) + ").base_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_regexp_derived_class) {
-		info.GetReturnValue().Set(Nan::New(".regexp.derived_class").ToLocalChecked());
+	POLY_METHOD(number_testers_regexp_derived_class) {
+		std::string retval = ".regexp(" + stringify(info[0]) + ").derived_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_regexp_struct_A) {
-		info.GetReturnValue().Set(Nan::New(".regexp.struct_A").ToLocalChecked());
+	POLY_METHOD(number_testers_regexp_struct_A) {
+		std::string retval = ".regexp(" + stringify(info[0]) + ").struct_A(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_regexp_struct_B) {
-		info.GetReturnValue().Set(Nan::New(".regexp.struct_B").ToLocalChecked());
+	POLY_METHOD(number_testers_regexp_struct_B) {
+		std::string retval = ".regexp(" + stringify(info[0]) + ").struct_B(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_regexp_array) {
-		info.GetReturnValue().Set(Nan::New(".regexp.array").ToLocalChecked());
+	POLY_METHOD(number_testers_regexp_array) {
+		std::string retval = ".regexp(" + stringify(info[0]) + ").array(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
 
 
 
 
 
-	NAN_METHOD(number_testers_base_class_number) {
-		info.GetReturnValue().Set(Nan::New(".base_class.number").ToLocalChecked());
+	POLY_METHOD(number_testers_base_class_number) {
+		std::string retval = ".base_class(" + stringify(info[0]) + ").number(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_base_class_string) {
-		info.GetReturnValue().Set(Nan::New(".base_class.string").ToLocalChecked());
+	POLY_METHOD(number_testers_base_class_string) {
+		std::string retval = ".base_class(" + stringify(info[0]) + ").string(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_base_class_bool) {
-		info.GetReturnValue().Set(Nan::New(".base_class.bool").ToLocalChecked());
+	POLY_METHOD(number_testers_base_class_bool) {
+		std::string retval = ".base_class(" + stringify(info[0]) + ").bool(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_base_class_date) {
-		info.GetReturnValue().Set(Nan::New(".base_class.date").ToLocalChecked());
+	POLY_METHOD(number_testers_base_class_date) {
+		std::string retval = ".base_class(" + stringify(info[0]) + ").date(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_base_class_function) {
-		info.GetReturnValue().Set(Nan::New(".base_class.function").ToLocalChecked());
+	POLY_METHOD(number_testers_base_class_function) {
+		std::string retval = ".base_class(" + stringify(info[0]) + ").function(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_base_class_buffer) {
-		info.GetReturnValue().Set(Nan::New(".base_class.buffer").ToLocalChecked());
+	POLY_METHOD(number_testers_base_class_buffer) {
+		std::string retval = ".base_class(" + stringify(info[0]) + ").buffer(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_base_class_map) {
-		info.GetReturnValue().Set(Nan::New(".base_class.map").ToLocalChecked());
+	POLY_METHOD(number_testers_base_class_map) {
+		std::string retval = ".base_class(" + stringify(info[0]) + ").map(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_base_class_set) {
-		info.GetReturnValue().Set(Nan::New(".base_class.set").ToLocalChecked());
+	POLY_METHOD(number_testers_base_class_set) {
+		std::string retval = ".base_class(" + stringify(info[0]) + ").set(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_base_class_promise) {
-		info.GetReturnValue().Set(Nan::New(".base_class.promise").ToLocalChecked());
+	POLY_METHOD(number_testers_base_class_promise) {
+		std::string retval = ".base_class(" + stringify(info[0]) + ").promise(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_base_class_proxy) {
-		info.GetReturnValue().Set(Nan::New(".base_class.proxy").ToLocalChecked());
+	POLY_METHOD(number_testers_base_class_proxy) {
+		std::string retval = ".base_class(" + stringify(info[0]) + ").proxy(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_base_class_regexp) {
-		info.GetReturnValue().Set(Nan::New(".base_class.regexp").ToLocalChecked());
+	POLY_METHOD(number_testers_base_class_regexp) {
+		std::string retval = ".base_class(" + stringify(info[0]) + ").regexp(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_base_class_base_class) {
-		info.GetReturnValue().Set(Nan::New(".base_class.base_class").ToLocalChecked());
+	POLY_METHOD(number_testers_base_class_base_class) {
+		std::string retval = ".base_class(" + stringify(info[0]) + ").base_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_base_class_derived_class) {
-		info.GetReturnValue().Set(Nan::New(".base_class.derived_class").ToLocalChecked());
+	POLY_METHOD(number_testers_base_class_derived_class) {
+		std::string retval = ".base_class(" + stringify(info[0]) + ").derived_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_base_class_struct_A) {
-		info.GetReturnValue().Set(Nan::New(".base_class.struct_A").ToLocalChecked());
+	POLY_METHOD(number_testers_base_class_struct_A) {
+		std::string retval = ".base_class(" + stringify(info[0]) + ").struct_A(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_base_class_struct_B) {
-		info.GetReturnValue().Set(Nan::New(".base_class.struct_B").ToLocalChecked());
+	POLY_METHOD(number_testers_base_class_struct_B) {
+		std::string retval = ".base_class(" + stringify(info[0]) + ").struct_B(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_base_class_array) {
-		info.GetReturnValue().Set(Nan::New(".base_class.array").ToLocalChecked());
+	POLY_METHOD(number_testers_base_class_array) {
+		std::string retval = ".base_class(" + stringify(info[0]) + ").array(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
 
 
 
 
 
-	NAN_METHOD(number_testers_derived_class_number) {
-		info.GetReturnValue().Set(Nan::New(".derived_class.number").ToLocalChecked());
+	POLY_METHOD(number_testers_derived_class_number) {
+		std::string retval = ".derived_class(" + stringify(info[0]) + ").number(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_derived_class_string) {
-		info.GetReturnValue().Set(Nan::New(".derived_class.string").ToLocalChecked());
+	POLY_METHOD(number_testers_derived_class_string) {
+		std::string retval = ".derived_class(" + stringify(info[0]) + ").string(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_derived_class_bool) {
-		info.GetReturnValue().Set(Nan::New(".derived_class.bool").ToLocalChecked());
+	POLY_METHOD(number_testers_derived_class_bool) {
+		std::string retval = ".derived_class(" + stringify(info[0]) + ").bool(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_derived_class_date) {
-		info.GetReturnValue().Set(Nan::New(".derived_class.date").ToLocalChecked());
+	POLY_METHOD(number_testers_derived_class_date) {
+		std::string retval = ".derived_class(" + stringify(info[0]) + ").date(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_derived_class_function) {
-		info.GetReturnValue().Set(Nan::New(".derived_class.function").ToLocalChecked());
+	POLY_METHOD(number_testers_derived_class_function) {
+		std::string retval = ".derived_class(" + stringify(info[0]) + ").function(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_derived_class_buffer) {
-		info.GetReturnValue().Set(Nan::New(".derived_class.buffer").ToLocalChecked());
+	POLY_METHOD(number_testers_derived_class_buffer) {
+		std::string retval = ".derived_class(" + stringify(info[0]) + ").buffer(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_derived_class_map) {
-		info.GetReturnValue().Set(Nan::New(".derived_class.map").ToLocalChecked());
+	POLY_METHOD(number_testers_derived_class_map) {
+		std::string retval = ".derived_class(" + stringify(info[0]) + ").map(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_derived_class_set) {
-		info.GetReturnValue().Set(Nan::New(".derived_class.set").ToLocalChecked());
+	POLY_METHOD(number_testers_derived_class_set) {
+		std::string retval = ".derived_class(" + stringify(info[0]) + ").set(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_derived_class_promise) {
-		info.GetReturnValue().Set(Nan::New(".derived_class.promise").ToLocalChecked());
+	POLY_METHOD(number_testers_derived_class_promise) {
+		std::string retval = ".derived_class(" + stringify(info[0]) + ").promise(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_derived_class_proxy) {
-		info.GetReturnValue().Set(Nan::New(".derived_class.proxy").ToLocalChecked());
+	POLY_METHOD(number_testers_derived_class_proxy) {
+		std::string retval = ".derived_class(" + stringify(info[0]) + ").proxy(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_derived_class_regexp) {
-		info.GetReturnValue().Set(Nan::New(".derived_class.regexp").ToLocalChecked());
+	POLY_METHOD(number_testers_derived_class_regexp) {
+		std::string retval = ".derived_class(" + stringify(info[0]) + ").regexp(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_derived_class_base_class) {
-		info.GetReturnValue().Set(Nan::New(".derived_class.base_class").ToLocalChecked());
+	POLY_METHOD(number_testers_derived_class_base_class) {
+		std::string retval = ".derived_class(" + stringify(info[0]) + ").base_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_derived_class_derived_class) {
-		info.GetReturnValue().Set(Nan::New(".derived_class.derived_class").ToLocalChecked());
+	POLY_METHOD(number_testers_derived_class_derived_class) {
+		std::string retval = ".derived_class(" + stringify(info[0]) + ").derived_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_derived_class_struct_A) {
-		info.GetReturnValue().Set(Nan::New(".derived_class.struct_A").ToLocalChecked());
+	POLY_METHOD(number_testers_derived_class_struct_A) {
+		std::string retval = ".derived_class(" + stringify(info[0]) + ").struct_A(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_derived_class_struct_B) {
-		info.GetReturnValue().Set(Nan::New(".derived_class.struct_B").ToLocalChecked());
+	POLY_METHOD(number_testers_derived_class_struct_B) {
+		std::string retval = ".derived_class(" + stringify(info[0]) + ").struct_B(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_derived_class_array) {
-		info.GetReturnValue().Set(Nan::New(".derived_class.array").ToLocalChecked());
+	POLY_METHOD(number_testers_derived_class_array) {
+		std::string retval = ".derived_class(" + stringify(info[0]) + ").array(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
 
 
 
 
-	NAN_METHOD(number_testers_struct_A_number) {
-		info.GetReturnValue().Set(Nan::New(".struct_A.number").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_A_number) {
+		std::string retval = ".struct_A(" + stringify(info[0]) + ").number(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_A_string) {
-		info.GetReturnValue().Set(Nan::New(".struct_A.string").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_A_string) {
+		std::string retval = ".struct_A(" + stringify(info[0]) + ").string(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_A_bool) {
-		info.GetReturnValue().Set(Nan::New(".struct_A.bool").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_A_bool) {
+		std::string retval = ".struct_A(" + stringify(info[0]) + ").bool(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_A_date) {
-		info.GetReturnValue().Set(Nan::New(".struct_A.date").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_A_date) {
+		std::string retval = ".struct_A(" + stringify(info[0]) + ").date(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_A_function) {
-		info.GetReturnValue().Set(Nan::New(".struct_A.function").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_A_function) {
+		std::string retval = ".struct_A(" + stringify(info[0]) + ").function(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_A_buffer) {
-		info.GetReturnValue().Set(Nan::New(".struct_A.buffer").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_A_buffer) {
+		std::string retval = ".struct_A(" + stringify(info[0]) + ").buffer(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_A_map) {
-		info.GetReturnValue().Set(Nan::New(".struct_A.map").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_A_map) {
+		std::string retval = ".struct_A(" + stringify(info[0]) + ").map(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_A_set) {
-		info.GetReturnValue().Set(Nan::New(".struct_A.set").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_A_set) {
+		std::string retval = ".struct_A(" + stringify(info[0]) + ").set(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_A_promise) {
-		info.GetReturnValue().Set(Nan::New(".struct_A.promise").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_A_promise) {
+		std::string retval = ".struct_A(" + stringify(info[0]) + ").promise(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_A_proxy) {
-		info.GetReturnValue().Set(Nan::New(".struct_A.proxy").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_A_proxy) {
+		std::string retval = ".struct_A(" + stringify(info[0]) + ").proxy(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_A_regexp) {
-		info.GetReturnValue().Set(Nan::New(".struct_A.regexp").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_A_regexp) {
+		std::string retval = ".struct_A(" + stringify(info[0]) + ").regexp(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_A_base_class) {
-		info.GetReturnValue().Set(Nan::New(".struct_A.base_class").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_A_base_class) {
+		std::string retval = ".struct_A(" + stringify(info[0]) + ").base_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_A_derived_class) {
-		info.GetReturnValue().Set(Nan::New(".struct_A.derived_class").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_A_derived_class) {
+		std::string retval = ".struct_A(" + stringify(info[0]) + ").derived_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_A_struct_A) {
-		info.GetReturnValue().Set(Nan::New(".struct_A.struct_A").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_A_struct_A) {
+		std::string retval = ".struct_A(" + stringify(info[0]) + ").struct_A(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_A_struct_B) {
-		info.GetReturnValue().Set(Nan::New(".struct_A.struct_B").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_A_struct_B) {
+		std::string retval = ".struct_A(" + stringify(info[0]) + ").struct_B(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_A_array) {
-		info.GetReturnValue().Set(Nan::New(".struct_A.array").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_A_array) {
+		std::string retval = ".struct_A(" + stringify(info[0]) + ").array(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
 
 
 
 
 
-	NAN_METHOD(number_testers_struct_B_number) {
-		info.GetReturnValue().Set(Nan::New(".struct_B.number").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_B_number) {
+		std::string retval = ".struct_B(" + stringify(info[0]) + ").number(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_B_string) {
-		info.GetReturnValue().Set(Nan::New(".struct_B.string").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_B_string) {
+		std::string retval = ".struct_B(" + stringify(info[0]) + ").string(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_B_bool) {
-		info.GetReturnValue().Set(Nan::New(".struct_B.bool").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_B_bool) {
+		std::string retval = ".struct_B(" + stringify(info[0]) + ").bool(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_B_date) {
-		info.GetReturnValue().Set(Nan::New(".struct_B.date").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_B_date) {
+		std::string retval = ".struct_B(" + stringify(info[0]) + ").date(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_B_function) {
-		info.GetReturnValue().Set(Nan::New(".struct_B.function").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_B_function) {
+		std::string retval = ".struct_B(" + stringify(info[0]) + ").function(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_B_buffer) {
-		info.GetReturnValue().Set(Nan::New(".struct_B.buffer").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_B_buffer) {
+		std::string retval = ".struct_B(" + stringify(info[0]) + ").buffer(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_B_map) {
-		info.GetReturnValue().Set(Nan::New(".struct_B.map").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_B_map) {
+		std::string retval = ".struct_B(" + stringify(info[0]) + ").map(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_B_set) {
-		info.GetReturnValue().Set(Nan::New(".struct_B.set").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_B_set) {
+		std::string retval = ".struct_B(" + stringify(info[0]) + ").set(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_B_promise) {
-		info.GetReturnValue().Set(Nan::New(".struct_B.promise").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_B_promise) {
+		std::string retval = ".struct_B(" + stringify(info[0]) + ").promise(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_B_proxy) {
-		info.GetReturnValue().Set(Nan::New(".struct_B.proxy").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_B_proxy) {
+		std::string retval = ".struct_B(" + stringify(info[0]) + ").proxy(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_B_regexp) {
-		info.GetReturnValue().Set(Nan::New(".struct_B.regexp").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_B_regexp) {
+		std::string retval = ".struct_B(" + stringify(info[0]) + ").regexp(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_B_base_class) {
-		info.GetReturnValue().Set(Nan::New(".struct_B.base_class").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_B_base_class) {
+		std::string retval = ".struct_B(" + stringify(info[0]) + ").base_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_B_derived_class) {
-		info.GetReturnValue().Set(Nan::New(".struct_B.derived_class").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_B_derived_class) {
+		std::string retval = ".struct_B(" + stringify(info[0]) + ").derived_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_B_struct_A) {
-		info.GetReturnValue().Set(Nan::New(".struct_B.struct_A").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_B_struct_A) {
+		std::string retval = ".struct_B(" + stringify(info[0]) + ").struct_A(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_B_struct_B) {
-		info.GetReturnValue().Set(Nan::New(".struct_B.struct_B").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_B_struct_B) {
+		std::string retval = ".struct_B(" + stringify(info[0]) + ").struct_B(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_struct_B_array) {
-		info.GetReturnValue().Set(Nan::New(".struct_B.array").ToLocalChecked());
+	POLY_METHOD(number_testers_struct_B_array) {
+		std::string retval = ".struct_B(" + stringify(info[0]) + ").array(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
 
 
 
-	NAN_METHOD(number_testers_array_number) {
-		info.GetReturnValue().Set(Nan::New(".array.number").ToLocalChecked());
+	POLY_METHOD(number_testers_array_number) {
+		std::string retval = ".array(" + stringify(info[0]) + ").number(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_array_string) {
-		info.GetReturnValue().Set(Nan::New(".array.string").ToLocalChecked());
+	POLY_METHOD(number_testers_array_string) {
+		std::string retval = ".array(" + stringify(info[0]) + ").string(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_array_bool) {
-		info.GetReturnValue().Set(Nan::New(".array.bool").ToLocalChecked());
+	POLY_METHOD(number_testers_array_bool) {
+		std::string retval = ".array(" + stringify(info[0]) + ").bool(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_array_date) {
-		info.GetReturnValue().Set(Nan::New(".array.date").ToLocalChecked());
+	POLY_METHOD(number_testers_array_date) {
+		std::string retval = ".array(" + stringify(info[0]) + ").date(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_array_function) {
-		info.GetReturnValue().Set(Nan::New(".array.function").ToLocalChecked());
+	POLY_METHOD(number_testers_array_function) {
+		std::string retval = ".array(" + stringify(info[0]) + ").function(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_array_buffer) {
-		info.GetReturnValue().Set(Nan::New(".array.buffer").ToLocalChecked());
+	POLY_METHOD(number_testers_array_buffer) {
+		std::string retval = ".array(" + stringify(info[0]) + ").buffer(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_array_map) {
-		info.GetReturnValue().Set(Nan::New(".array.map").ToLocalChecked());
+	POLY_METHOD(number_testers_array_map) {
+		std::string retval = ".array(" + stringify(info[0]) + ").map(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_array_set) {
-		info.GetReturnValue().Set(Nan::New(".array.set").ToLocalChecked());
+	POLY_METHOD(number_testers_array_set) {
+		std::string retval = ".array(" + stringify(info[0]) + ").set(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_array_promise) {
-		info.GetReturnValue().Set(Nan::New(".array.promise").ToLocalChecked());
+	POLY_METHOD(number_testers_array_promise) {
+		std::string retval = ".array(" + stringify(info[0]) + ").promise(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_array_proxy) {
-		info.GetReturnValue().Set(Nan::New(".array.proxy").ToLocalChecked());
+	POLY_METHOD(number_testers_array_proxy) {
+		std::string retval = ".array(" + stringify(info[0]) + ").proxy(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_array_regexp) {
-		info.GetReturnValue().Set(Nan::New(".array.regexp").ToLocalChecked());
+	POLY_METHOD(number_testers_array_regexp) {
+		std::string retval = ".array(" + stringify(info[0]) + ").regexp(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_array_base_class) {
-		info.GetReturnValue().Set(Nan::New(".array.base_class").ToLocalChecked());
+	POLY_METHOD(number_testers_array_base_class) {
+		std::string retval = ".array(" + stringify(info[0]) + ").base_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_array_derived_class) {
-		info.GetReturnValue().Set(Nan::New(".array.derived_class").ToLocalChecked());
+	POLY_METHOD(number_testers_array_derived_class) {
+		std::string retval = ".array(" + stringify(info[0]) + ").derived_class(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_array_struct_A) {
-		info.GetReturnValue().Set(Nan::New(".array.struct_A").ToLocalChecked());
+	POLY_METHOD(number_testers_array_struct_A) {
+		std::string retval = ".array(" + stringify(info[0]) + ").struct_A(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_array_struct_B) {
-		info.GetReturnValue().Set(Nan::New(".array.struct_B").ToLocalChecked());
+	POLY_METHOD(number_testers_array_struct_B) {
+		std::string retval = ".array(" + stringify(info[0]) + ").struct_B(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
-	NAN_METHOD(number_testers_array_array) {
-		info.GetReturnValue().Set(Nan::New(".array.array").ToLocalChecked());
+	POLY_METHOD(number_testers_array_array) {
+		std::string retval = ".array(" + stringify(info[0]) + ").array(" + stringify(info[1]) + ")";
+		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
 
 
 
-	NAN_METHOD(number_testers) {
+	POLY_METHOD(number_testers) {
 		info.GetReturnValue().Set(Nan::New(".no_params").ToLocalChecked());
 		
 	}
@@ -867,6 +1141,9 @@ namespace or_default_parameters_tester {
 	void ORFunctionCallback(const Nan::FunctionCallbackInfo<v8::Value>& info) {
 		//NOP
 	}
+
+
+	
 
 
 	void RegisterORTesters(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
@@ -1142,43 +1419,43 @@ namespace or_default_parameters_tester {
 
 
 
-		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","Number",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_A",struct_A::New()) }, number_testers_number_struct_A);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","String",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_A",struct_A::New()) }, number_testers_string_struct_A);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","Boolean",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_A",struct_A::New()) }, number_testers_bool_struct_A);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","Date",Nan::Undefined()),			std::make_shared<overload_info>("a","struct_A",struct_A::New()) }, number_testers_date_struct_A);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","Function",Nan::Undefined()) ,		std::make_shared<overload_info>("a","struct_A",struct_A::New()) }, number_testers_function_struct_A);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","Buffer",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_A",struct_A::New()) }, number_testers_buffer_struct_A);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","Map",Nan::Undefined()),			std::make_shared<overload_info>("a","struct_A",struct_A::New()) }, number_testers_map_struct_A);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","Set",Nan::Undefined()),			std::make_shared<overload_info>("a","struct_A",struct_A::New()) }, number_testers_set_struct_A);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","Promise",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_A",struct_A::New()) }, number_testers_promise_struct_A);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","Proxy",Nan::Undefined()),			std::make_shared<overload_info>("a","struct_A",struct_A::New()) }, number_testers_proxy_struct_A);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","RegExp",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_A",struct_A::New()) }, number_testers_regexp_struct_A);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","base_class",Nan::Undefined()),	std::make_shared<overload_info>("a","struct_A",struct_A::New()) }, number_testers_base_class_struct_A);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","derived_class",Nan::Undefined()), std::make_shared<overload_info>("a","struct_A",struct_A::New()) }, number_testers_derived_class_struct_A);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","struct_A",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_A",struct_A::New()) }, number_testers_struct_A_struct_A);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","Array",Nan::Undefined()),			std::make_shared<overload_info>("a","struct_A",struct_A::New()) }, number_testers_array_struct_A);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","struct_B",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_A",struct_A::New()) }, number_testers_struct_B_struct_A);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","Number",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_A",struct_A::New("val1","val2")) }, number_testers_number_struct_A);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","String",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_A",struct_A::New("val1","val2")) }, number_testers_string_struct_A);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","Boolean",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_A",struct_A::New("val1","val2")) }, number_testers_bool_struct_A);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","Date",Nan::Undefined()),			std::make_shared<overload_info>("a","struct_A",struct_A::New("val1","val2")) }, number_testers_date_struct_A);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","Function",Nan::Undefined()) ,		std::make_shared<overload_info>("a","struct_A",struct_A::New("val1","val2")) }, number_testers_function_struct_A);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","Buffer",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_A",struct_A::New("val1","val2")) }, number_testers_buffer_struct_A);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","Map",Nan::Undefined()),			std::make_shared<overload_info>("a","struct_A",struct_A::New("val1","val2")) }, number_testers_map_struct_A);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","Set",Nan::Undefined()),			std::make_shared<overload_info>("a","struct_A",struct_A::New("val1","val2")) }, number_testers_set_struct_A);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","Promise",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_A",struct_A::New("val1","val2")) }, number_testers_promise_struct_A);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","Proxy",Nan::Undefined()),			std::make_shared<overload_info>("a","struct_A",struct_A::New("val1","val2")) }, number_testers_proxy_struct_A);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","RegExp",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_A",struct_A::New("val1","val2")) }, number_testers_regexp_struct_A);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","base_class",Nan::Undefined()),	std::make_shared<overload_info>("a","struct_A",struct_A::New("val1","val2")) }, number_testers_base_class_struct_A);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","derived_class",Nan::Undefined()), std::make_shared<overload_info>("a","struct_A",struct_A::New("val1","val2")) }, number_testers_derived_class_struct_A);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","struct_A",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_A",struct_A::New("val1","val2")) }, number_testers_struct_A_struct_A);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","Array",Nan::Undefined()),			std::make_shared<overload_info>("a","struct_A",struct_A::New("val1","val2")) }, number_testers_array_struct_A);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_A", { std::make_shared<overload_info>("a","struct_B",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_A",struct_A::New("val1","val2")) }, number_testers_struct_B_struct_A);
 		overload->addOverload("or_default_tester", "", "default_testers_struct_A", {}, number_testers);
 
 
 
 
-		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","Number",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_B",struct_B::New()) }, number_testers_number_struct_B);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","String",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_B",struct_B::New()) }, number_testers_string_struct_B);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","Boolean",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_B",struct_B::New()) }, number_testers_bool_struct_B);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","Date",Nan::Undefined()),			std::make_shared<overload_info>("a","struct_B",struct_B::New()) }, number_testers_date_struct_B);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","Function",Nan::Undefined()) ,		std::make_shared<overload_info>("a","struct_B",struct_B::New()) }, number_testers_function_struct_B);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","Buffer",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_B",struct_B::New()) }, number_testers_buffer_struct_B);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","Map",Nan::Undefined()),			std::make_shared<overload_info>("a","struct_B",struct_B::New()) }, number_testers_map_struct_B);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","Set",Nan::Undefined()),			std::make_shared<overload_info>("a","struct_B",struct_B::New()) }, number_testers_set_struct_B);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","Promise",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_B",struct_B::New()) }, number_testers_promise_struct_B);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","Proxy",Nan::Undefined()),			std::make_shared<overload_info>("a","struct_B",struct_B::New()) }, number_testers_proxy_struct_B);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","RegExp",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_B",struct_B::New()) }, number_testers_regexp_struct_B);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","base_class",Nan::Undefined()),	std::make_shared<overload_info>("a","struct_B",struct_B::New()) }, number_testers_base_class_struct_B);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","derived_class",Nan::Undefined()), std::make_shared<overload_info>("a","struct_B",struct_B::New()) }, number_testers_derived_class_struct_B);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","struct_A",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_B",struct_B::New()) }, number_testers_struct_A_struct_B);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","struct_B",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_B",struct_B::New()) }, number_testers_struct_B_struct_B);
-		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","Array",Nan::Undefined()),			std::make_shared<overload_info>("a","struct_B",struct_B::New()) }, number_testers_array_struct_B);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","Number",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_B",struct_B::New("val1",2)) }, number_testers_number_struct_B);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","String",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_B",struct_B::New("val1",2)) }, number_testers_string_struct_B);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","Boolean",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_B",struct_B::New("val1",2)) }, number_testers_bool_struct_B);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","Date",Nan::Undefined()),			std::make_shared<overload_info>("a","struct_B",struct_B::New("val1",2)) }, number_testers_date_struct_B);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","Function",Nan::Undefined()) ,		std::make_shared<overload_info>("a","struct_B",struct_B::New("val1",2)) }, number_testers_function_struct_B);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","Buffer",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_B",struct_B::New("val1",2)) }, number_testers_buffer_struct_B);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","Map",Nan::Undefined()),			std::make_shared<overload_info>("a","struct_B",struct_B::New("val1",2)) }, number_testers_map_struct_B);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","Set",Nan::Undefined()),			std::make_shared<overload_info>("a","struct_B",struct_B::New("val1",2)) }, number_testers_set_struct_B);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","Promise",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_B",struct_B::New("val1",2)) }, number_testers_promise_struct_B);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","Proxy",Nan::Undefined()),			std::make_shared<overload_info>("a","struct_B",struct_B::New("val1",2)) }, number_testers_proxy_struct_B);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","RegExp",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_B",struct_B::New("val1",2)) }, number_testers_regexp_struct_B);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","base_class",Nan::Undefined()),	std::make_shared<overload_info>("a","struct_B",struct_B::New("val1",2)) }, number_testers_base_class_struct_B);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","derived_class",Nan::Undefined()), std::make_shared<overload_info>("a","struct_B",struct_B::New("val1",2)) }, number_testers_derived_class_struct_B);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","struct_A",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_B",struct_B::New("val1",2)) }, number_testers_struct_A_struct_B);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","struct_B",Nan::Undefined()),		std::make_shared<overload_info>("a","struct_B",struct_B::New("val1",2)) }, number_testers_struct_B_struct_B);
+		overload->addOverload("or_default_tester", "", "default_testers_struct_B", { std::make_shared<overload_info>("a","Array",Nan::Undefined()),			std::make_shared<overload_info>("a","struct_B",struct_B::New("val1",2)) }, number_testers_array_struct_B);
 		overload->addOverload("or_default_tester", "", "default_testers_struct_B", {}, number_testers);
 
 

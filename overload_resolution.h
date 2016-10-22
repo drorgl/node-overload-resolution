@@ -23,6 +23,15 @@
 
 #include "IStructuredObject.h"
 
+#include "FunctionCallbackInfo.h"
+
+
+typedef const or::FunctionCallbackInfo<v8::Value>& POLY_METHOD_ARGS_TYPE;
+#define	POLY_METHOD(name)                                                       \
+		Nan::NAN_METHOD_RETURN_TYPE name(POLY_METHOD_ARGS_TYPE info)
+
+typedef void(*PolyFunctionCallback)(POLY_METHOD_ARGS_TYPE);
+
 ////overload resolution module
 //
 ////on constructor, register each function signature and c++ function that implements it
@@ -93,9 +102,11 @@ struct overload_info {
 
 
 struct o_r_function {
-	Nan::FunctionCallback function;
+	PolyFunctionCallback function;
 	std::string functionName;
 	std::string className;
+	bool is_constructor;
+	bool is_static;
 	std::vector<std::shared_ptr<overload_info>> parameters;
 };
 
@@ -144,6 +155,8 @@ private:
 
 	//takes a generic type in the form of Array<Number> or Array<Array<Number> and returns the list of separate types for type validation
 	void split_generic_types(std::string type, std::set<std::string> &types);
+
+	void create_function_store(const std::string ns, const std::string className, const std::string functionName);
 public:
 	overload_resolution();
 
@@ -161,7 +174,13 @@ public:
 	bool validate_type_registrations();
 
 	//adds an overload function
-	void addOverload(const std::string ns, const std::string className, const std::string functionName, std::vector<std::shared_ptr<overload_info>> arguments, Nan::FunctionCallback callback);
+	void addOverload(const std::string ns, const std::string className, const std::string functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
+
+	//adds an overload for a static function
+	void addStaticOverload(const std::string ns, const std::string className, const std::string functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
+
+	//adds an overload constructor
+	void addOverloadConstructor(const std::string ns, const std::string className, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
 
 	//determines the type of param, primitives, registered types, registered structs
 	std::string determineType(v8::Local<v8::Value> param);

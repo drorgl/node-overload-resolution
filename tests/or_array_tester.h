@@ -11,114 +11,114 @@ namespace or_array_tester {
 		}
 	}
 
-	NAN_METHOD(array_testers_number) {
+	POLY_METHOD(array_testers_number) {
 		info.GetReturnValue().Set(Nan::New(".number").ToLocalChecked());
 	}
 
 	
-	NAN_METHOD(array_testers_array) {
+	POLY_METHOD(array_testers_array) {
 		info.GetReturnValue().Set(Nan::New(".array").ToLocalChecked());
 	}
-NAN_METHOD(array_testers_array_number) {
+POLY_METHOD(array_testers_array_number) {
 	info.GetReturnValue().Set(Nan::New(".array<number>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_string) {
+POLY_METHOD(array_testers_array_string) {
 	info.GetReturnValue().Set(Nan::New(".array<string>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_bool) {
+POLY_METHOD(array_testers_array_bool) {
 	info.GetReturnValue().Set(Nan::New(".array<bool>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_date) {
+POLY_METHOD(array_testers_array_date) {
 	info.GetReturnValue().Set(Nan::New(".array<date>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_function) {
+POLY_METHOD(array_testers_array_function) {
 	info.GetReturnValue().Set(Nan::New(".array<function>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_buffer) {
+POLY_METHOD(array_testers_array_buffer) {
 	info.GetReturnValue().Set(Nan::New(".array<buffer>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_map) {
+POLY_METHOD(array_testers_array_map) {
 	info.GetReturnValue().Set(Nan::New(".array<map>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_set) {
+POLY_METHOD(array_testers_array_set) {
 	info.GetReturnValue().Set(Nan::New(".array<set>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_promise) {
+POLY_METHOD(array_testers_array_promise) {
 	info.GetReturnValue().Set(Nan::New(".array<promise>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_proxy) {
+POLY_METHOD(array_testers_array_proxy) {
 	info.GetReturnValue().Set(Nan::New(".array<proxy>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_regexp) {
+POLY_METHOD(array_testers_array_regexp) {
 	info.GetReturnValue().Set(Nan::New(".array<regexp>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_base_class) {
+POLY_METHOD(array_testers_array_base_class) {
 	info.GetReturnValue().Set(Nan::New(".array<base_class>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_derived_class) {
+POLY_METHOD(array_testers_array_derived_class) {
 	info.GetReturnValue().Set(Nan::New(".array<derived_class>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_struct_A) {
+POLY_METHOD(array_testers_array_struct_A) {
 	info.GetReturnValue().Set(Nan::New(".array<struct_A>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_struct_B) {
+POLY_METHOD(array_testers_array_struct_B) {
 	info.GetReturnValue().Set(Nan::New(".array<struct_B>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_array) {
+POLY_METHOD(array_testers_array_array) {
 	info.GetReturnValue().Set(Nan::New(".array<array>").ToLocalChecked());
 }
 
-NAN_METHOD(array_testers_array_array_number) {
+POLY_METHOD(array_testers_array_array_number) {
 	info.GetReturnValue().Set(Nan::New(".array<array<number>>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_array_string) {
+POLY_METHOD(array_testers_array_array_string) {
 	info.GetReturnValue().Set(Nan::New(".array<array<string>>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_array_bool) {
+POLY_METHOD(array_testers_array_array_bool) {
 	info.GetReturnValue().Set(Nan::New(".array<array<bool>>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_array_date) {
+POLY_METHOD(array_testers_array_array_date) {
 	info.GetReturnValue().Set(Nan::New(".array<array<date>>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_array_function) {
+POLY_METHOD(array_testers_array_array_function) {
 	info.GetReturnValue().Set(Nan::New(".array<array<function>>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_array_buffer) {
+POLY_METHOD(array_testers_array_array_buffer) {
 	info.GetReturnValue().Set(Nan::New(".array<array<buffer>>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_array_map) {
+POLY_METHOD(array_testers_array_array_map) {
 	info.GetReturnValue().Set(Nan::New(".array<array<map>>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_array_set) {
+POLY_METHOD(array_testers_array_array_set) {
 	info.GetReturnValue().Set(Nan::New(".array<array<set>>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_array_promise) {
+POLY_METHOD(array_testers_array_array_promise) {
 	info.GetReturnValue().Set(Nan::New(".array<array<promise>>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_array_proxy) {
+POLY_METHOD(array_testers_array_array_proxy) {
 	info.GetReturnValue().Set(Nan::New(".array<array<proxy>>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_array_regexp) {
+POLY_METHOD(array_testers_array_array_regexp) {
 	info.GetReturnValue().Set(Nan::New(".array<array<regexp>>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_array_base_class) {
+POLY_METHOD(array_testers_array_array_base_class) {
 	info.GetReturnValue().Set(Nan::New(".array<array<base_class>>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_array_derived_class) {
+POLY_METHOD(array_testers_array_array_derived_class) {
 	info.GetReturnValue().Set(Nan::New(".array<array<derived_class>>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_array_struct_A) {
+POLY_METHOD(array_testers_array_array_struct_A) {
 	info.GetReturnValue().Set(Nan::New(".array<array<struct_A>>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_array_struct_B) {
+POLY_METHOD(array_testers_array_array_struct_B) {
 	info.GetReturnValue().Set(Nan::New(".array<array<struct_B>>").ToLocalChecked());
 }
-NAN_METHOD(array_testers_array_array_array) {
+POLY_METHOD(array_testers_array_array_array) {
 	info.GetReturnValue().Set(Nan::New(".array<array<array>>").ToLocalChecked());
 }
 
 	
-NAN_METHOD(array_testers) {
+POLY_METHOD(array_testers) {
 	info.GetReturnValue().Set(Nan::New(".no_parameters_testers").ToLocalChecked());
 }
 

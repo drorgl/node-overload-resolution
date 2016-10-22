@@ -2,6 +2,7 @@
 #define _O_R_TESTER_H_
 #include "../overload_resolution.h"
 
+
 namespace or_tester {
 
 	namespace general_callback {
@@ -11,99 +12,99 @@ namespace or_tester {
 		}
 	}
 
-	NAN_METHOD(number_testers_number) {
+	POLY_METHOD(number_testers_number) {
 		info.GetReturnValue().Set(Nan::New(".number").ToLocalChecked());
 	}
 
-	NAN_METHOD(number_testers_string) {
+	POLY_METHOD(number_testers_string) {
 		info.GetReturnValue().Set(Nan::New(".string").ToLocalChecked());
 	}
 
-	NAN_METHOD(number_testers_bool) {
+	POLY_METHOD(number_testers_bool) {
 		info.GetReturnValue().Set(Nan::New(".bool").ToLocalChecked());
 	}
 
-	NAN_METHOD(number_testers_date) {
+	POLY_METHOD(number_testers_date) {
 		info.GetReturnValue().Set(Nan::New(".date").ToLocalChecked());
 	}
 
-	NAN_METHOD(number_testers_function) {
+	POLY_METHOD(number_testers_function) {
 		info.GetReturnValue().Set(Nan::New(".function").ToLocalChecked());
 	}
 
-	NAN_METHOD(number_testers_buffer) {
+	POLY_METHOD(number_testers_buffer) {
 		info.GetReturnValue().Set(Nan::New(".buffer").ToLocalChecked());
 	}
 
-	NAN_METHOD(number_testers_map) {
+	POLY_METHOD(number_testers_map) {
 		info.GetReturnValue().Set(Nan::New(".map").ToLocalChecked());
 	}
 
-	NAN_METHOD(number_testers_set) {
+	POLY_METHOD(number_testers_set) {
 		info.GetReturnValue().Set(Nan::New(".set").ToLocalChecked());
 	}
 
-	NAN_METHOD(number_testers_promise) {
+	POLY_METHOD(number_testers_promise) {
 		info.GetReturnValue().Set(Nan::New(".promise").ToLocalChecked());
 	}
 
-	NAN_METHOD(number_testers_proxy) {
+	POLY_METHOD(number_testers_proxy) {
 		info.GetReturnValue().Set(Nan::New(".proxy").ToLocalChecked());
 	}
 
-	NAN_METHOD(number_testers_regexp) {
+	POLY_METHOD(number_testers_regexp) {
 		info.GetReturnValue().Set(Nan::New(".regexp").ToLocalChecked());
 	}
 
-	NAN_METHOD(number_testers_base_class) {
+	POLY_METHOD(number_testers_base_class) {
 		info.GetReturnValue().Set(Nan::New(".base_class").ToLocalChecked());
 	}
 
-	NAN_METHOD(number_testers_derived_class) {
+	POLY_METHOD(number_testers_derived_class) {
 		info.GetReturnValue().Set(Nan::New(".derived_class").ToLocalChecked());
 	}
 
-	NAN_METHOD(number_testers_struct_A) {
+	POLY_METHOD(number_testers_struct_A) {
 		info.GetReturnValue().Set(Nan::New(".struct_A").ToLocalChecked());
 	}
 
-	NAN_METHOD(number_testers_struct_B) {
+	POLY_METHOD(number_testers_struct_B) {
 		info.GetReturnValue().Set(Nan::New(".struct_B").ToLocalChecked());
 	}
 
-	NAN_METHOD(number_testers_array) {
+	POLY_METHOD(number_testers_array) {
 		info.GetReturnValue().Set(Nan::New(".array").ToLocalChecked());
 	}
 
-	NAN_METHOD(number_testers) {
+	POLY_METHOD(number_testers) {
 		info.GetReturnValue().Set(Nan::New(".no_parameters").ToLocalChecked());
 	}
 
-	NAN_METHOD(structs_testers) {
+	POLY_METHOD(structs_testers) {
 		info.GetReturnValue().Set(Nan::New("structs_testers.no_parameters").ToLocalChecked());
 	}
 
-	NAN_METHOD(structs_testers_struct_A) {
+	POLY_METHOD(structs_testers_struct_A) {
 		info.GetReturnValue().Set(Nan::New("structs_testers.struct_A").ToLocalChecked());
 	}
 
-	NAN_METHOD(structs_testers_struct_B) {
+	POLY_METHOD(structs_testers_struct_B) {
 		info.GetReturnValue().Set(Nan::New("structs_testers.struct_B").ToLocalChecked());
 	}
 
-	NAN_METHOD(structs_testers_struct_A_struct_B) {
+	POLY_METHOD(structs_testers_struct_A_struct_B) {
 		info.GetReturnValue().Set(Nan::New("structs_testers.struct_A_struct_B").ToLocalChecked());
 	}
 
-	NAN_METHOD(structs_testers_struct_B_struct_A) {
+	POLY_METHOD(structs_testers_struct_B_struct_A) {
 		info.GetReturnValue().Set(Nan::New("structs_testers.struct_B_struct_A").ToLocalChecked());
 	}
 
-	NAN_METHOD(structs_testers_struct_A_struct_A) {
+	POLY_METHOD(structs_testers_struct_A_struct_A) {
 		info.GetReturnValue().Set(Nan::New("structs_testers.struct_A_struct_A").ToLocalChecked());
 	}
 
-	NAN_METHOD(structs_testers_struct_B_struct_B) {
+	POLY_METHOD(structs_testers_struct_B_struct_B) {
 		info.GetReturnValue().Set(Nan::New("structs_testers.struct_B_struct_B").ToLocalChecked());
 	}
 

@@ -62,58 +62,58 @@ NAN_METHOD(derived_class::derived_function) {
 }
 
 
-NAN_METHOD(derived_class::base_function) {
+POLY_METHOD(derived_class::base_function) {
 	info.GetReturnValue().Set(Nan::New<v8::String>("derived_class.base_function.no_parameters_testers").ToLocalChecked());
 }
 
 
-NAN_METHOD(derived_class::base_function_number) {
+POLY_METHOD(derived_class::base_function_number) {
 	info.GetReturnValue().Set(Nan::New<v8::String>("derived_class.base_function.number").ToLocalChecked());
 }
-NAN_METHOD(derived_class::base_function_string) {
+POLY_METHOD(derived_class::base_function_string) {
 	info.GetReturnValue().Set(Nan::New<v8::String>("derived_class.base_function.string").ToLocalChecked());
 }
-NAN_METHOD(derived_class::base_function_bool) {
+POLY_METHOD(derived_class::base_function_bool) {
 	info.GetReturnValue().Set(Nan::New<v8::String>("derived_class.base_function.bool").ToLocalChecked());
 }
-NAN_METHOD(derived_class::base_function_date) {
+POLY_METHOD(derived_class::base_function_date) {
 	info.GetReturnValue().Set(Nan::New<v8::String>("derived_class.base_function.date").ToLocalChecked());
 }
-NAN_METHOD(derived_class::base_function_function) {
+POLY_METHOD(derived_class::base_function_function) {
 	info.GetReturnValue().Set(Nan::New<v8::String>("derived_class.base_function.function").ToLocalChecked());
 }
-NAN_METHOD(derived_class::base_function_buffer) {
+POLY_METHOD(derived_class::base_function_buffer) {
 	info.GetReturnValue().Set(Nan::New<v8::String>("derived_class.base_function.buffer").ToLocalChecked());
 }
-NAN_METHOD(derived_class::base_function_map) {
+POLY_METHOD(derived_class::base_function_map) {
 	info.GetReturnValue().Set(Nan::New<v8::String>("derived_class.base_function.map").ToLocalChecked());
 }
-NAN_METHOD(derived_class::base_function_set) {
+POLY_METHOD(derived_class::base_function_set) {
 	info.GetReturnValue().Set(Nan::New<v8::String>("derived_class.base_function.set").ToLocalChecked());
 }
-NAN_METHOD(derived_class::base_function_promise) {
+POLY_METHOD(derived_class::base_function_promise) {
 	info.GetReturnValue().Set(Nan::New<v8::String>("derived_class.base_function.promise").ToLocalChecked());
 }
-NAN_METHOD(derived_class::base_function_proxy) {
+POLY_METHOD(derived_class::base_function_proxy) {
 	info.GetReturnValue().Set(Nan::New<v8::String>("derived_class.base_function.proxy").ToLocalChecked());
 }
-NAN_METHOD(derived_class::base_function_regexp) {
+POLY_METHOD(derived_class::base_function_regexp) {
 	info.GetReturnValue().Set(Nan::New<v8::String>("derived_class.base_function.regexp").ToLocalChecked());
 }
-NAN_METHOD(derived_class::base_function_base_class) {
+POLY_METHOD(derived_class::base_function_base_class) {
 	info.GetReturnValue().Set(Nan::New<v8::String>("derived_class.base_function.base_class").ToLocalChecked());
 }
-NAN_METHOD(derived_class::base_function_derived_class) {
+POLY_METHOD(derived_class::base_function_derived_class) {
 	info.GetReturnValue().Set(Nan::New<v8::String>("derived_class.base_function.derived_class").ToLocalChecked());
 }
-NAN_METHOD(derived_class::base_function_struct_A) {
+POLY_METHOD(derived_class::base_function_struct_A) {
 	info.GetReturnValue().Set(Nan::New<v8::String>("derived_class.base_function.struct_A").ToLocalChecked());
 }
 
-NAN_METHOD(derived_class::base_function_struct_B) {
+POLY_METHOD(derived_class::base_function_struct_B) {
 	info.GetReturnValue().Set(Nan::New<v8::String>("derived_class.base_function.struct_B").ToLocalChecked());
 }
 
-NAN_METHOD(derived_class::base_function_array) {
+POLY_METHOD(derived_class::base_function_array) {
 	info.GetReturnValue().Set(Nan::New<v8::String>("derived_class.base_function.array").ToLocalChecked());
 }
