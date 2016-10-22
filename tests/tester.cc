@@ -34,7 +34,6 @@ DECLARE_MY_CLASS(std::vector<std::string>);
 
 
 void init(v8::Handle<v8::Object> target) {
-	assert(false);
 	auto overload = std::make_shared<overload_resolution>();
 
 	overload->register_type<IStructuredObject>("", "IStructuredObject");
