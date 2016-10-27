@@ -78,7 +78,7 @@ var aoDebug = null;
 
 if (addon == null) {
     try {
-        addon = require('../build/Release/tester');
+        addon = require('../build/Release/overload-tester');
     } catch (e) {
         aoRelease = e;
     }
@@ -86,7 +86,7 @@ if (addon == null) {
 
 if (addon == null) {
     try {
-        addon = require('../build/Debug/tester');
+        addon = require('../build/Debug/overload-tester');
     } catch (e) {
         aoDebug = e;
     }
