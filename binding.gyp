@@ -1,7 +1,35 @@
 {
   "targets": [
+	{
+		"target_name":"node-overload-resolution",
+		"type" : "static_library",
+		"include_dirs":[
+			"./"
+		],
+		"direct_dependent_settings":{
+			"include_dirs":[
+				"./"
+			],
+		},
+		"sources":[			
+			  "overload_resolution.h"
+			, "overload_resolution.cpp"
+			
+			, "IStructuredObject.h"
+			, "IStructuredObject.cpp"
+			
+			, "FunctionCallbackInfo.h"
+			
+			, "factory.h"
+			, "README.md"
+			, "package.json"
+		],
+	},
     {
-      "target_name": "tester",
+      "target_name": "overload-tester",
+	  "dependencies":[
+		"node-overload-resolution"
+	  ],
       "sources": [ 
 		  "tests/tester.cc"
 		, "tests/tester.js"
@@ -25,20 +53,6 @@
 		, "tests/or_two_parameters_tester.h"
 		, "tests/or_array_tester.h"
 		, "tests/or_default_tester.h"
-
-		
-		, "overload_resolution.h"
-		, "overload_resolution.cpp"
-		
-		
-		, "IStructuredObject.h"
-		, "IStructuredObject.cpp"
-		
-        , "FunctionCallbackInfo.h"
-		
-		, "factory.h"
-		, "README.md"
-		, "package.json"
 	  ]
     }
   ]
