@@ -444,25 +444,7 @@ void overload_resolution::executeBestOverload(const std::string ns, std::vector<
 		auto bestOverload = std::max_element(candidates.begin(), candidates.end(), [](std::pair<int,std::weak_ptr< o_r_function>> a, std::pair<int,std::weak_ptr< o_r_function>> b) {return a.first < b.first; });
 		if (auto bestOverloadFunction = bestOverload->second.lock()) { // Has to be copied into a shared_ptr before usage
 
-			//auto fci = std::make_shared<or::FunctionCallbackInfo<v8::Value>>(info);
-			//auto retval = fci->GetReturnValue();
-
 			auto parametersLength = std::max(info.Length(), (int)bestOverloadFunction->parameters.size());
-
-			
-			//fci._param
-			//	//
-
-
-			//for (auto i = 0; i < bestOverloadFunction->parameters.size(); i++) {
-			//	
-			//	
-
-			//}
-			//v8::FunctionCallbackInfo<v8::Value> y(NULL,NULL,0,true);
-			//Nan::FunctionCallbackInfo<v8::Value> x(y,Nan::Undefined());
-
-			//NanOverrides::FunctionCallbackInfo<v8::Value> test(&info);
 			std::vector<v8::Local<v8::Value>> info_params;
 			for (auto i = 0; i < parametersLength; i++) {
 				if (info.Length() > i && !info[i]->IsUndefined()) {
@@ -478,8 +460,6 @@ void overload_resolution::executeBestOverload(const std::string ns, std::vector<
 
 
 			or::FunctionCallbackInfo<v8::Value> processed_info(info,info_params);
-			//auto retval2 = processed_info.GetReturnValue();
-
 
 			return bestOverloadFunction->function(processed_info);
 		}
