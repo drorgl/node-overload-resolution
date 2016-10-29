@@ -7,7 +7,7 @@
 #include <node_version.h>
 #include <node_buffer.h>
 #include <string.h>
-#include "node_modules/nan/nan.h"
+#include <nan.h>
 
 #include <map>
 #include <functional>
@@ -92,6 +92,9 @@ struct overload_info {
 	std::string type;
 	Nan::Persistent<v8::Value, Nan::CopyablePersistentTraits<v8::Value>> defaultValue;
 	overload_info(const std::string parameterName, const std::string type, v8::Local<v8::Value> defaultValue = Nan::Undefined());
+	overload_info(const std::string parameterName, const std::string type, int defaultValue);
+	overload_info(const std::string parameterName, const std::string type, double defaultValue);
+	overload_info(const std::string parameterName, const std::string type, std::string defaultValue);
 };
 
 
@@ -138,6 +141,9 @@ private:
 	//type registry
 	std::map<std::string, std::shared_ptr<object_type>> _types;
 
+	//type alias registry
+	std::map<std::string, std::string> _type_aliases;
+
 	//overload_info _emptyOverloadInfo;
 
 	//overload registry
@@ -157,6 +163,10 @@ private:
 	void split_generic_types(std::string type, std::set<std::string> &types);
 
 	void create_function_store(const std::string ns, const std::string className, const std::string functionName);
+
+	std::string drill_type_aliases(std::string alias);
+
+	std::string normalize_types(std::string type);
 public:
 	overload_resolution();
 
@@ -170,6 +180,9 @@ public:
 	void register_type(const std::string ns, const std::string name) {
 		_structured_factory.register_type<TDerived>(name);
 	}
+
+	//add type alias
+	void add_type_alias(std::string alias, std::string type);
 
 	bool validate_type_registrations();
 

@@ -12,10 +12,30 @@ overload_info::overload_info(const std::string parameterName, const std::string 
 	this->defaultValue.Reset(defaultValue);
 }
 
+overload_info::overload_info(const std::string parameterName, const std::string type, int defaultValue) : overload_info(parameterName, type, Nan::New(defaultValue)) {}
+overload_info::overload_info(const std::string parameterName, const std::string type, std::string defaultValue) : overload_info(parameterName, type, Nan::New(defaultValue).ToLocalChecked()) {}
+overload_info::overload_info(const std::string parameterName, const std::string type, double defaultValue) : overload_info(parameterName, type, Nan::New(defaultValue)) {}
+
+
+
 overload_resolution::overload_resolution() {
 
 }
 
+void overload_resolution::add_type_alias(std::string alias, std::string type) {
+	_type_aliases[alias] = type;
+}
+
+std::string overload_resolution::drill_type_aliases(std::string alias) {
+	if (_type_aliases.count(alias)) {
+		auto type = _type_aliases[alias];
+		return drill_type_aliases(type);
+	}
+	else {
+		return alias;
+	}
+	
+}
 
 void overload_resolution::register_type(v8::Local<v8::FunctionTemplate> functionTemplate, const std::string ns, const std::string name) {
 	assert(_types.count(name) == 0 && "type name already exists");
@@ -27,11 +47,28 @@ void overload_resolution::register_type(v8::Local<v8::FunctionTemplate> function
 	_types[name] = ot;
 }
 
+std::string overload_resolution::normalize_types(std::string type) {
+	auto genericBegin = type.find("<");
+	if (genericBegin == std::string::npos) {
+		return drill_type_aliases(type);
+	}
+
+	auto genericEnd = type.find_last_of(">");
+
+	assert(genericEnd != std::string::npos && "generic types should be between <>");
+
+	auto genericType = type.substr(0, genericBegin);
+	//types.insert(genericType);
+	type = type.replace(0, genericBegin, normalize_types(genericType));
+	auto between = type.substr(genericBegin + 1, genericEnd - genericBegin - 1);
+	type = type.replace(genericBegin + 1, genericEnd - genericBegin - 1, normalize_types(between));
+	return type;
+}
 
 void overload_resolution::split_generic_types(std::string type, std::set<std::string> &types) {
 	auto genericBegin = type.find("<");
 	if (genericBegin == std::string::npos) {
-		types.insert(type);
+		types.insert(drill_type_aliases(type));
 		return;
 	}
 
@@ -54,9 +91,10 @@ bool overload_resolution::validate_type_registrations() {
 				//for each function
 				for (std::vector<std::shared_ptr< o_r_function>>::iterator fnoverload = std::begin(fn->second); fnoverload != std::end(fn->second); fnoverload++) {
 					//for each function overload
+					//TODO: add duplicate parameters testing
 					for (std::vector<std::shared_ptr<overload_info>>::iterator olinfo = std::begin(fnoverload->get()->parameters); olinfo != std::end(fnoverload->get()->parameters); olinfo++) {
 						//for each overload parameter
-						auto type = olinfo->get()->type;
+						auto type = drill_type_aliases(olinfo->get()->type);
 
 						if ((_types.count(type) == 0 ) &&
 							(!_structured_factory.has_type(type)) && 
@@ -153,7 +191,7 @@ void overload_resolution::addOverloadConstructor(const std::string ns, const std
 void overload_resolution::get_array_types(v8::Local<v8::Value> arr, std::set<std::string> &types) {
 	auto v8arr = arr.As<v8::Array>();
 	for (auto i = 0; i < v8arr->Length(); i++) {
-		types.insert(determineType(v8arr->Get(i)));
+		types.insert(drill_type_aliases(determineType(v8arr->Get(i))));
 	}
 }
 
@@ -243,7 +281,7 @@ std::string overload_resolution::determineType(v8::Local<v8::Value> param) {
 	for (it = _types.begin(); it != _types.end(); it++) {
 		if (Nan::New<v8::FunctionTemplate>(it->second-> function_template)->HasInstance(param)) {
 			if (strcmp(*Nan::Utf8String(param.As<v8::Object>()->GetConstructorName()), it->second->name.c_str()) == 0) {
-				return it->second->name;
+				return drill_type_aliases(it->second->name);
 			}
 			else {
 				alternatives.push_back(it->second);
@@ -258,7 +296,7 @@ std::string overload_resolution::determineType(v8::Local<v8::Value> param) {
 	auto structured = _structured_factory.all();
 	for (auto i = 0; i < structured.size(); i++) {
 		if (structured[i].second->verify(this,param)){
-			return structured[i].first;
+			return drill_type_aliases(structured[i].first);
 		}
 	}
 
@@ -325,14 +363,14 @@ int overload_resolution::MatchOverload(std::shared_ptr<o_r_function> func, Nan::
 		}
 		
 		//check if the function parameter and info parameter types are the same
-		if (fparam->type == determineType(iparam)) {
+		if (normalize_types(fparam->type) == determineType(iparam)) {
 			local_rank += 2^10;
 		}
 		
 
 		//check if the function parameter and info parameter types are convertible
 		//make sure undefined was actually passed so conversion to boolean won't be used
-		if ((info.Length() > i) && isConvertibleTo(iparam, fparam->type)) {
+		if ((info.Length() > i) && isConvertibleTo(iparam, drill_type_aliases(fparam->type))) {
 			local_rank += 2^2;
 		}
 
