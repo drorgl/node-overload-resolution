@@ -112,8 +112,8 @@ namespace or_tester {
 
 	void RegisterORTesters(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
 		auto loverload = overload;
-		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","Number",Nan::Undefined()) }, number_testers_number);
-		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","String",Nan::Undefined()) }, number_testers_string);
+		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","int",Nan::Undefined()) }, number_testers_number);
+		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","string",Nan::Undefined()) }, number_testers_string);
 		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","Boolean",Nan::Undefined()) }, number_testers_bool);
 		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","Date",Nan::Undefined()) }, number_testers_date);
 		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","Function",Nan::Undefined()) }, number_testers_function);

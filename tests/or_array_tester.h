@@ -126,7 +126,7 @@ POLY_METHOD(array_testers) {
 	void RegisterORTesters(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
 		auto loverload = overload;
 		overload->addOverload("or_array_tester", "", "array_testers", { std::make_shared<overload_info>("a","Array",Nan::Undefined()) }, array_testers_array);
-		overload->addOverload("or_array_tester", "", "array_testers", { std::make_shared<overload_info>("a","Array<Number>",Nan::Undefined()) }, array_testers_array_number);
+		overload->addOverload("or_array_tester", "", "array_testers", { std::make_shared<overload_info>("a","Array<int>",Nan::Undefined()) }, array_testers_array_number);
 		overload->addOverload("or_array_tester", "", "array_testers", { std::make_shared<overload_info>("a","Array<String>",Nan::Undefined()) }, array_testers_array_string);
 		overload->addOverload("or_array_tester", "", "array_testers", { std::make_shared<overload_info>("a","Array<Boolean>",Nan::Undefined()) }, array_testers_array_bool);
 		overload->addOverload("or_array_tester", "", "array_testers", { std::make_shared<overload_info>("a","Array<Date>",Nan::Undefined()) }, array_testers_array_date);

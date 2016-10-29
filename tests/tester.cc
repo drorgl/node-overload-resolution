@@ -36,6 +36,12 @@ DECLARE_MY_CLASS(std::vector<std::string>);
 void init(v8::Handle<v8::Object> target) {
 	auto overload = std::make_shared<overload_resolution>();
 
+	overload->add_type_alias("int", "Number");
+	overload->add_type_alias("double", "Number");
+	overload->add_type_alias("float", "Number");
+	overload->add_type_alias("string", "String");
+	overload->add_type_alias("bool", "Boolean");
+
 	overload->register_type<IStructuredObject>("", "IStructuredObject");
 	overload->register_type<struct_A>("", "struct_A");
 	overload->register_type<struct_B>("", "struct_B");

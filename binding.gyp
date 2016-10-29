@@ -4,11 +4,13 @@
 		"target_name":"node-overload-resolution",
 		"type" : "static_library",
 		"include_dirs":[
-			"./"
+			"./",
+			"<!(node -e \"require('nan')\")"
 		],
 		"direct_dependent_settings":{
 			"include_dirs":[
-				"./"
+				"./",
+				"<!(node -e \"require('nan')\")"
 			],
 		},
 		"sources":[			
