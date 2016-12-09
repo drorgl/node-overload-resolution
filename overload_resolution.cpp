@@ -13,6 +13,7 @@ overload_info::overload_info(const std::string parameterName, const std::string 
 }
 
 overload_info::overload_info(const std::string parameterName, const std::string type, int defaultValue) : overload_info(parameterName, type, Nan::New(defaultValue)) {}
+overload_info::overload_info(const std::string parameterName, const std::string type, bool defaultValue) : overload_info(parameterName, type, Nan::New(defaultValue)) {}
 overload_info::overload_info(const std::string parameterName, const std::string type, std::string defaultValue) : overload_info(parameterName, type, Nan::New(defaultValue).ToLocalChecked()) {}
 overload_info::overload_info(const std::string parameterName, const std::string type, double defaultValue) : overload_info(parameterName, type, Nan::New(defaultValue)) {}
 
@@ -497,9 +498,29 @@ void overload_resolution::executeBestOverload(const std::string ns, std::vector<
 			}
 
 
-			or::FunctionCallbackInfo<v8::Value> processed_info(info,info_params);
+			or::FunctionCallbackInfo<v8::Value> processed_info(info,info_params, bestOverloadFunction->parameters);
 
-			return bestOverloadFunction->function(processed_info);
+			//TODO: handle async callbacks:
+			// if last parameter is a function not part of the best overload function, it means an async was requested
+			// in this case, cache all the function parameters, create an async wrapper, execute the function in the threadpool
+			// post process the returned values as regular functions (both SetReturnValue and function return value)
+
+			//TODO: process returned values, check if SetReturnValue was called, if so, make sure to use the passed value, otherwise, proceed as normal
+
+			try {
+				//execute the callback function
+				bestOverloadFunction->function(processed_info);
+
+				//execute post process on function callback info
+				processed_info.post_process();
+
+				return;
+			}
+			catch (std::exception std_exception) {
+				std::string errDetail = "error executing " + name + " " + std_exception.what();
+				return Nan::ThrowError(errDetail.c_str());
+			}
+
 		}
 		else {
 			assert(false && "overloaded function was removed, this error most likely means a buffer overflow");

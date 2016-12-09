@@ -112,22 +112,22 @@ namespace or_tester {
 
 	void RegisterORTesters(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
 		auto loverload = overload;
-		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","int",Nan::Undefined()) }, number_testers_number);
-		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","string",Nan::Undefined()) }, number_testers_string);
-		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","Boolean",Nan::Undefined()) }, number_testers_bool);
-		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","Date",Nan::Undefined()) }, number_testers_date);
-		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","Function",Nan::Undefined()) }, number_testers_function);
-		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","Buffer",Nan::Undefined()) }, number_testers_buffer);
-		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","Map",Nan::Undefined()) }, number_testers_map);
-		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","Set",Nan::Undefined()) }, number_testers_set);
-		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","Promise",Nan::Undefined()) }, number_testers_promise);
-		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","Proxy",Nan::Undefined()) }, number_testers_proxy);
-		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","RegExp",Nan::Undefined()) }, number_testers_regexp);
-		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","base_class",Nan::Undefined()) }, number_testers_base_class);
-		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","derived_class",Nan::Undefined()) }, number_testers_derived_class);
-		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","struct_A",Nan::Undefined()) }, number_testers_struct_A);
-		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","struct_B",Nan::Undefined()) }, number_testers_struct_B);
-		overload->addOverload("or_tester", "", "number_testers", { std::make_shared<overload_info>("a","Array",Nan::Undefined()) }, number_testers_array);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","int",Nan::Undefined()) }, number_testers_number);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","string",Nan::Undefined()) }, number_testers_string);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Boolean",Nan::Undefined()) }, number_testers_bool);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Date",Nan::Undefined()) }, number_testers_date);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Function",Nan::Undefined()) }, number_testers_function);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Buffer",Nan::Undefined()) }, number_testers_buffer);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Map",Nan::Undefined()) }, number_testers_map);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Set",Nan::Undefined()) }, number_testers_set);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Promise",Nan::Undefined()) }, number_testers_promise);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Proxy",Nan::Undefined()) }, number_testers_proxy);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","RegExp",Nan::Undefined()) }, number_testers_regexp);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","base_class",Nan::Undefined()) }, number_testers_base_class);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","derived_class",Nan::Undefined()) }, number_testers_derived_class);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","struct_A",Nan::Undefined()) }, number_testers_struct_A);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","struct_B",Nan::Undefined()) }, number_testers_struct_B);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Array",Nan::Undefined()) }, number_testers_array);
 		overload->addOverload("or_tester", "", "number_testers", {}, number_testers);
 
 		general_callback::overload = overload;

@@ -9,7 +9,7 @@
 
 
 
-	class base_class : public Nan::ObjectWrap {
+	class base_class : public or::ObjectWrap {
 	private:
 
 	public:

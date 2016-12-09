@@ -25,6 +25,20 @@
 
 #include "FunctionCallbackInfo.h"
 
+#include "generic_value_holder.h"
+#include "Callback.h"
+
+
+#include "value_holder.h"
+#include "value_converter.h"
+
+
+
+
+#include "ObjectWrap.h"
+
+
+
 
 typedef const or::FunctionCallbackInfo<v8::Value>& POLY_METHOD_ARGS_TYPE;
 #define	POLY_METHOD(name)                                                       \
@@ -91,14 +105,55 @@ struct overload_info {
 	std::string parameterName;
 	std::string type;
 	Nan::Persistent<v8::Value, Nan::CopyablePersistentTraits<v8::Value>> defaultValue;
+	std::shared_ptr<or::prefetcher_base> prefetcher;
 	overload_info(const std::string parameterName, const std::string type, v8::Local<v8::Value> defaultValue = Nan::Undefined());
 	overload_info(const std::string parameterName, const std::string type, int defaultValue);
 	overload_info(const std::string parameterName, const std::string type, double defaultValue);
+	overload_info(const std::string parameterName, const std::string type, bool defaultValue);
 	overload_info(const std::string parameterName, const std::string type, std::string defaultValue);
 };
 
+inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type, v8::Local<v8::Value> defaultValue = Nan::Undefined()) {
+	return std::make_shared<overload_info>(parameterName, type, defaultValue);
+}
 
+inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type, bool defaultValue) {
+	return std::make_shared<overload_info>(parameterName, type, defaultValue);
+}
 
+inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type, int defaultValue) {
+	return std::make_shared<overload_info>(parameterName, type, defaultValue);
+}
+
+inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type, double defaultValue) {
+	return std::make_shared<overload_info>(parameterName, type, defaultValue);
+}
+
+inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type, std::string defaultValue) {
+	return std::make_shared<overload_info>(parameterName, type, defaultValue);
+}
+
+template<typename T>
+inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type) {
+	//todo: add default value conversion
+	//todo: add prefetcher to overload_info
+	auto prefetcher = std::make_shared < or ::prefetcher<T>>();
+	auto oi = std::make_shared<overload_info>(parameterName, type);
+	oi->prefetcher = prefetcher;
+
+	return oi;
+}
+
+template<typename T>
+inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type,std::shared_ptr<T> defaultValue) {
+	//todo: add default value conversion
+	//todo: add prefetcher to overload_info
+	auto prefetcher = std::make_shared < or ::prefetcher<T>>();
+	auto oi = std::make_shared<overload_info>(parameterName, type,prefetcher->convert(defaultValue));
+	oi->prefetcher = prefetcher;
+
+	return oi;
+}
 
 
 
@@ -123,6 +178,27 @@ struct o_r_namespace {
 	std::map<std::string, std::shared_ptr< o_r_class>> classes;
 };
 //
+//
+//struct o_r_typeinfo {
+//	const std::string type_name;
+//	const bool isString;
+//	const bool isNumber;
+//	const bool isArray;
+//	const bool isBuffer;
+//	const bool isDate;
+//	const bool isFunction;
+//	const bool isConstructorFunction;
+//	const bool isMap;
+//	const bool isSet;
+//	const bool isNull;
+//	const bool isPromise;
+//	const bool isProxy;
+//	const bool isRegExp;
+//	const bool isNativeStruct;
+//	const bool isNativeClass;
+//
+//
+//};
 
 class IStructuredObject;
 

@@ -1,5 +1,5 @@
-#ifndef _TESTER_STRUCT_A_H_
-#define _TESTER_STRUCT_A_H_
+#ifndef _TESTER_RETURN_STRUCT_H_
+#define _TESTER_RETURN_STRUCT_H_
 
 #include <v8.h>
 #include <node.h>
@@ -18,21 +18,19 @@
 
 
 
-class struct_A : public IStructuredObject {
+class return_struct : public IStructuredObject {
 private:
 	static std::vector<std::shared_ptr<overload_info>> _definition;
 
 public:
-	std::string prop1;
-	std::string prop2;
+	std::string type;
+	std::string value;
 
 	virtual bool verify(overload_resolution * ovres, v8::Local<v8::Value> obj);
 	virtual bool parse(overload_resolution * ovres, v8::Local<v8::Value> obj);
 
-	 v8::Local<v8::Value> ToObject();
+	virtual v8::Local<v8::Value> ToObject();
 
-	 static v8::Local<v8::Object> New();
-	 static v8::Local<v8::Object> New(std::string prop1, std::string prop2);
 };
 
 

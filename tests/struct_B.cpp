@@ -1,8 +1,8 @@
 #include "struct_B.h"
 
 std::vector<std::shared_ptr<overload_info>> struct_B::_definition = { 
-	std::make_shared<overload_info>("prop1","String",Nan::Undefined()) ,
-	std::make_shared<overload_info>("prop2","Number",Nan::Undefined())
+	make_param("prop1","String",Nan::Undefined()) ,
+	make_param("prop2","Number",Nan::Undefined())
 };
 
 

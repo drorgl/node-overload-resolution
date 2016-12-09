@@ -22,6 +22,16 @@
 			
 			, "FunctionCallbackInfo.h"
 			
+			, "ObjectWrap.cpp"
+			, "ObjectWrap.h"
+			
+			, "Callback.h"
+			
+			, "value_converter.h"
+			, "value_holder.h"
+			
+			, "generic_value_holder.h"
+			
 			, "factory.h"
 			, "README.md"
 			, "package.json"
@@ -47,6 +57,9 @@
 		, "tests/struct_B.h"
 		, "tests/struct_B.cpp"
 		
+		, "tests/return_struct.h"
+		, "tests/return_struct.cpp"
+		
         , "tests/constructor_class_tester.h"
 		, "tests/constructor_class_tester.cpp"
 
@@ -55,6 +68,7 @@
 		, "tests/or_two_parameters_tester.h"
 		, "tests/or_array_tester.h"
 		, "tests/or_default_tester.h"
+		, "tests/or_value_converter.h"
 	  ]
     }
   ]

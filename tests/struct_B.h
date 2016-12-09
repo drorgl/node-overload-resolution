@@ -11,7 +11,7 @@
 
 #include <memory>
 #include <string>
-#include "../IStructuredObject.h"
+//#include "../IStructuredObject.h"
 
 #include "../overload_resolution.h"
 
