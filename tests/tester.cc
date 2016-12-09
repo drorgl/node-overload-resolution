@@ -12,6 +12,7 @@
 #include "or_two_parameters_tester.h"
 #include "or_array_tester.h"
 #include "or_default_tester.h"
+#include "or_value_converter.h"
 
 
 NAN_METHOD(testfunction_no_overload_resolution) {
@@ -34,6 +35,7 @@ DECLARE_MY_CLASS(std::vector<std::string>);
 
 
 void init(v8::Handle<v8::Object> target) {
+	assert(false);
 	auto overload = std::make_shared<overload_resolution>();
 
 	overload->add_type_alias("int", "Number");
@@ -42,7 +44,7 @@ void init(v8::Handle<v8::Object> target) {
 	overload->add_type_alias("string", "String");
 	overload->add_type_alias("bool", "Boolean");
 
-	overload->register_type<IStructuredObject>("", "IStructuredObject");
+	//overload->register_type<IStructuredObject>("", "IStructuredObject");
 	overload->register_type<struct_A>("", "struct_A");
 	overload->register_type<struct_B>("", "struct_B");
 
@@ -56,6 +58,7 @@ void init(v8::Handle<v8::Object> target) {
 	or_two_parameters_tester::RegisterORTesters(target, overload);
 	or_array_tester::RegisterORTesters(target, overload);
 	or_default_parameters_tester::RegisterORTesters(target, overload);
+	or_value_converter::RegisterORTesters(target, overload);
 
 	assert(overload->validate_type_registrations());
 
@@ -82,8 +85,8 @@ void init(v8::Handle<v8::Object> target) {
 	//array<array<int>>
 	//array<array<number>>
 	//array<array<struct_A>>
-	//overload->addOverload("", "derived_class", "base_function", { std::make_shared<overload_info>("a","Array<Number>",Nan::Undefined()) }, base_function_number);
-	//overload->addOverload("", "derived_class", "base_function", { std::make_shared<overload_info>("a","Array<Array<Number>>",Nan::Undefined()) }, base_function_number);
+	//overload->addOverload("", "derived_class", "base_function", { make_param("a","Array<Number>",Nan::Undefined()) }, base_function_number);
+	//overload->addOverload("", "derived_class", "base_function", { make_param("a","Array<Array<Number>>",Nan::Undefined()) }, base_function_number);
 
 }
 

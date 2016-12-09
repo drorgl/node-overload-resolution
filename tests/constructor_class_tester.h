@@ -7,7 +7,7 @@
 
 
 
-class constructor_class_tester : public Nan::ObjectWrap {
+class constructor_class_tester : public or::ObjectWrap {
 private:
 	std::string _constructor_type;
 

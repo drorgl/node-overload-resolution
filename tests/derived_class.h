@@ -7,7 +7,7 @@
 
 
 
-class derived_class : public Nan::ObjectWrap {
+class derived_class : public or::ObjectWrap {
 private:
 
 public:
