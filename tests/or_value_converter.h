@@ -17,29 +17,40 @@ namespace or_value_converter {
 	}
 
 	POLY_METHOD(value_converter_number) {
-		auto rt = std::make_shared<return_struct>();
+		auto rt = std::make_shared<return_struct<int>>("Number");
 		rt->type = "number";
-		rt->value = std::to_string(info.at<int>(0));
-		//printf("value %s", rt->value.c_str());
-		info.SetReturnValue<std::shared_ptr<return_struct>>(rt);
-		//info.SetReturnValue<return_struct>(rt);
-
-		//info.GetReturnValue().Set(Nan::New(".number(" + std::to_string( info.at<int>(0)) + ")").ToLocalChecked());
+		rt->value = info.at<int>(0);
+		info.SetReturnValue<std::shared_ptr<return_struct<int>>>(rt);
 	}
 
 	POLY_METHOD(value_converter_string) {
-		info.GetReturnValue().Set(Nan::New(".string(" + info.at<std::string>(0) + ")").ToLocalChecked());
+		auto rt = std::make_shared<return_struct<std::string>>("String");
+		rt->type = "string";
+		rt->value = info.at<std::string>(0);
+		info.SetReturnValue<std::shared_ptr<return_struct<std::string>>>(rt);
 	}
 
 	POLY_METHOD(value_converter_bool) {
-		info.GetReturnValue().Set(Nan::New(".bool(" + std::to_string(info.at<bool>(0)) + ")").ToLocalChecked());
+		auto rt = std::make_shared<return_struct<bool>>("Bool");
+		rt->type = "bool";
+		rt->value = info.at<bool>(0);
+		info.SetReturnValue<std::shared_ptr<return_struct<bool>>>(rt);
 	}
 
 	POLY_METHOD(value_converter_date) {
-		info.GetReturnValue().Set(Nan::New(".date(" + std::to_string(info.at<double>(0)) + ")").ToLocalChecked());
+		auto rt = std::make_shared<return_struct<or::DateTime>>("Date");
+		rt->type = "date";
+		rt->value = info.at<or::DateTime>(0);
+		info.SetReturnValue<std::shared_ptr<return_struct<or::DateTime>>>(rt);
 	}
 
 	POLY_METHOD(value_converter_function) {
+		auto rt = std::make_shared<return_struct<std::shared_ptr<or ::Callback>>>("Function");
+		rt->type = "function";
+		rt->value = info.at<std::shared_ptr< or ::Callback>>(0);
+		rt->value->Call({or::make_value<std::string>("callback called")});
+		info.SetReturnValue<std::shared_ptr<return_struct<std::shared_ptr< or ::Callback>>>>(rt);
+
 		//info.GetReturnValue().Set(Nan::New(".function(" + info.at<Nan::Callback>(0) + ")").ToLocalChecked());
 	}
 
@@ -96,11 +107,12 @@ namespace or_value_converter {
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<int>("a","int") }, value_converter_number);
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<std::string>("a","string") }, value_converter_string);
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<bool>("a","Boolean") }, value_converter_bool);
-		overload->addOverload("or_value_converter", "", "value_converter", { make_param<double>("a","Date") }, value_converter_date);
+		overload->addOverload("or_value_converter", "", "value_converter", { make_param<or::DateTime>("a","Date") }, value_converter_date);
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<std::shared_ptr<or::Callback>>("a","Function") }, value_converter_function);
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<std::shared_ptr<std::vector<uint8_t>>>("a","Buffer") }, value_converter_buffer);
-		//overload->addOverload("or_value_converter", "", "value_converter", { make_param<std::shared_ptr<std::map<std::string,int>>>("a","Map") }, value_converter_map);
-		//overload->addOverload("or_value_converter", "", "value_converter", { make_param<std::set<std::string>>("a","Set") }, value_converter_set);
+		overload->addOverload("or_value_converter", "", "value_converter", { make_param<std::shared_ptr<std::map<std::string,int>>>("a","Map") }, value_converter_map);
+		//overload->addOverload("or_value_converter", "", "value_converter", { make_param<std::shared_ptr<std::map<int,int>>>("a","Map") }, value_converter_map);
+		overload->addOverload("or_value_converter", "", "value_converter", { make_param<std::shared_ptr<std::set<std::string>>>("a","Set") }, value_converter_set);
 		//overload->addOverload("or_value_converter", "", "value_converter", { make_param<>("a","Promise") }, value_converter_promise);
 		//overload->addOverload("or_value_converter", "", "value_converter", { make_param<>("a","Proxy") }, value_converter_proxy);
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<std::string>("a","RegExp") }, value_converter_regexp);
