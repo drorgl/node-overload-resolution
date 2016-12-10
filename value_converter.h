@@ -5,31 +5,28 @@
 
 #include "node_modules/nan/nan.h"
 
+#include "value_converter_base.h"
+#include "value_holder.h"
 
-
+#include "DateTime.h"
 #include "Callback.h"
 #include "ObjectWrap.h"
 #include "IStructuredObject.h"
 
-#include "value_holder.h"
+
+
 
 #include <type_traits>
 #include <memory>
+#include <set>
+#include <map>
+#include <vector>
+#include <string>
 
 namespace or {
-	//class Callback;
-	//class ObjectWrap;
-	//class IStructuredObject;
+	
 
-	class prefetcher_base {
-	public:
-		prefetcher_base() {}
-		virtual ~prefetcher_base() = default;
-
-		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) = 0;
-
-		virtual v8::Local<v8::Value> convert(std::shared_ptr< value_holder_base> from) = 0;
-	};
+	//default value
 
 	template<typename T, class = void>
 	class prefetcher : public prefetcher_base {
@@ -62,6 +59,7 @@ namespace or {
 
 	};
 
+	//Callback
 
 	template<typename T>
 	class prefetcher<std::shared_ptr<T>, typename std::enable_if<std::is_base_of<Callback, T>::value>::type> : public prefetcher_base {
@@ -92,6 +90,8 @@ namespace or {
 
 	};
 
+	//ObjectWrap
+
 	template<typename T>
 	class prefetcher<std::shared_ptr<T>, typename std::enable_if<std::is_base_of<ObjectWrap, T>::value>::type> : public prefetcher_base {
 	public:
@@ -118,6 +118,8 @@ namespace or {
 
 	};
 
+	//IStructuredObject
+
 	template<typename T>
 	class prefetcher<std::shared_ptr<T>,typename std::enable_if<std::is_base_of<IStructuredObject,T>::value>::type> : public prefetcher_base {
 	public:
@@ -143,6 +145,8 @@ namespace or {
 		}
 
 	};
+
+	//vector/array
 
 	template<typename T>
 	class prefetcher<std::shared_ptr<std::vector<T>>> : public prefetcher_base {
@@ -206,6 +210,97 @@ namespace or {
 
 
 
+	//map <K, V>
+
+	template<typename T>
+	class prefetcher<std::shared_ptr<std::map<std::string, T>>> : public prefetcher_base {
+	public:
+
+		virtual std::shared_ptr<std::map<std::string, T>> convert(v8::Local<v8::Value> from) {
+			
+
+			throw std::exception("converted v8 value does not contain a map");
+		}
+
+
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<std::map<std::string,T>> from) {
+			throw std::exception("converted v8 value does not contain a map");
+		}
+
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+			auto from_value = std::dynamic_pointer_cast<value_holder<std::shared_ptr<std::map<std::string, T>>>>(from);
+			return convert(from_value->Value);
+		}
+
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+			auto parsed_value = std::make_shared<value_holder<std::shared_ptr<std::map<std::string, T>>>>();
+			parsed_value->Value = convert(val);
+			return parsed_value;
+		}
+
+	};
+
+	//map <K, V>
+
+	template<typename K, typename T>
+	class prefetcher<std::shared_ptr<std::map<K, T>>> : public prefetcher_base {
+	public:
+
+		virtual std::shared_ptr<std::map<K, T>> convert(v8::Local<v8::Value> from) {
+			
+			throw std::exception("converted v8 value does not contain a map");
+		}
+
+
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<std::map<K,T>> from) {
+			throw std::exception("converted v8 value does not contain a map");
+		}
+
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+			auto from_value = std::dynamic_pointer_cast<value_holder<std::shared_ptr<std::map<K, T>>>>(from);
+			return convert(from_value->Value);
+		}
+
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+			auto parsed_value = std::make_shared<value_holder<std::shared_ptr<std::map<K, T>>>>();
+			parsed_value->Value = convert(val);
+			return parsed_value;
+		}
+
+	};
+
+
+	//set <T>
+
+	template<typename T>
+	class prefetcher<std::shared_ptr<std::set<T>>> : public prefetcher_base {
+	public:
+
+		virtual std::shared_ptr<std::set<T>> convert(v8::Local<v8::Value> from) {
+
+			throw std::exception("converted v8 value does not contain a map");
+		}
+
+
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<std::set<T>> from) {
+			throw std::exception("converted v8 value does not contain a map");
+		}
+
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+			auto from_value = std::dynamic_pointer_cast<value_holder<std::shared_ptr<std::set<T>>>>(from);
+			return convert(from_value->Value);
+		}
+
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+			auto parsed_value = std::make_shared<value_holder<std::shared_ptr<std::set<T>>>>();
+			parsed_value->Value = convert(val);
+			return parsed_value;
+		}
+
+	};
+
+
+	//string
 
 	template<>
 	class prefetcher<std::string> : public prefetcher_base {
@@ -215,6 +310,9 @@ namespace or {
 			return *Nan::Utf8String(from->ToString());
 		}
 
+		virtual v8::Local<v8::Value> convert(std::string from) {
+			return Nan::New(from).ToLocalChecked();
+		}
 
 		virtual v8::Local<v8::Value> convert(std::shared_ptr<std::string> from) {
 			return Nan::New(*from).ToLocalChecked();
@@ -233,12 +331,18 @@ namespace or {
 
 	};
 
+	//int/Number
+
 	template<>
 	class prefetcher<int> : public prefetcher_base {
 	public:
 
 		virtual int convert(v8::Local<v8::Value> from) {
 			return from->IntegerValue();
+		}
+
+		virtual v8::Local<v8::Value> convert(int from) {
+			return Nan::New(from);
 		}
 
 
@@ -258,6 +362,8 @@ namespace or {
 		}
 
 	};
+
+	//uint8_t / number
 
 	template<>
 	class prefetcher<uint8_t> : public prefetcher_base {
@@ -285,6 +391,8 @@ namespace or {
 
 	};
 
+	//bool
+
 	template<>
 	class prefetcher<bool> : public prefetcher_base {
 	public:
@@ -293,6 +401,9 @@ namespace or {
 			return from->BooleanValue();
 		}
 
+		virtual v8::Local<v8::Value> convert(bool from) {
+			return Nan::New(from);
+		}
 
 		virtual v8::Local<v8::Value> convert(std::shared_ptr<bool> from) {
 			return Nan::New(*from);
@@ -310,6 +421,37 @@ namespace or {
 		}
 
 	};
+
+
+	template<>
+	class prefetcher<DateTime> : public prefetcher_base {
+	public:
+
+		virtual DateTime convert(v8::Local<v8::Value> from) {
+			return DateTime(from.As<v8::Date>());
+		}
+
+		virtual v8::Local<v8::Value> convert(DateTime from) {
+			return from.to_v8_Date();
+		}
+
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<DateTime> from) {
+			return from->to_v8_Date();
+		}
+
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+			auto from_value = std::dynamic_pointer_cast<value_holder<DateTime>>(from);
+			return from_value->Value.to_v8_Date();
+		}
+
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+			auto parsed_value = std::make_shared<value_holder<DateTime>>();
+			parsed_value->Value = convert(val);
+			return parsed_value;
+		}
+
+	};
+
 
 
 	/*template<>
