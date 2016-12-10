@@ -81,6 +81,9 @@ namespace or {
 
 		
 		inline Nan::ReturnValue<T> GetReturnValue() const {
+			if (_return != nullptr) {
+				throw std::exception("a return value was already set by SetReturnValue, this is most likely a bug");
+			}
 			return _info.GetReturnValue();
 		}
 
@@ -102,7 +105,7 @@ namespace or {
 
 		void post_process() {
 			if (_return != nullptr) {
-				GetReturnValue().Set(_return->Get());
+				_info.GetReturnValue().Set(_return->Get());
 			}
 		}
 

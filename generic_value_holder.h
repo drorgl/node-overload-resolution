@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "value_converter.h"
+#include "value_converter_base.h"
 #include "value_holder.h"
 
 namespace or {
@@ -34,6 +34,13 @@ namespace or {
 			return _prefetcher->convert(_value);
 		}
 	};
+
+	template<typename T>
+	std::shared_ptr<generic_value_holder> make_value(T value) {
+		auto gvalue = std::make_shared<generic_value_holder>();
+		gvalue->Set(value);
+		return gvalue;
+	}
 }
 
 #endif
