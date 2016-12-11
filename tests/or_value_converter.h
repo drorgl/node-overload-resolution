@@ -50,19 +50,37 @@ namespace or_value_converter {
 		rt->value = info.at<std::shared_ptr< or ::Callback>>(0);
 		rt->value->Call({or::make_value<std::string>("callback called")});
 		info.SetReturnValue<std::shared_ptr<return_struct<std::shared_ptr< or ::Callback>>>>(rt);
-
-		//info.GetReturnValue().Set(Nan::New(".function(" + info.at<Nan::Callback>(0) + ")").ToLocalChecked());
 	}
 
 	POLY_METHOD(value_converter_buffer) {
+		auto rt = std::make_shared<return_struct<std::shared_ptr<std::vector<uint8_t>>>>("Buffer");
+		rt->type = "buffer";
+		rt->value = info.at<std::shared_ptr<std::vector<uint8_t>>>(0);
+		
+		info.SetReturnValue<std::shared_ptr<return_struct<std::shared_ptr<std::vector<uint8_t>>>>>(rt);
+
 		//info.GetReturnValue().Set(Nan::New(".buffer(" + info.at<std::vector<int8_t>>(0) + ")").ToLocalChecked());
 	}
 
 	POLY_METHOD(value_converter_map) {
+		auto rt = std::make_shared<return_struct<std::shared_ptr<std::map<std::string,int>>>>("Map");
+		rt->type = "map";
+		rt->value = info.at<std::shared_ptr<std::map<std::string, int>>>(0);
+
+		info.SetReturnValue<std::shared_ptr<return_struct<std::shared_ptr<std::map<std::string,int>>>>>(rt);
+
+
 		//info.GetReturnValue().Set(Nan::New(".map(" + info.at<std::map<std::string,int>>(0) + ")").ToLocalChecked());
 	}
 
 	POLY_METHOD(value_converter_set) {
+		auto rt = std::make_shared<return_struct<std::shared_ptr<std::set<std::string>>>>("Set");
+		rt->type = "set";
+		rt->value = info.at<std::shared_ptr<std::set<std::string>>>(0);
+
+		info.SetReturnValue<std::shared_ptr<return_struct<std::shared_ptr<std::set<std::string>>>>>(rt);
+
+
 		//info.GetReturnValue().Set(Nan::New(".set(" + info.at<std::set<int>>(0) + ")").ToLocalChecked());
 	}
 
@@ -75,26 +93,66 @@ namespace or_value_converter {
 	}
 
 	POLY_METHOD(value_converter_regexp) {
-		info.GetReturnValue().Set(Nan::New(".regexp(" + info.at<std::string>(0) + ")").ToLocalChecked());
+		auto rt = std::make_shared<return_struct<std::string>>("string");
+		rt->type = "string";
+		rt->value = info.at<std::string>(0);
+
+		info.SetReturnValue<std::shared_ptr<return_struct<std::string>>>(rt);
+
+
+		//info.GetReturnValue().Set(Nan::New(".regexp(" + info.at<std::string>(0) + ")").ToLocalChecked());
 	}
 
 	POLY_METHOD(value_converter_base_class) {
+
+		auto rt = std::make_shared<return_struct<base_class*>>("base_class");
+		rt->type = "base_class";
+		rt->value = info.at<base_class*>(0);
+
+		info.SetReturnValue<std::shared_ptr<return_struct<base_class*>>>(rt);
+
+
 		//info.GetReturnValue().Set(Nan::New(".base_class(" + info.at<base_class>(0) + ")").ToLocalChecked());
 	}
 
 	POLY_METHOD(value_converter_derived_class) {
+		auto rt = std::make_shared<return_struct<derived_class*>>("derived_class");
+		rt->type = "derived_class";
+		rt->value = info.at<derived_class*>(0);
+
+		info.SetReturnValue<std::shared_ptr<return_struct<derived_class*>>>(rt);
+
 		//info.GetReturnValue().Set(Nan::New(".derived_class(" + info.at<derived_class>(0) + ")").ToLocalChecked());
 	}
 
 	POLY_METHOD(value_converter_struct_A) {
+		auto rt = std::make_shared<return_struct<std::shared_ptr<struct_A>>>("struct_A");
+		rt->type = "struct_A";
+		rt->value = info.at<std::shared_ptr<struct_A>>(0);
+
+		info.SetReturnValue<std::shared_ptr<return_struct<std::shared_ptr<struct_A>>>>(rt);
+
 		//info.GetReturnValue().Set(Nan::New(".struct_A(" + info.at<struct_A>(0) + ")").ToLocalChecked());
 	}
 
 	POLY_METHOD(value_converter_struct_B) {
+		auto rt = std::make_shared<return_struct<std::shared_ptr<struct_B>>>("struct_B");
+		rt->type = "struct_B";
+		rt->value = info.at<std::shared_ptr<struct_B>>(0);
+
+		info.SetReturnValue<std::shared_ptr<return_struct<std::shared_ptr<struct_B>>>>(rt);
+
 		//info.GetReturnValue().Set(Nan::New(".struct_B(" + info.at<struct_B>(0) + ")").ToLocalChecked());
 	}
 
 	POLY_METHOD(value_converter_array) {
+		auto rt = std::make_shared<return_struct<std::shared_ptr<std::vector<int>>>>("array");
+		rt->type = "array";
+		rt->value = info.at<std::shared_ptr<std::vector<int>>>(0);
+
+		info.SetReturnValue<std::shared_ptr<return_struct<std::shared_ptr<std::vector<int>>>>>(rt);
+
+
 		//info.GetReturnValue().Set(Nan::New(".array(" + info.at<std::vector<int>>(0) + ")").ToLocalChecked());
 	}
 
