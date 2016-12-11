@@ -173,18 +173,18 @@ for (var i = 0; i < 1; i++) {
             name: "function"
         }
         , {
-            value: new Map(),
-            defaultValue: new Map(),
+            value: new Map([["s1",1], ["s2",2]]),
+            defaultValue: new Map([["s1", 1], ["s2", 2]]),
             name: "map"
         }
         , {
-            value: new Set(),
-            defaultValue:new Set(),
+            value: new Set(["k1","k2"]),
+            defaultValue: new Set(["k1", "k2"]),
             name: "set"
         }
         , {
-            value: new Buffer(0),
-            defaultValue: new Buffer(0),
+            value: new Buffer([1,2,3]),
+            defaultValue: new Buffer([1,2,3]),
             name: "buffer"
         }
         , {
@@ -437,7 +437,7 @@ for (var i = 0; i < 1; i++) {
             t.equal(addon.value_converter(), ".no_parameters", "value_converter no_params");
 
             for (var dt of dataTypes) {
-                t.doesNotThrow(function () { 
+                t.doesNotThrow(function () {
                     t.equal(JSON.stringify( addon.value_converter(dt.value)), "." + dt.name + "(" + JSON.stringify(dt.value) + ")", "value_converter " + dt.name);
                 }, "value converter executed successfully for " + dt.name);
             }
