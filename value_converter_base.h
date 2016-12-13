@@ -10,10 +10,10 @@
 
 
 namespace or {
-	class prefetcher_base {
+	class value_converter_base {
 	public:
-		prefetcher_base() {}
-		virtual ~prefetcher_base() = default;
+		value_converter_base() {}
+		virtual ~value_converter_base() = default;
 
 		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) = 0;
 

@@ -31,7 +31,7 @@ namespace or {
 	//default value
 
 	template<typename T, class = void>
-	class prefetcher : public prefetcher_base {
+	class value_converter : public value_converter_base {
 	public:
 
 		virtual T convert(v8::Local<v8::Value> from) {
@@ -69,7 +69,7 @@ namespace or {
 	//Callback
 
 	template<typename T>
-	class prefetcher<std::shared_ptr<T>, typename std::enable_if<std::is_base_of<Callback, T>::value>::type> : public prefetcher_base {
+	class value_converter<std::shared_ptr<T>, typename std::enable_if<std::is_base_of<Callback, T>::value>::type> : public value_converter_base {
 	public:
 
 		virtual std::shared_ptr<T> convert(v8::Local<v8::Value> from) {
@@ -100,7 +100,7 @@ namespace or {
 	//ObjectWrap
 
 	template<typename T>
-	class prefetcher<T*, typename std::enable_if<std::is_base_of<ObjectWrap, T>::value>::type> : public prefetcher_base {
+	class value_converter<T*, typename std::enable_if<std::is_base_of<ObjectWrap, T>::value>::type> : public value_converter_base {
 	public:
 
 		virtual T* convert(v8::Local<v8::Value> from) {
@@ -126,7 +126,7 @@ namespace or {
 	};
 
 	template<typename T>
-	class prefetcher<std::shared_ptr<T>, typename std::enable_if<std::is_base_of<ObjectWrap, T>::value>::type> : public prefetcher_base {
+	class value_converter<std::shared_ptr<T>, typename std::enable_if<std::is_base_of<ObjectWrap, T>::value>::type> : public value_converter_base {
 	public:
 
 		virtual std::shared_ptr<T> convert(v8::Local<v8::Value> from) {
@@ -154,7 +154,7 @@ namespace or {
 	//IStructuredObject
 
 	template<typename T>
-	class prefetcher<std::shared_ptr<T>,typename std::enable_if<std::is_base_of<IStructuredObject,T>::value>::type> : public prefetcher_base {
+	class value_converter<std::shared_ptr<T>,typename std::enable_if<std::is_base_of<IStructuredObject,T>::value>::type> : public value_converter_base {
 	public:
 
 		virtual std::shared_ptr<T> convert(v8::Local<v8::Value> from) {
@@ -191,13 +191,13 @@ namespace or {
 	//vector/array
 
 	template<typename T>
-	class prefetcher<std::shared_ptr<std::vector<T>>> : public prefetcher_base {
+	class value_converter<std::shared_ptr<std::vector<T>>> : public value_converter_base {
 	public:
 
 		virtual std::shared_ptr<std::vector<T>> convert(v8::Local<v8::Value> from) {
 			if (from->IsArray()) {
 				auto arr = std::make_shared<std::vector<T>>();
-				auto converter = std::make_shared<prefetcher<T>>();
+				auto converter = std::make_shared<value_converter<T>>();
 				auto fromArray = from.As<v8::Array>();
 				for (auto i = 0; i < fromArray->Length(); i++) {
 					arr->push_back(converter->convert(fromArray->Get(i)));
@@ -232,7 +232,7 @@ namespace or {
 			}
 
 			auto v8array = Nan::New<v8::Array>();
-			auto converter = std::make_shared<prefetcher<T>>();
+			auto converter = std::make_shared<value_converter<T>>();
 			for (auto i = 0; i < from->size(); i++) {
 				v8array->Set(i, converter->convert( (*from)[i]));
 			}
@@ -259,7 +259,7 @@ namespace or {
 	//map <K, V>
 
 	template<typename T>
-	class prefetcher<std::shared_ptr<std::map<std::string, T>>> : public prefetcher_base {
+	class value_converter<std::shared_ptr<std::map<std::string, T>>> : public value_converter_base {
 	public:
 
 		virtual std::shared_ptr<std::map<std::string, T>> convert(v8::Local<v8::Value> from) {
@@ -267,7 +267,7 @@ namespace or {
 				throw std::exception("converted v8 value does not contain a v8::Map");
 			}
 
-			auto converter = std::make_shared<prefetcher<T>>();
+			auto converter = std::make_shared<value_converter<T>>();
 
 			auto map_value = std::make_shared<std::map<std::string, T>>();
 			auto from_map = from.As<v8::Map>()->AsArray();
@@ -284,7 +284,7 @@ namespace or {
 
 
 		virtual v8::Local<v8::Value> convert(std::shared_ptr<std::map<std::string,T>> from) {
-			auto converter = std::make_shared<prefetcher<T>>();
+			auto converter = std::make_shared<value_converter<T>>();
 
 			auto map_value = v8::Map::New(v8::Isolate::GetCurrent()); //Nan::New<v8::Map>();
 			
@@ -311,7 +311,7 @@ namespace or {
 	//map <K, V>
 
 	template<typename K, typename T>
-	class prefetcher<std::shared_ptr<std::map<K, T>>> : public prefetcher_base {
+	class value_converter<std::shared_ptr<std::map<K, T>>> : public value_converter_base {
 	public:
 
 		virtual std::shared_ptr<std::map<K, T>> convert(v8::Local<v8::Value> from) {
@@ -320,8 +320,8 @@ namespace or {
 				throw std::exception("converted v8 value does not contain a v8::Map");
 			}
 
-			auto value_converter = std::make_shared<prefetcher<T>>();
-			auto key_converter = std::make_shared<prefetcher<K>>();
+			auto value_converter = std::make_shared<value_converter<T>>();
+			auto key_converter = std::make_shared<value_converter<K>>();
 
 			auto map_value = std::make_shared<std::map<std::string, T>>();
 			auto from_map = from.As<v8::Map>()->AsArray();
@@ -338,8 +338,8 @@ namespace or {
 
 
 		virtual v8::Local<v8::Value> convert(std::shared_ptr<std::map<K,T>> from) {
-			auto value_converter = std::make_shared<prefetcher<T>>();
-			auto key_converter = std::make_shared<prefetcher<K>>();
+			auto value_converter = std::make_shared<value_converter<T>>();
+			auto key_converter = std::make_shared<value_converter<K>>();
 
 			auto map_value = v8::Map::New(v8::Isolate::GetCurrent()); //Nan::New<v8::Map>();
 
@@ -367,7 +367,7 @@ namespace or {
 	//set <T>
 
 	template<typename T>
-	class prefetcher<std::shared_ptr<std::set<T>>> : public prefetcher_base {
+	class value_converter<std::shared_ptr<std::set<T>>> : public value_converter_base {
 	public:
 
 		virtual std::shared_ptr<std::set<T>> convert(v8::Local<v8::Value> from) {
@@ -376,7 +376,7 @@ namespace or {
 				throw std::exception("converted v8 value does not contain a v8::Set");
 			}
 
-			auto converter = std::make_shared<prefetcher<T>>();
+			auto converter = std::make_shared<value_converter<T>>();
 
 			auto set_value = std::make_shared<std::set<T>>();
 			auto from_set = from.As<v8::Set>()->AsArray();
@@ -391,7 +391,7 @@ namespace or {
 
 
 		virtual v8::Local<v8::Value> convert(std::shared_ptr<std::set<T>> from) {
-			auto converter = std::make_shared<prefetcher<T>>();
+			auto converter = std::make_shared<value_converter<T>>();
 
 			auto set_value = v8::Set::New(v8::Isolate::GetCurrent()); //Nan::New<v8::Set>();
 
@@ -419,7 +419,7 @@ namespace or {
 	//string
 
 	template<>
-	class prefetcher<std::string> : public prefetcher_base {
+	class value_converter<std::string> : public value_converter_base {
 	public:
 
 		virtual std::string convert(v8::Local<v8::Value> from) {
@@ -450,7 +450,7 @@ namespace or {
 	//int/Number
 
 	template<>
-	class prefetcher<int> : public prefetcher_base {
+	class value_converter<int> : public value_converter_base {
 	public:
 
 		virtual int convert(v8::Local<v8::Value> from) {
@@ -482,7 +482,7 @@ namespace or {
 	//uint8_t / number
 
 	template<>
-	class prefetcher<uint8_t> : public prefetcher_base {
+	class value_converter<uint8_t> : public value_converter_base {
 	public:
 
 		virtual uint8_t convert(v8::Local<v8::Value> from) {
@@ -513,7 +513,7 @@ namespace or {
 	//bool
 
 	template<>
-	class prefetcher<bool> : public prefetcher_base {
+	class value_converter<bool> : public value_converter_base {
 	public:
 
 		virtual int convert(v8::Local<v8::Value> from) {
@@ -543,7 +543,7 @@ namespace or {
 
 
 	template<>
-	class prefetcher<DateTime> : public prefetcher_base {
+	class value_converter<DateTime> : public value_converter_base {
 	public:
 
 		virtual DateTime convert(v8::Local<v8::Value> from) {
@@ -574,7 +574,7 @@ namespace or {
 
 
 	/*template<>
-	class prefetcher<Nan::Callback> : public prefetcher_base {
+	class value_converter<Nan::Callback> : public value_converter_base {
 	public:
 
 		virtual Nan::Callback convert(v8::Local<v8::Value> from) {
@@ -593,7 +593,7 @@ namespace or {
 	};*/
 
 	//template<typename T>
-	//class prefetcher : public prefetcher_base{
+	//class value_converter : public value_converter_base{
 	//public:
 	//	T* convert(v8::Local<v8::Value> from) {
 	//		assert(from->IsObject() && "not a v8::Object for c++ object conversion");
@@ -622,7 +622,7 @@ namespace or {
 	//		return Nan::Undefined();
 	//	}
 
-	//	prefetcher() : prefetcher_base() {}
+	//	value_converter() : value_converter_base() {}
 
 	//	virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
 	//		auto parsed_value = std::make_shared<value_holder<T>>();
@@ -630,12 +630,12 @@ namespace or {
 	//		return parsed_value;
 	//	}
 
-	//	virtual ~prefetcher() {}
+	//	virtual ~value_converter() {}
 	//};
 
 	//
 	//template<>
-	//class prefetcher<IStructuredObject *> : public prefetcher_base {
+	//class value_converter<IStructuredObject *> : public value_converter_base {
 	//public:
 	//	std::shared_ptr<IStructuredObject> convert(v8::Local<v8::Value> from) {
 	//		//return from->IntegerValue();
@@ -670,16 +670,16 @@ namespace or {
 	//		return parsed_value;
 	//	}
 
-	//	prefetcher() : prefetcher_base() {}
+	//	value_converter() : value_converter_base() {}
 
-	//	virtual ~prefetcher() {}
+	//	virtual ~value_converter() {}
 	//};
 
 
 	//
 
 	//template<>
-	//class prefetcher<int> : public prefetcher_base {
+	//class value_converter<int> : public value_converter_base {
 	//public:
 	//	int convert(v8::Local<v8::Value> from) {
 	//		return from->IntegerValue();
@@ -711,13 +711,13 @@ namespace or {
 	//		return parsed_value;
 	//	}
 
-	//	prefetcher() : prefetcher_base() {}
+	//	value_converter() : value_converter_base() {}
 
-	//	virtual ~prefetcher() {}
+	//	virtual ~value_converter() {}
 	//};
 
 	//template<>
-	//class prefetcher<double> : public prefetcher_base {
+	//class value_converter<double> : public value_converter_base {
 	//public:
 	//	double convert(v8::Local<v8::Value> from) {
 	//		return from->IntegerValue();
@@ -749,13 +749,13 @@ namespace or {
 	//		return parsed_value;
 	//	}
 
-	//	prefetcher() : prefetcher_base() {}
+	//	value_converter() : value_converter_base() {}
 
-	//	virtual ~prefetcher() {}
+	//	virtual ~value_converter() {}
 	//};
 
 	//template<>
-	//class prefetcher<bool> : public prefetcher_base {
+	//class value_converter<bool> : public value_converter_base {
 	//public:
 	//	bool convert(v8::Local<v8::Value> from) {
 	//		return from->IntegerValue();
@@ -787,13 +787,13 @@ namespace or {
 	//		return parsed_value;
 	//	}
 
-	//	prefetcher() : prefetcher_base() {}
+	//	value_converter() : value_converter_base() {}
 
-	//	virtual ~prefetcher() {}
+	//	virtual ~value_converter() {}
 	//};
 
 	//template<>
-	//class prefetcher<std::string> : public prefetcher_base {
+	//class value_converter<std::string> : public value_converter_base {
 	//public:
 
 	//	std::string convert(v8::Local<v8::Value> from) {
@@ -826,9 +826,9 @@ namespace or {
 	//		return parsed_value;
 	//	}
 
-	//	prefetcher() : prefetcher_base() {}
+	//	value_converter() : value_converter_base() {}
 
-	//	virtual ~prefetcher() {}
+	//	virtual ~value_converter() {}
 	//};
 
 
