@@ -10,9 +10,9 @@ bool struct_B::verify(overload_resolution * ovres, v8::Local<v8::Value> obj) {
 	return ovres->verifyObject(struct_B::_definition, obj);
 }
 
-bool struct_B::parse(overload_resolution * ovres, v8::Local<v8::Value> obj) {
-	this->prop1 = *Nan::Utf8String(ovres->GetFromObject(obj, "prop1").ToLocalChecked());
-	this->prop2 = ovres->GetFromObject(obj, "prop2").ToLocalChecked()->IntegerValue();
+bool struct_B::parse(v8::Local<v8::Value> obj) {
+	this->prop1 = *Nan::Utf8String(overload_resolution::GetFromObject(obj, "prop1").ToLocalChecked());
+	this->prop2 = overload_resolution::GetFromObject(obj, "prop2").ToLocalChecked()->IntegerValue();
 
 	return true;
 }

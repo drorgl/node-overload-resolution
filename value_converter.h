@@ -23,6 +23,8 @@
 #include <vector>
 #include <string>
 
+#include "class_typename.h"
+
 namespace or {
 	
 
@@ -33,13 +35,18 @@ namespace or {
 	public:
 
 		virtual T convert(v8::Local<v8::Value> from) {
+			DECLARE_CLASS_TYPENAME(T)
+
 #pragma message ("not implemented, need template specialization " T)
-			throw std::exception("not implemented, need template specialization for T");
+			throw std::exception("not implemented, need template specialization for " + Class_TypeName<T>::name);
 		}
 
 
 		virtual v8::Local<v8::Value> convert(T from) {
-			return Nan::New(from);
+			DECLARE_CLASS_TYPENAME(T)
+
+#pragma message ("not implemented, need template specialization " T)
+			throw std::exception("not implemented, need template specialization for " + Class_TypeName<T>::name);
 		}
 
 		//virtual v8::Local<v8::Value> convert(std::shared_ptr<T> from) {
@@ -93,6 +100,32 @@ namespace or {
 	//ObjectWrap
 
 	template<typename T>
+	class prefetcher<T*, typename std::enable_if<std::is_base_of<ObjectWrap, T>::value>::type> : public prefetcher_base {
+	public:
+
+		virtual T* convert(v8::Local<v8::Value> from) {
+			return or::ObjectWrap::Unwrap<T>(from.As<v8::Object>());
+		}
+
+
+		virtual v8::Local<v8::Value> convert(T* from) {
+			return from->Wrap();
+		}
+
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+			auto from_value = std::dynamic_pointer_cast<value_holder<T*>>(from);
+			return from_value->Value->Wrap();
+		}
+
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+			auto parsed_value = std::make_shared<value_holder<T*>>();
+			parsed_value->Value = convert(val);
+			return parsed_value;
+		}
+
+	};
+
+	template<typename T>
 	class prefetcher<std::shared_ptr<T>, typename std::enable_if<std::is_base_of<ObjectWrap, T>::value>::type> : public prefetcher_base {
 	public:
 
@@ -125,11 +158,20 @@ namespace or {
 	public:
 
 		virtual std::shared_ptr<T> convert(v8::Local<v8::Value> from) {
-			return nullptr;
+			if (from.IsEmpty() || from->IsUndefined() || from->IsNull()) {
+				return nullptr;
+			}
+
+			auto struct_instance = std::make_shared<T>();
+			struct_instance->parse(from);
+			return struct_instance;
 		}
 
 
 		virtual v8::Local<v8::Value> convert(std::shared_ptr<T> from) {
+			if (from == nullptr) {
+				return Nan::Null();
+			}
 			return from->ToObject();
 		}
 
@@ -176,19 +218,23 @@ namespace or {
 			throw std::exception("converted v8 value does not contain an array or buffer");
 		}
 
+		static void FreeBufferCallback(char *data, void *hint) {
+			delete (std::shared_ptr<std::vector<T>> *) hint;
+		}
 		
 		virtual v8::Local<v8::Value> convert(std::shared_ptr<std::vector<T>> from) {
 			if (std::is_same<T, uint8_t>::value) {
-				//std::shared_ptr<std::vector<uint8_t>> x;
-				//x.get()->size()
-				auto v8buffer = Nan::NewBuffer((char*)&(from.get()[0]), from.get()->size());
+				//create a manual instance of shared_ptr to increment the ref counter manually, which will be deleted by FreeBufferCallback when Buffer is free'd
+				auto copy_for_ref_inc = new std::shared_ptr<std::vector<T>>(from);
+
+				auto v8buffer = Nan::NewBuffer((char*)&(*from)[0], from->size(),FreeBufferCallback,copy_for_ref_inc);
 				return v8buffer.ToLocalChecked();
 			}
 
 			auto v8array = Nan::New<v8::Array>();
 			auto converter = std::make_shared<prefetcher<T>>();
-			for (auto i = 0; i < from.get()->size(); i++) {
-				//v8array->Set(i, converter->convert( from.get()[i]));
+			for (auto i = 0; i < from->size(); i++) {
+				v8array->Set(i, converter->convert( (*from)[i]));
 			}
 			return v8array;
 			
@@ -217,14 +263,36 @@ namespace or {
 	public:
 
 		virtual std::shared_ptr<std::map<std::string, T>> convert(v8::Local<v8::Value> from) {
-			
+			if (!from->IsMap()) {
+				throw std::exception("converted v8 value does not contain a v8::Map");
+			}
 
-			throw std::exception("converted v8 value does not contain a map");
+			auto converter = std::make_shared<prefetcher<T>>();
+
+			auto map_value = std::make_shared<std::map<std::string, T>>();
+			auto from_map = from.As<v8::Map>()->AsArray();
+			assert((from_map->Length() % 2) == 0 && "v8::Map::AsArray returned length other than % 2");
+			for (auto i = 0; i < from_map->Length(); i+=2) {
+				auto key = *Nan::Utf8String(from_map->Get(i));
+				auto value = converter->convert(from_map->Get(i + 1));
+
+				(*map_value)[key] = value;
+			}
+
+			return map_value;
 		}
 
 
 		virtual v8::Local<v8::Value> convert(std::shared_ptr<std::map<std::string,T>> from) {
-			throw std::exception("converted v8 value does not contain a map");
+			auto converter = std::make_shared<prefetcher<T>>();
+
+			auto map_value = v8::Map::New(v8::Isolate::GetCurrent()); //Nan::New<v8::Map>();
+			
+			for (auto &&kv : *from) {
+				map_value->Set(Nan::GetCurrentContext(), Nan::New(kv.first).ToLocalChecked(), converter->convert(kv.second));
+			}
+
+			return map_value;
 		}
 
 		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
@@ -248,12 +316,38 @@ namespace or {
 
 		virtual std::shared_ptr<std::map<K, T>> convert(v8::Local<v8::Value> from) {
 			
-			throw std::exception("converted v8 value does not contain a map");
+			if (!from->IsMap()) {
+				throw std::exception("converted v8 value does not contain a v8::Map");
+			}
+
+			auto value_converter = std::make_shared<prefetcher<T>>();
+			auto key_converter = std::make_shared<prefetcher<K>>();
+
+			auto map_value = std::make_shared<std::map<std::string, T>>();
+			auto from_map = from.As<v8::Map>()->AsArray();
+			assert((from_map->Length() % 2) == 0 && "v8::Map::AsArray returned length other than % 2");
+			for (auto i = 0; i < from_map->Length(); i += 2) {
+				auto key = key_converter->convert(from_map->Get(i));
+				auto value = value_converter->convert(from_map->Get(i + 1));
+
+				(*map_value)[key] = value;
+			}
+
+			return map_value;
 		}
 
 
 		virtual v8::Local<v8::Value> convert(std::shared_ptr<std::map<K,T>> from) {
-			throw std::exception("converted v8 value does not contain a map");
+			auto value_converter = std::make_shared<prefetcher<T>>();
+			auto key_converter = std::make_shared<prefetcher<K>>();
+
+			auto map_value = v8::Map::New(v8::Isolate::GetCurrent()); //Nan::New<v8::Map>();
+
+			for (auto &&kv : *from) {
+				map_value->Set(Nan::GetCurrentContext(),key_converter->convert(kv.first), value_converter->convert(kv.second));
+			}
+
+			return map_value;
 		}
 
 		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
@@ -278,12 +372,34 @@ namespace or {
 
 		virtual std::shared_ptr<std::set<T>> convert(v8::Local<v8::Value> from) {
 
-			throw std::exception("converted v8 value does not contain a map");
+			if (!from->IsSet()) {
+				throw std::exception("converted v8 value does not contain a v8::Set");
+			}
+
+			auto converter = std::make_shared<prefetcher<T>>();
+
+			auto set_value = std::make_shared<std::set<T>>();
+			auto from_set = from.As<v8::Set>()->AsArray();
+			for (auto i = 0; i < from_set->Length(); i ++) {
+				auto value = converter->convert(from_set->Get(i));
+
+				set_value->insert(value);
+			}
+
+			return set_value;
 		}
 
 
 		virtual v8::Local<v8::Value> convert(std::shared_ptr<std::set<T>> from) {
-			throw std::exception("converted v8 value does not contain a map");
+			auto converter = std::make_shared<prefetcher<T>>();
+
+			auto set_value = v8::Set::New(v8::Isolate::GetCurrent()); //Nan::New<v8::Set>();
+
+			for (auto &&kv : *from) {
+				set_value->Add(Nan::GetCurrentContext(), converter->convert(kv));
+			}
+
+			return set_value;
 		}
 
 		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
@@ -373,6 +489,9 @@ namespace or {
 			return from->IntegerValue();
 		}
 
+		virtual v8::Local<v8::Value> convert(uint8_t from) {
+			return Nan::New(from);
+		}
 
 		virtual v8::Local<v8::Value> convert(std::shared_ptr<uint8_t> from) {
 			return Nan::New(*from);

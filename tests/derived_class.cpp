@@ -54,7 +54,7 @@ NAN_METHOD(derived_class::New) {
 	pt = new derived_class();
 
 	pt->Wrap(info.This());
-	info.GetReturnValue().Set(info.This());
+	//info.GetReturnValue().Set(info.This());
 }
 
 NAN_METHOD(derived_class::derived_function) {

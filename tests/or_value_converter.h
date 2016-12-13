@@ -157,7 +157,7 @@ namespace or_value_converter {
 	}
 
 	POLY_METHOD(value_converter) {
-		info.GetReturnValue().Set(Nan::New(".no_parameters()").ToLocalChecked());
+		info.GetReturnValue().Set(Nan::New(".no_parameters").ToLocalChecked());
 	}
 
 	void RegisterORTesters(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload) {

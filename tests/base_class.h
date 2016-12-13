@@ -15,7 +15,7 @@
 	public:
 		static void Init(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload);
 
-		std::shared_ptr<std::string> _data;
+		std::shared_ptr<std::string> _data_base;
 
 		static Nan::Persistent<v8::FunctionTemplate> constructor;
 

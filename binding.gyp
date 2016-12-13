@@ -36,6 +36,9 @@
 			, "generic_value_holder.h"
 			
 			, "factory.h"
+			
+			, "class_typename.h"
+			
 			, "README.md"
 			, "package.json"
 		],

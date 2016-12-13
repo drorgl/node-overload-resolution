@@ -1,6 +1,12 @@
 #ifndef _ALVISION_OVERLOAD_RESOLUTION_H_
 #define _ALVISION_OVERLOAD_RESOLUTION_H_
 
+#ifdef DEBUG
+#define _CRTDBG_MAP_ALLOC  
+#include <stdlib.h>  
+#include <crtdbg.h>  
+#endif
+
 #include <v8.h>
 #include <node.h>
 #include <node_object_wrap.h>
@@ -213,7 +219,7 @@ private:
 	
 	//factory for structs, used to instantiate the appropriate struct when required or generate all structs when determining type
 	//TODO: improve the struct checking process, its inefficient to create all structs for each type checking (that didn't meet primitive or classes names)
-	Factory<IStructuredObject> _structured_factory;
+	std::shared_ptr<Factory<IStructuredObject>> _structured_factory;
 	
 	//type registry
 	std::map<std::string, std::shared_ptr<object_type>> _types;
@@ -247,6 +253,8 @@ private:
 public:
 	overload_resolution();
 
+	~overload_resolution();
+
 	//function should be registerType
 	//should add to it all the basics, string, number, integer, boolean, array, object(?), buffer (?), function (is it possible to know the function signature?), promises(?)
 	//in case of array, which type is inside it, what to do if multiple types are in the array?
@@ -255,7 +263,7 @@ public:
 	//register struct
 	template <typename TDerived>
 	void register_type(const std::string ns, const std::string name) {
-		_structured_factory.register_type<TDerived>(name);
+		_structured_factory->register_type<TDerived>(name);
 	}
 
 	//add type alias
@@ -296,7 +304,7 @@ public:
 	bool verifyObject(std::vector<std::shared_ptr<overload_info>> props, v8::Local<v8::Value> val);
 
 	//gets a value from an object/map
-	Nan::MaybeLocal<v8::Value> GetFromObject(v8::Local<v8::Value> obj, const std::string key);
+	static Nan::MaybeLocal<v8::Value> GetFromObject(v8::Local<v8::Value> obj, const std::string key);
 };
 
 #endif
