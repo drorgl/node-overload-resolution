@@ -45,7 +45,7 @@ public:
 	virtual bool parse(v8::Local<v8::Value> obj) {
 		this->type = *Nan::Utf8String(overload_resolution::GetFromObject(obj, "type").ToLocalChecked());
 
-		auto vconverter = std::make_shared< or ::prefetcher<T>>();
+		auto vconverter = std::make_shared< or ::value_converter<T>>();
 		this->value = vconverter->convert(overload_resolution::GetFromObject(obj, "value").ToLocalChecked());
 		//this->value = *Nan::Utf8String(ovres->GetFromObject(obj, "value").ToLocalChecked());
 
@@ -56,7 +56,7 @@ public:
 		auto retval = Nan::New<v8::Object>();
 		retval->Set(Nan::New<v8::String>("type").ToLocalChecked(), Nan::New<v8::String>(this->type).ToLocalChecked());
 
-		auto vconverter = std::make_shared< or ::prefetcher<T>>();
+		auto vconverter = std::make_shared< or ::value_converter<T>>();
 		retval->Set(Nan::New<v8::String>("value").ToLocalChecked(), vconverter->convert( this->value ));
 		//retval->Set(Nan::New<v8::String>("value").ToLocalChecked(), Nan::New<v8::String>(this->value).ToLocalChecked());
 		return retval;

@@ -112,7 +112,7 @@ struct overload_info {
 	std::string parameterName;
 	std::string type;
 	Nan::Persistent<v8::Value, Nan::CopyablePersistentTraits<v8::Value>> defaultValue;
-	std::shared_ptr<or::prefetcher_base> prefetcher;
+	std::shared_ptr<or::value_converter_base> value_converter;
 	overload_info(const std::string parameterName, const std::string type, v8::Local<v8::Value> defaultValue = Nan::Undefined());
 	overload_info(const std::string parameterName, const std::string type, int defaultValue);
 	overload_info(const std::string parameterName, const std::string type, double defaultValue);
@@ -143,10 +143,10 @@ inline std::shared_ptr<overload_info> make_param(const std::string parameterName
 template<typename T>
 inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type) {
 	//todo: add default value conversion
-	//todo: add prefetcher to overload_info
-	auto prefetcher = std::make_shared < or ::prefetcher<T>>();
+	//todo: add value_converter to overload_info
+	auto value_converter = std::make_shared < or ::value_converter<T>>();
 	auto oi = std::make_shared<overload_info>(parameterName, type);
-	oi->prefetcher = prefetcher;
+	oi->value_converter = value_converter;
 
 	return oi;
 }
@@ -154,10 +154,10 @@ inline std::shared_ptr<overload_info> make_param(const std::string parameterName
 template<typename T>
 inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type,std::shared_ptr<T> defaultValue) {
 	//todo: add default value conversion
-	//todo: add prefetcher to overload_info
-	auto prefetcher = std::make_shared < or ::prefetcher<T>>();
-	auto oi = std::make_shared<overload_info>(parameterName, type,prefetcher->convert(defaultValue));
-	oi->prefetcher = prefetcher;
+	//todo: add value_converter to overload_info
+	auto value_converter = std::make_shared < or ::value_converter<T>>();
+	auto oi = std::make_shared<overload_info>(parameterName, type,value_converter->convert(defaultValue));
+	oi->value_converter = value_converter;
 
 	return oi;
 }

@@ -29,7 +29,7 @@ namespace or {
 		}
 
 		/*template<typename atT>
-		inline std::shared_ptr<prefetcher<atT>> at(int i) const {
+		inline std::shared_ptr<value_converter<atT>> at(int i) const {
 			return _prefetched[i]
 		}*/
 		template<typename atT>
@@ -39,11 +39,11 @@ namespace or {
 				return  std::static_pointer_cast<or ::value_holder<atT>>(_values[i])->Value;
 			}
 
-			//no converted value, retrieve prefetcher and attempt to convert params to atT
-			auto argprefetcher = std::static_pointer_cast<or ::prefetcher<atT>>(_arguments[i]->prefetcher);
+			//no converted value, retrieve value_converter and attempt to convert params to atT
+			auto argprefetcher = std::static_pointer_cast<or ::value_converter<atT>>(_arguments[i]->value_converter);
 #ifdef DEBUG
 			if (argprefetcher == nullptr) {
-				throw new std::exception("argument prefetcher does not match registered type");
+				throw new std::exception("argument value_converter does not match registered type");
 			}
 #endif
 			return argprefetcher->convert(_params[i]);
@@ -99,7 +99,7 @@ namespace or {
 			for (auto i = 0; i < _arguments.size(); i++) {
 				auto oinfo = _arguments[i];
 
-				_values.push_back(_arguments[i]->prefetcher->read(_params[i]));
+				_values.push_back(_arguments[i]->value_converter->read(_params[i]));
 			}
 		}
 
