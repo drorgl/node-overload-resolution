@@ -27,12 +27,14 @@ public:
 	std::string prop2;
 
 	virtual bool verify(overload_resolution * ovres, v8::Local<v8::Value> obj);
-	virtual bool parse(overload_resolution * ovres, v8::Local<v8::Value> obj);
+	virtual bool parse(v8::Local<v8::Value> obj);
 
 	 v8::Local<v8::Value> ToObject();
 
 	 static v8::Local<v8::Object> New();
 	 static v8::Local<v8::Object> New(std::string prop1, std::string prop2);
+
+	 virtual ~struct_A() {}
 };
 
 

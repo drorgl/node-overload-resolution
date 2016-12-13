@@ -20,19 +20,6 @@ NAN_METHOD(testfunction_no_overload_resolution) {
 }
 
 
-//strong types research
-template <typename T>
-class MyClass {
-public:
-	static const char *name; // Not private
-							 // ...
-};
-
-#define DECLARE_MY_CLASS(x) template<> const char *MyClass<x>::name = #x;
-
-DECLARE_MY_CLASS(int);
-DECLARE_MY_CLASS(std::vector<std::string>);
-
 
 void init(v8::Handle<v8::Object> target) {
 	assert(false);

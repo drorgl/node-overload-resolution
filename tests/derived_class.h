@@ -4,16 +4,16 @@
 #include <memory>
 #include <string>
 #include "../overload_resolution.h"
+#include "base_class.h"
 
 
-
-class derived_class : public or::ObjectWrap {
+class derived_class : public base_class {
 private:
 
 public:
 	static void Init(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload);
 
-	std::shared_ptr<std::string> _data;
+	std::shared_ptr<std::string> _data_derived;
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 

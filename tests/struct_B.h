@@ -26,7 +26,7 @@ public:
 	int prop2;
 
 	virtual bool verify(overload_resolution * ovres, v8::Local<v8::Value> obj);
-	virtual bool parse(overload_resolution * ovres, v8::Local<v8::Value> obj);
+	virtual bool parse(v8::Local<v8::Value> obj);
 
 	 v8::Local<v8::Value> ToObject();
 

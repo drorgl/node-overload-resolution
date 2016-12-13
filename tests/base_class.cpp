@@ -62,7 +62,7 @@ namespace base_class_general_callback {
 		pt = new base_class();
 
 		pt->Wrap(info.This());
-		info.GetReturnValue().Set(info.This());
+		//info.GetReturnValue().Set(info.This());
 	}
 
 	POLY_METHOD(base_class::base_function) {

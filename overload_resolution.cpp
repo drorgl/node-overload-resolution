@@ -20,7 +20,18 @@ overload_info::overload_info(const std::string parameterName, const std::string 
 
 
 overload_resolution::overload_resolution() {
+	_structured_factory = std::make_shared<Factory<IStructuredObject>>();
+}
 
+overload_resolution::~overload_resolution() {
+	_structured_factory = nullptr;
+	_types.clear();
+	_type_aliases.clear();
+	_namespaces.clear();
+
+#ifdef DEBUG
+	_CrtDumpMemoryLeaks();
+#endif
 }
 
 void overload_resolution::add_type_alias(std::string alias, std::string type) {
@@ -98,7 +109,7 @@ bool overload_resolution::validate_type_registrations() {
 						auto type = drill_type_aliases(olinfo->get()->type);
 
 						if ((_types.count(type) == 0 ) &&
-							(!_structured_factory.has_type(type)) && 
+							(!_structured_factory->has_type(type)) && 
 							(_primitive_types.count(type) == 0))
 						{
 							//if normal type checking failed, do a generic type checking
@@ -107,7 +118,7 @@ bool overload_resolution::validate_type_registrations() {
 
 							for (std::set<std::string>::iterator separate_type = std::begin(types); separate_type != std::end(types); separate_type++) {
 								if ((_types.count(*separate_type) == 0) &&
-									(!_structured_factory.has_type(separate_type->c_str())) &&
+									(!_structured_factory->has_type(separate_type->c_str())) &&
 									(_primitive_types.count(*separate_type) == 0)){
 									printf("cannot find type %s in %s::%s::%s\r\n", separate_type->c_str(),ns->second->name.c_str(),cls->second->className.c_str(), (*fnoverload)->functionName.c_str());
 									return false;
@@ -279,13 +290,13 @@ std::string overload_resolution::determineType(v8::Local<v8::Value> param) {
 	std::vector<std::shared_ptr<object_type>> alternatives;
 
 	//might be able to optimize with FindInstanceInPrototypeChain
-	for (it = _types.begin(); it != _types.end(); it++) {
-		if (Nan::New<v8::FunctionTemplate>(it->second-> function_template)->HasInstance(param)) {
-			if (strcmp(*Nan::Utf8String(param.As<v8::Object>()->GetConstructorName()), it->second->name.c_str()) == 0) {
-				return drill_type_aliases(it->second->name);
+	for (auto &&it : _types){
+		if (Nan::New<v8::FunctionTemplate>(it.second-> function_template)->HasInstance(param)) {
+			if (strcmp(*Nan::Utf8String(param.As<v8::Object>()->GetConstructorName()), it.second->name.c_str()) == 0) {
+				return drill_type_aliases(it.second->name);
 			}
 			else {
-				alternatives.push_back(it->second);
+				alternatives.push_back(it.second);
 			}
 		}
 	}
@@ -294,7 +305,7 @@ std::string overload_resolution::determineType(v8::Local<v8::Value> param) {
 		assert(false && "object base was found but not object itself!");
 	}
 
-	auto structured = _structured_factory.all();
+	auto structured = _structured_factory->all();
 	for (auto i = 0; i < structured.size(); i++) {
 		if (structured[i].second->verify(this,param)){
 			return drill_type_aliases(structured[i].first);
@@ -423,9 +434,9 @@ void overload_resolution::executeBestOverload(const std::string ns, std::vector<
 
 	std::vector < std::shared_ptr< o_r_class>> classes;
 
-	for (std::vector<std::string>::iterator cit = classNames.begin(); cit < classNames.end(); cit++) {
-		if (_namespaces.count(ns) > 0 && _namespaces[ns]->classes.count(*cit) > 0) {
-			classes.push_back(_namespaces[ns]->classes[*cit]);
+	for (auto &&cit : classNames){
+		if (_namespaces.count(ns) > 0 && _namespaces[ns]->classes.count(cit) > 0) {
+			classes.push_back(_namespaces[ns]->classes[cit]);
 		}
 	}
 
@@ -456,9 +467,9 @@ void overload_resolution::executeBestOverload(const std::string ns, std::vector<
 	std::vector<std::shared_ptr< o_r_function>> implementations;
 
 	//copy all class functions by name from all descendant classes
-	for (std::vector<std::string>::iterator cit = classNames.begin(); cit < classNames.end(); cit++) {
-		if (_namespaces.count(ns) > 0 && _namespaces[ns]->classes.count(*cit) > 0) {
-			auto functions = _namespaces[ns]->classes[*cit]->functions[name];
+	for (auto &&cit : classNames){
+		if (_namespaces.count(ns) > 0 && _namespaces[ns]->classes.count(cit) > 0) {
+			auto functions = _namespaces[ns]->classes[cit]->functions[name];
 
 			implementations.insert(std::end(implementations), std::begin(functions), std::end(functions));
 		}
@@ -515,6 +526,7 @@ void overload_resolution::executeBestOverload(const std::string ns, std::vector<
 				processed_info.post_process();
 
 				//TODO: !!!!!!!!!!! call all callbacks post process
+				
 
 				return;
 			}
@@ -594,8 +606,8 @@ bool overload_resolution::verifyObject(std::vector<std::shared_ptr<overload_info
 	if (val->IsMap()) {
 		
 		auto omap = val.As<v8::Map>();
-		for (std::vector<std::shared_ptr<overload_info>>::iterator pit = props.begin(); pit < props.end(); pit++) {
-			auto oi = *pit;
+		for (auto &&pit : props){
+			auto oi = pit;
 
 			bool mapHasValue = false;
 
@@ -621,8 +633,8 @@ bool overload_resolution::verifyObject(std::vector<std::shared_ptr<overload_info
 	}
 	else if (val->IsObject()) {
 		auto obj = val.As<v8::Object>();
-		for (std::vector<std::shared_ptr<overload_info>>::iterator pit = props.begin(); pit < props.end(); pit++) {
-			auto oi = *pit;
+		for (auto &&pit : props){
+			auto oi = pit;
 
 			if (!obj->HasOwnProperty(Nan::New<v8::String>(oi->parameterName).ToLocalChecked())) {
 				return false;

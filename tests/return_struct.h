@@ -24,6 +24,10 @@ private:
 	std::vector<std::shared_ptr<overload_info>> _definition;
 
 public:
+	return_struct() {
+		throw std::exception("invalid use for return_struct");
+	}
+
 	return_struct(std::string v8_value_type) {
 		_v8_value_type = v8_value_type;
 		_definition = {
@@ -38,11 +42,11 @@ public:
 	virtual bool verify(overload_resolution * ovres, v8::Local<v8::Value> obj) {
 		return ovres->verifyObject(return_struct::_definition, obj);
 	}
-	virtual bool parse(overload_resolution * ovres, v8::Local<v8::Value> obj) {
-		this->type = *Nan::Utf8String(ovres->GetFromObject(obj, "type").ToLocalChecked());
+	virtual bool parse(v8::Local<v8::Value> obj) {
+		this->type = *Nan::Utf8String(overload_resolution::GetFromObject(obj, "type").ToLocalChecked());
 
 		auto vconverter = std::make_shared< or ::prefetcher<T>>();
-		this->value = vconverter->convert(ovres->GetFromObject(obj, "value").ToLocalChecked());
+		this->value = vconverter->convert(overload_resolution::GetFromObject(obj, "value").ToLocalChecked());
 		//this->value = *Nan::Utf8String(ovres->GetFromObject(obj, "value").ToLocalChecked());
 
 		return true;

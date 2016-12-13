@@ -163,7 +163,7 @@ for (var i = 0; i < 1; i++) {
             name: "string"
         }
         , {
-            value: new Date(),
+            value: new Date(1234* 1000),
             defaultValue: new Date(0),
             name: "date"
         }
@@ -184,7 +184,7 @@ for (var i = 0; i < 1; i++) {
         }
         , {
             value: new Buffer([1,2,3]),
-            defaultValue: new Buffer([1,2,3]),
+            defaultValue: new Buffer([]),
             name: "buffer"
         }
         , {
@@ -241,195 +241,195 @@ for (var i = 0; i < 1; i++) {
          //}
     ];
 
-    ////test constructor overloads
-    //tape('constructor overload 1 parameter, no defaults', function (t) {
-    //    t.doesNotThrow(function () {
-    //        let ct = new addon.constructor_class_tester();
-    //        t.equal(ct.ctype(), ".no_parameters", "constructor_tester no_params");
+    //test constructor overloads
+    tape('constructor overload 1 parameter, no defaults', function (t) {
+        t.doesNotThrow(function () {
+            let ct = new addon.constructor_class_tester();
+            t.equal(ct.ctype(), ".no_parameters", "constructor_tester no_params");
 
-    //        for (var dt of dataTypes) {
-    //            let ct = new addon.constructor_class_tester(dt.value);
-    //            t.equal(ct.ctype(), "." + dt.name, "constructor_testers " + dt.name);
-    //        }
+            for (var dt of dataTypes) {
+                let ct = new addon.constructor_class_tester(dt.value);
+                t.equal(ct.ctype(), "." + dt.name, "constructor_testers " + dt.name);
+            }
 
-    //    }, "executing all new addon.constructor_class_tester(...)");
-    //    t.end();
-    //});
-
-
-    ////test static functions (non-instance)
-    //tape('static vs instance function overload 1 parameter, no defaults', function (t) {
-    //    t.doesNotThrow(function () {
-    //        let cs = new addon.constructor_class_tester();
-
-    //        t.equal(addon.constructor_class_tester.static_function(), ".static.no_params", "constructor_class_tester.static_function no_params");
-    //        t.equal(cs.static_function(), ".instance.no_params", "instance constructor_class_tester.static_function no_params");
-
-    //        for (var dt of dataTypes) {
-    //            t.equal(addon.constructor_class_tester.static_function(dt.value), ".static." + dt.name, "base_class.static_function " + dt.name);
-    //            t.equal(cs.static_function(dt.value), ".instance." + dt.name, "instance constructor_class_tester.static_function " + dt.name);
-    //        }
-
-    //    },"executing all constructor_class_tester.static_function(...) instance and static");
-    //    t.end();
-    //});
+        }, "executing all new addon.constructor_class_tester(...)");
+        t.end();
+    });
 
 
+    //test static functions (non-instance)
+    tape('static vs instance function overload 1 parameter, no defaults', function (t) {
+        t.doesNotThrow(function () {
+            let cs = new addon.constructor_class_tester();
 
+            t.equal(addon.constructor_class_tester.static_function(), ".static.no_params", "constructor_class_tester.static_function no_params");
+            t.equal(cs.static_function(), ".instance.no_params", "instance constructor_class_tester.static_function no_params");
 
-    //tape('function overload 1 parameter, no defaults', function (t) {
-    //    t.doesNotThrow(function () {
-    //        t.equal(addon.number_testers(), ".no_parameters", "number_testers no_params");
+            for (var dt of dataTypes) {
+                t.equal(addon.constructor_class_tester.static_function(dt.value), ".static." + dt.name, "base_class.static_function " + dt.name);
+                t.equal(cs.static_function(dt.value), ".instance." + dt.name, "instance constructor_class_tester.static_function " + dt.name);
+            }
 
-    //        for (var dt of dataTypes) {
-    //            t.equal(addon.number_testers(dt.value), "." + dt.name, "number_testers " + dt.name);
-    //        }
-
-    //    });
-    //    t.end();
-    //});
-
-
-
-    ////test member functions
-
-    //tape('member function overload 1 parameter, no defaults', function (t) {
-    //    t.doesNotThrow(function () {
-    //        let bc = new addon.base_class();
-
-    //        t.equal(bc.base_function(), "base_class.base_function.no_parameters_testers", "no_params");
-
-    //        for (var dt of dataTypes) {
-    //            t.equal(bc.base_function(dt.value), "base_class.base_function." + dt.name, "number_testers " + dt.name);
-    //        }
-
-    //    });
-    //    t.end();
-    //});
-
-    ////TODO: test class inheritance chain calls
-    ////e.g. derived class overload implements function x and base class overload implement function x, which will be called when and on which parameters? 
-    ////overload should be across class graph, otherwise no true inheritance will be implemented.
-    ////also, what happens when calling function inherited from base but not overloaded in derived?
-
-    //tape('derived member function overload 1 parameter, no defaults', function (t) {
-    //    t.doesNotThrow(function () {
-    //        let bc = new addon.derived_class();
-
-    //        t.equal(bc.base_function(), "derived_class.base_function.no_parameters_testers", "no_params");
-
-    //        for (var dt of dataTypes) {
-    //            t.equal(bc.base_function(dt.value), "derived_class.base_function." + dt.name, "derived_class.base_function " + dt.name);
-    //        }
-
-    //    });
-    //    t.end();
-    //});
-
-    ////test structs, succes, fail, multiple
-    //tape('function overload - structs', function (t) {
-    //    t.doesNotThrow(function () {
-    //        t.equal(addon.structs_testers(), "structs_testers.no_parameters", "no parameters")
-    //        t.equal(addon.structs_testers({ "prop1": "1", "prop2": "2" }), "structs_testers.struct_A", "structs_testers struct_A");
-    //        t.equal(addon.structs_testers({ "prop1": "1", "prop2": 2 }), "structs_testers.struct_B", "structs_testers struct_B");
-
-    //        t.equal(addon.structs_testers({ "prop1": "1", "prop2": "2" }, { "prop1": "1", "prop2": "2" }), "structs_testers.struct_A_struct_A", "structs_testers struct_A struct_A");
-    //        t.equal(addon.structs_testers({ "prop1": "1", "prop2": 2 }, { "prop1": "1", "prop2": 2 }), "structs_testers.struct_B_struct_B", "structs_testers struct_B struct_B");
-
-    //        t.equal(addon.structs_testers({ "prop1": "1", "prop2": "2" }, { "prop1": "1", "prop2": 2 }), "structs_testers.struct_A_struct_B", "structs_testers struct_A struct_B");
-    //        t.equal(addon.structs_testers({ "prop1": "1", "prop2": 2 }, { "prop1": "1", "prop2": "2" }), "structs_testers.struct_B_struct_A", "structs_testers struct_B struct_A");
-
-    //    });
-    //    t.end();
-    //});
+        },"executing all constructor_class_tester.static_function(...) instance and static");
+        t.end();
+    });
 
 
 
 
+    tape('function overload 1 parameter, no defaults', function (t) {
+        t.doesNotThrow(function () {
+            t.equal(addon.number_testers(), ".no_parameters", "number_testers no_params");
 
-    ////test multiple parameters
-    //tape('function overload 2 parameter, no defaults', function (t) {
-    //    t.doesNotThrow(function () {
+            for (var dt of dataTypes) {
+                t.equal(addon.number_testers(dt.value), "." + dt.name, "number_testers " + dt.name);
+            }
 
-    //        for (var dt1 of dataTypes) {
-    //            for (var dt2 of dataTypes) {
-    //                t.equal(addon.two_testers(dt1.value, dt2.value), "." + dt1.name + "." + dt2.name, "two_testers " + dt1.name + " " + dt2.name);
-    //            }
-    //        }
+        });
+        t.end();
+    });
 
-    //    });
-    //    t.end();
-    //});
 
-    ////test array types, array types overloads, array types defaults, array<struct>, array<array<struct>>
-    //tape('function overload for arrays, no defaults', function (t) {
-    //    t.doesNotThrow(function () {
-    //        t.equal(addon.array_testers(), ".no_parameters_testers", "array_testers()");
 
-    //        for (var dt of dataTypes) {
-    //            t.equal(addon.array_testers([dt.value]), ".array<" + dt.name + ">", "array_testers array<" + dt.name + ">");
-    //        }
+    //test member functions
 
-    //        for (var dt of dataTypes) {
-    //            t.equal(addon.array_testers([[dt.value]]), ".array<array<" + dt.name + ">>", "array_testers array<array<" + dt.name + ">>");
-    //        }
+    tape('member function overload 1 parameter, no defaults', function (t) {
+        t.doesNotThrow(function () {
+            let bc = new addon.base_class();
 
-    //        //test array with multiple types
+            t.equal(bc.base_function(), "base_class.base_function.no_parameters_testers", "no_params");
 
-    //        for (var dt1 of dataTypes) {
-    //            for (var dt2 of dataTypes) {
-    //                if (dt1.name != dt2.name) {
-    //                    t.equal(addon.array_testers([dt1.value, dt2.value]), ".array", "array_testers array (multiple types - " + dt1.name + "," + dt2.name + ")");
-    //                }
-    //            }
-    //        }
+            for (var dt of dataTypes) {
+                t.equal(bc.base_function(dt.value), "base_class.base_function." + dt.name, "number_testers " + dt.name);
+            }
 
-    //        for (var dt1 of dataTypes) {
-    //            for (var dt2 of dataTypes) {
-    //                if (dt1.name != dt2.name) {
-    //                    t.equal(addon.array_testers([[dt1.value, dt2.value]]), ".array<array>", "array_testers array<array> (multiple types - " + dt1.name + "," + dt2.name + ")");
-    //                }
-    //            }
-    //        }
+        });
+        t.end();
+    });
 
-    //        for (var dt1 of dataTypes) {
-    //            for (var dt2 of dataTypes) {
-    //                if (dt1 != dt2) {
-    //                    t.equal(addon.array_testers([[dt1.value], dt2.value]), ".array", "array_testers array<array> (multiple types - " + dt1.name + "," + dt2.name + ")");
-    //                }
-    //            }
-    //        }
+    //TODO: test class inheritance chain calls
+    //e.g. derived class overload implements function x and base class overload implement function x, which will be called when and on which parameters? 
+    //overload should be across class graph, otherwise no true inheritance will be implemented.
+    //also, what happens when calling function inherited from base but not overloaded in derived?
 
-    //        //test array with multiple values of the same type
+    tape('derived member function overload 1 parameter, no defaults', function (t) {
+        t.doesNotThrow(function () {
+            let bc = new addon.derived_class();
 
-    //        for (var dt of dataTypes) {
-    //            t.equal(addon.array_testers([dt.value, dt.value]), ".array<" + dt.name + ">", "array_testers array<" + dt.name + ">");
-    //        }
+            t.equal(bc.base_function(), "derived_class.base_function.no_parameters_testers", "no_params");
 
-    //        for (var dt of dataTypes) {
-    //            t.equal(addon.array_testers([[dt.value, dt.value]]), ".array<array<" + dt.name + ">>", "array_testers array<array<" + dt.name + ">>");
-    //        }
+            for (var dt of dataTypes) {
+                t.equal(bc.base_function(dt.value), "derived_class.base_function." + dt.name, "derived_class.base_function " + dt.name);
+            }
 
-    //    });
-    //    t.end();
-    //});
+        });
+        t.end();
+    });
 
-    ////test parameter defaults, test the default value is passed to function, test that passed parameter is overwriting the default value
-    //tape('function overload 1 parameter, 2nd parameter default', function (t) {
-    //    t.doesNotThrow(function () {
-    //        for (var dt1 of dataTypes) {
-    //            var default_func = new Function("addon, val", "return addon.default_testers_" + dt1.name + "(val)");
-    //            var default_func_2params = new Function("addon, val1,val2", "return addon.default_testers_" + dt1.name + "(val1,val2)");
-    //            t.equal(default_func(addon), ".no_params", "default testers " + dt1.name + ", no parameters");
-    //            for (var dt2 of dataTypes) {
-    //                t.equal(default_func(addon, dt2.value), "." + dt2.name + "(" + JSON.stringify(dt2.value) + ")." + dt1.name + "(" + JSON.stringify(dt1.defaultValue) + ")", "default testers " + dt2.name + ", default (2nd parameter):" + dt1.name);
-    //                t.equal(default_func_2params(addon, dt2.value,dt1.value), "." + dt2.name + "(" + JSON.stringify(dt2.value) + ")." + dt1.name + "(" + JSON.stringify(dt1.value) + ")", "default testers " + dt2.name + ", passed 2nd parameter (instead of default):" + dt1.name);
-    //            }
-    //        }
+    //test structs, succes, fail, multiple
+    tape('function overload - structs', function (t) {
+        t.doesNotThrow(function () {
+            t.equal(addon.structs_testers(), "structs_testers.no_parameters", "no parameters")
+            t.equal(addon.structs_testers({ "prop1": "1", "prop2": "2" }), "structs_testers.struct_A", "structs_testers struct_A");
+            t.equal(addon.structs_testers({ "prop1": "1", "prop2": 2 }), "structs_testers.struct_B", "structs_testers struct_B");
 
-    //    });
-    //    t.end();
-    //});
+            t.equal(addon.structs_testers({ "prop1": "1", "prop2": "2" }, { "prop1": "1", "prop2": "2" }), "structs_testers.struct_A_struct_A", "structs_testers struct_A struct_A");
+            t.equal(addon.structs_testers({ "prop1": "1", "prop2": 2 }, { "prop1": "1", "prop2": 2 }), "structs_testers.struct_B_struct_B", "structs_testers struct_B struct_B");
+
+            t.equal(addon.structs_testers({ "prop1": "1", "prop2": "2" }, { "prop1": "1", "prop2": 2 }), "structs_testers.struct_A_struct_B", "structs_testers struct_A struct_B");
+            t.equal(addon.structs_testers({ "prop1": "1", "prop2": 2 }, { "prop1": "1", "prop2": "2" }), "structs_testers.struct_B_struct_A", "structs_testers struct_B struct_A");
+
+        });
+        t.end();
+    });
+
+
+
+
+
+    //test multiple parameters
+    tape('function overload 2 parameter, no defaults', function (t) {
+        t.doesNotThrow(function () {
+
+            for (var dt1 of dataTypes) {
+                for (var dt2 of dataTypes) {
+                    t.equal(addon.two_testers(dt1.value, dt2.value), "." + dt1.name + "." + dt2.name, "two_testers " + dt1.name + " " + dt2.name);
+                }
+            }
+
+        });
+        t.end();
+    });
+
+    //test array types, array types overloads, array types defaults, array<struct>, array<array<struct>>
+    tape('function overload for arrays, no defaults', function (t) {
+        t.doesNotThrow(function () {
+            t.equal(addon.array_testers(), ".no_parameters_testers", "array_testers()");
+
+            for (var dt of dataTypes) {
+                t.equal(addon.array_testers([dt.value]), ".array<" + dt.name + ">", "array_testers array<" + dt.name + ">");
+            }
+
+            for (var dt of dataTypes) {
+                t.equal(addon.array_testers([[dt.value]]), ".array<array<" + dt.name + ">>", "array_testers array<array<" + dt.name + ">>");
+            }
+
+            //test array with multiple types
+
+            for (var dt1 of dataTypes) {
+                for (var dt2 of dataTypes) {
+                    if (dt1.name != dt2.name) {
+                        t.equal(addon.array_testers([dt1.value, dt2.value]), ".array", "array_testers array (multiple types - " + dt1.name + "," + dt2.name + ")");
+                    }
+                }
+            }
+
+            for (var dt1 of dataTypes) {
+                for (var dt2 of dataTypes) {
+                    if (dt1.name != dt2.name) {
+                        t.equal(addon.array_testers([[dt1.value, dt2.value]]), ".array<array>", "array_testers array<array> (multiple types - " + dt1.name + "," + dt2.name + ")");
+                    }
+                }
+            }
+
+            for (var dt1 of dataTypes) {
+                for (var dt2 of dataTypes) {
+                    if (dt1 != dt2) {
+                        t.equal(addon.array_testers([[dt1.value], dt2.value]), ".array", "array_testers array<array> (multiple types - " + dt1.name + "," + dt2.name + ")");
+                    }
+                }
+            }
+
+            //test array with multiple values of the same type
+
+            for (var dt of dataTypes) {
+                t.equal(addon.array_testers([dt.value, dt.value]), ".array<" + dt.name + ">", "array_testers array<" + dt.name + ">");
+            }
+
+            for (var dt of dataTypes) {
+                t.equal(addon.array_testers([[dt.value, dt.value]]), ".array<array<" + dt.name + ">>", "array_testers array<array<" + dt.name + ">>");
+            }
+
+        });
+        t.end();
+    });
+
+    //test parameter defaults, test the default value is passed to function, test that passed parameter is overwriting the default value
+    tape('function overload 1 parameter, 2nd parameter default', function (t) {
+        t.doesNotThrow(function () {
+            for (var dt1 of dataTypes) {
+                var default_func = new Function("addon, val", "return addon.default_testers_" + dt1.name + "(val)");
+                var default_func_2params = new Function("addon, val1,val2", "return addon.default_testers_" + dt1.name + "(val1,val2)");
+                t.equal(default_func(addon), ".no_params", "default testers " + dt1.name + ", no parameters");
+                for (var dt2 of dataTypes) {
+                    t.equal(default_func(addon, dt2.value), "." + dt2.name + "(" + JSON.stringify(dt2.value) + ")." + dt1.name + "(" + JSON.stringify(dt1.defaultValue) + ")", "default testers " + dt2.name + ", default (2nd parameter):" + dt1.name);
+                    t.equal(default_func_2params(addon, dt2.value,dt1.value), "." + dt2.name + "(" + JSON.stringify(dt2.value) + ")." + dt1.name + "(" + JSON.stringify(dt1.value) + ")", "default testers " + dt2.name + ", passed 2nd parameter (instead of default):" + dt1.name);
+                }
+            }
+
+        });
+        t.end();
+    });
 
 
     tape('function overload 1 parameter, no defaults, with value converter', function (t) {
@@ -438,7 +438,23 @@ for (var i = 0; i < 1; i++) {
 
             for (var dt of dataTypes) {
                 t.doesNotThrow(function () {
-                    t.equal(JSON.stringify( addon.value_converter(dt.value)), "." + dt.name + "(" + JSON.stringify(dt.value) + ")", "value_converter " + dt.name);
+                    var c_result = addon.value_converter(dt.value);
+                    if (c_result.hasOwnProperty('value')) {
+                        //special return_struct
+
+                        //check if callback, if so, call it
+                        if (c_result.type == "function") {
+                            console.log("calling");
+                            c_result.value("c_result");
+                            dt.value("dt");
+                        }
+
+                        //string value for tests
+                        c_result = "." + c_result.type + "(" + JSON.stringify(c_result.value) + ")";
+
+                        
+                    }
+                    t.equal(c_result, "." + dt.name + "(" + JSON.stringify(dt.value) + ")", "value_converter " + dt.name);
                 }, "value converter executed successfully for " + dt.name);
             }
 
