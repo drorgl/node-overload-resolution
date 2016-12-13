@@ -20,6 +20,7 @@ namespace or {
 	public:
 		T Value;
 		value_holder() : value_holder_base() {}
+		value_holder(T val) : value_holder_base(), Value(val) {}
 		virtual ~value_holder() {}
 	};
 
