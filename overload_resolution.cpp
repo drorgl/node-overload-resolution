@@ -1,10 +1,15 @@
 #include "overload_resolution.h"
+#include "async_worker.h"
 
 
 std::set<std::string> overload_resolution::_convertible_primitive_types = {"Number","String","Boolean"};
 
 std::set<std::string> overload_resolution::_primitive_types = {"Number","String","Boolean","Date","Buffer","Function","Map","Set","Null","Promise","Proxy","RegExp","Array"};
 
+overload_info::overload_info(const std::string parameterName, const std::string type) {
+	this->parameterName = parameterName;
+	this->type = type;
+}
 
 overload_info::overload_info(const std::string parameterName, const std::string type, v8::Local<v8::Value> defaultValue) {
 	this->parameterName = parameterName;
@@ -393,7 +398,7 @@ int overload_resolution::MatchOverload(std::shared_ptr<o_r_function> func, Nan::
 		//TODO: check interface/structures?
 
 		//if no default value and no supplied parameter, this should not match
-		if (iparam->IsUndefined() && Nan::New(fparam->defaultValue)->IsUndefined()){
+		if (iparam->IsUndefined() && (fparam->defaultValue.IsEmpty() || Nan::New(fparam->defaultValue)->IsUndefined())){
 			return -1;
 		}
 		else {
@@ -509,7 +514,7 @@ void overload_resolution::executeBestOverload(const std::string ns, std::vector<
 			}
 
 
-			or::FunctionCallbackInfo<v8::Value> processed_info(info,info_params, bestOverloadFunction->parameters);
+			auto processed_info = std::make_shared< or ::FunctionCallbackInfo<v8::Value>>(info,info_params, bestOverloadFunction->parameters);
 
 			//TODO: handle async callbacks:
 			// if last parameter is a function not part of the best overload function, it means an async was requested
@@ -518,12 +523,23 @@ void overload_resolution::executeBestOverload(const std::string ns, std::vector<
 
 			//TODO: process returned values, check if SetReturnValue was called, if so, make sure to use the passed value, otherwise, proceed as normal
 
+
+			//check if the call is async by checking if there is additional parameter which is a function
+			//if so, execute it as an async call
+			if (info.Length() > bestOverloadFunction->parameters.size()
+				&& info[bestOverloadFunction->parameters.size()]->IsFunction()) {
+				auto async_cb = std::make_shared<Nan::Callback>(info[bestOverloadFunction->parameters.size()].As<v8::Function>());
+				queue_async_polyfunction(bestOverloadFunction->function, processed_info, async_cb);
+
+				return;
+			}
+
 			try {
 				//execute the callback function
-				bestOverloadFunction->function(processed_info);
+				bestOverloadFunction->function(*processed_info);
 
 				//execute post process on function callback info
-				processed_info.post_process();
+				processed_info->post_process();
 
 				//TODO: !!!!!!!!!!! call all callbacks post process
 				

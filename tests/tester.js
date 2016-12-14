@@ -22,10 +22,12 @@ function tablevel() {
 
 var results = {
     passed: 0,
-    failed : 0
+    failed: 0
 };
 
-tape.createStream({ objectMode: true }).on('data', (row) => {
+var tapestream = tape.createStream({ objectMode: true });
+
+tapestream.on('data', (row) => {
     //console.log(JSON.stringify(row));
     if (row.type == "end") {
         console.log();
@@ -47,16 +49,17 @@ tape.createStream({ objectMode: true }).on('data', (row) => {
         else {
             results.failed++;
             console.log(tablevel() + errorColor("%d. \t %s \t %s"), row.id, row.ok, row.name);
-            console.log(tablevel() + errorColor("\t expected: %s actual: %s"),row.expected, row.actual);
+            console.log(tablevel() + errorColor("\t expected: %s actual: %s"), row.expected, row.actual);
         }
     }
     //console.log(JSON.stringify(row))
 });
 
-tape.createStream({ objectMode: true }).on('end', (r) => {
+tapestream.on('end', (r) => {
     console.log("passed:", results.passed);
     console.log("failed:", results.failed);
 });
+
 
 
 function showObject(tobj) {
@@ -94,8 +97,8 @@ if (addon == null) {
 
 if (addon == null) {
     console.log("failed to load addon");
-    console.log("release:",aoRelease);
-    console.log("debug:",aoDebug);
+    console.log("release:", aoRelease);
+    console.log("debug:", aoDebug);
 }
 
 
@@ -133,9 +136,9 @@ for (var i = 0; i < 1; i++) {
     var dataTypes = [
         {
             value: 1,
-            defaultValue : 1,
+            defaultValue: 1,
             name: "number"
-            
+
         }
         , {
             value: 2 ^ 33,
@@ -163,38 +166,38 @@ for (var i = 0; i < 1; i++) {
             name: "string"
         }
         , {
-            value: new Date(1234* 1000),
+            value: new Date(1234 * 1000),
             defaultValue: new Date(0),
             name: "date"
         }
         , {
             value: function () { console.log("value function was called", arguments); },
-            defaultValue: function () { console.log("defaultValue function was called",arguments);},
+            defaultValue: function () { console.log("defaultValue function was called", arguments); },
             name: "function"
         }
         , {
-            value: new Map([["s1",1], ["s2",2]]),
+            value: new Map([["s1", 1], ["s2", 2]]),
             defaultValue: new Map([["s1", 1], ["s2", 2]]),
             name: "map"
         }
         , {
-            value: new Set(["k1","k2"]),
+            value: new Set(["k1", "k2"]),
             defaultValue: new Set(["k1", "k2"]),
             name: "set"
         }
         , {
-            value: new Buffer([1,2,3]),
+            value: new Buffer([1, 2, 3]),
             defaultValue: new Buffer([]),
             name: "buffer"
         }
         , {
             value: Promise.resolve(0),
-            defaultValue:Promise.resolve(0),
+            defaultValue: Promise.resolve(0),
             name: "promise"
         }
         , {
             value: new Proxy({}, {}),
-            defaultValue: new Proxy({},{}),
+            defaultValue: new Proxy({}, {}),
             name: "proxy"
         }
         , {
@@ -452,7 +455,7 @@ for (var i = 0; i < 1; i++) {
                         //string value for tests
                         c_result = "." + c_result.type + "(" + JSON.stringify(c_result.value) + ")";
 
-                        
+
                     }
                     t.equal(c_result, "." + dt.name + "(" + JSON.stringify(dt.value) + ")", "value_converter " + dt.name);
                 }, "value converter executed successfully for " + dt.name);
@@ -460,6 +463,61 @@ for (var i = 0; i < 1; i++) {
 
         });
         t.end();
+    });
+
+
+
+
+    tape('async function overload 1 parameter, no defaults, with value converter', function (t) {
+        var executions = 0;
+        t.doesNotThrow(function () {
+            t.equal(addon.value_converter(), ".no_parameters", "value_converter no_params");
+
+            for (var dt of dataTypes) {
+                t.doesNotThrow(function () {
+                    executions++;
+                    (() => {
+                        var dtlocal = dt;
+                        var tlocal = t;
+                        addon.value_converter(dt.value, function (err, c_result) {
+                            if (err) {
+                                tlocal.error(err, "while executing async value_converter " + dtlocal.name);
+                                executions--;
+                                return;
+                            }
+                            if (c_result.hasOwnProperty('value')) {
+                                //special return_struct
+
+                                //check if callback, if so, call it
+                                if (c_result.type == "function") {
+                                    console.log("calling");
+                                    c_result.value("c_result");
+                                    dtlocal.value("dt");
+                                }
+
+                                //string value for tests
+                                c_result = "." + c_result.type + "(" + JSON.stringify(c_result.value) + ")";
+
+
+                            }
+                            tlocal.equal(c_result, "." + dtlocal.name + "(" + JSON.stringify(dtlocal.value) + ")", "value_converter " + dtlocal.name);
+                            executions--;
+                        });
+                    })();
+
+                }, "value converter executed successfully for " + dt.name);
+            }
+
+        });
+        var shouldEnd = () => {
+            if (executions == 0) {
+                t.end();
+            } else {
+                setTimeout(shouldEnd, 1);
+            }
+        }
+        shouldEnd();
+
     });
 
 }

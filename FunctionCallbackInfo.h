@@ -98,15 +98,20 @@ namespace or {
 		void prefetch() {
 			for (auto i = 0; i < _arguments.size(); i++) {
 				auto oinfo = _arguments[i];
-
-				_values.push_back(_arguments[i]->value_converter->read(_params[i]));
+				if (_params.size() > i) {
+					_values.push_back(_arguments[i]->value_converter->read(_params[i]));
+				}
 			}
 		}
 
-		void post_process() {
-			if (_return != nullptr) {
+		void post_process(bool async = false) {
+			if (_return != nullptr && !async) {
 				_info.GetReturnValue().Set(_return->Get());
 			}
+		}
+
+		std::shared_ptr<generic_value_holder> Return() {
+			return _return;
 		}
 
 	protected:

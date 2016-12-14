@@ -17,6 +17,8 @@
 			  "overload_resolution.h"
 			, "overload_resolution.cpp"
 			
+			, "overload_resolution_types.h"
+			
 			, "IStructuredObject.h"
 			, "IStructuredObject.cpp"
 			
@@ -38,6 +40,8 @@
 			, "factory.h"
 			
 			, "class_typename.h"
+			
+			, "async_worker.h"
 			
 			, "README.md"
 			, "package.json"
