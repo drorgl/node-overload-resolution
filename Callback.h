@@ -9,13 +9,16 @@ namespace or {
 	class generic_value_holder;
 
 	class Callback {
+
 	public:
 		Callback() {
 			_callback = std::make_shared<Nan::Callback>();
+			is_async = false;
 		}
 
 		Callback(const v8::Local<v8::Function> &fn) {
 			_callback = std::make_shared<Nan::Callback>(fn);
+			is_async = false;
 		}
 
 		virtual ~Callback() {
@@ -30,6 +33,17 @@ namespace or {
 		}
 
 		void Call(std::vector<std::shared_ptr<generic_value_holder>> args) {
+			if (!is_async) {
+				std::vector<v8::Local<v8::Value>> params;
+				for (auto param : args) {
+					params.push_back(param->Get());
+				}
+				this->Call(params.size(), &params[0]);
+
+				//TODO: how to handle callback return values?
+				return;
+			}
+
 			if (_calls == nullptr) {
 				_calls = std::make_shared<std::vector<std::vector<std::shared_ptr<generic_value_holder>>>>();
 			}
@@ -52,6 +66,9 @@ namespace or {
 
 			return return_value;
 		}
+		
+		
+		bool is_async;
 
 	private:
 		std::shared_ptr<std::vector<std::vector<std::shared_ptr<generic_value_holder>>>> _calls = nullptr;

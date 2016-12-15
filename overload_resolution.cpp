@@ -6,23 +6,6 @@ std::set<std::string> overload_resolution::_convertible_primitive_types = {"Numb
 
 std::set<std::string> overload_resolution::_primitive_types = {"Number","String","Boolean","Date","Buffer","Function","Map","Set","Null","Promise","Proxy","RegExp","Array"};
 
-overload_info::overload_info(const std::string parameterName, const std::string type) {
-	this->parameterName = parameterName;
-	this->type = type;
-}
-
-overload_info::overload_info(const std::string parameterName, const std::string type, v8::Local<v8::Value> defaultValue) {
-	this->parameterName = parameterName;
-	this->type = type;
-	this->defaultValue.Reset(defaultValue);
-}
-
-overload_info::overload_info(const std::string parameterName, const std::string type, int defaultValue) : overload_info(parameterName, type, Nan::New(defaultValue)) {}
-overload_info::overload_info(const std::string parameterName, const std::string type, bool defaultValue) : overload_info(parameterName, type, Nan::New(defaultValue)) {}
-overload_info::overload_info(const std::string parameterName, const std::string type, std::string defaultValue) : overload_info(parameterName, type, Nan::New(defaultValue).ToLocalChecked()) {}
-overload_info::overload_info(const std::string parameterName, const std::string type, double defaultValue) : overload_info(parameterName, type, Nan::New(defaultValue)) {}
-
-
 
 overload_resolution::overload_resolution() {
 	_structured_factory = std::make_shared<Factory<IStructuredObject>>();
@@ -514,7 +497,7 @@ void overload_resolution::executeBestOverload(const std::string ns, std::vector<
 			}
 
 
-			auto processed_info = std::make_shared< or ::FunctionCallbackInfo<v8::Value>>(info,info_params, bestOverloadFunction->parameters);
+			
 
 			//TODO: handle async callbacks:
 			// if last parameter is a function not part of the best overload function, it means an async was requested
@@ -526,13 +509,18 @@ void overload_resolution::executeBestOverload(const std::string ns, std::vector<
 
 			//check if the call is async by checking if there is additional parameter which is a function
 			//if so, execute it as an async call
-			if (info.Length() > bestOverloadFunction->parameters.size()
+			if (!bestOverloadFunction->is_constructor &&  info.Length() > bestOverloadFunction->parameters.size()
 				&& info[bestOverloadFunction->parameters.size()]->IsFunction()) {
-				auto async_cb = std::make_shared<Nan::Callback>(info[bestOverloadFunction->parameters.size()].As<v8::Function>());
-				queue_async_polyfunction(bestOverloadFunction->function, processed_info, async_cb);
+				auto async_processed_info = std::make_shared< or ::FunctionCallbackInfo<v8::Value>>(info, info_params, bestOverloadFunction->parameters,true);
+				auto async_cb = std::make_shared<or::Callback>(info[bestOverloadFunction->parameters.size()].As<v8::Function>());
+				async_cb->is_async = true;
+				queue_async_polyfunction(bestOverloadFunction->function, async_processed_info, async_cb);
 
 				return;
 			}
+
+
+			auto processed_info = std::make_shared< or ::FunctionCallbackInfo<v8::Value>>(info, info_params, bestOverloadFunction->parameters, false);
 
 			try {
 				//execute the callback function

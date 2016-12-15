@@ -20,6 +20,10 @@ namespace or {
 			return _params.size();
 		}
 		inline v8::Local<v8::Value> operator[](int i) const {
+			if (is_async) {
+				throw std::exception("attempted info[] access on async call");
+			}
+
 			if (i < _params.size()) {
 				return _params[i];
 			}
@@ -28,19 +32,15 @@ namespace or {
 			}
 		}
 
-		/*template<typename atT>
-		inline std::shared_ptr<value_converter<atT>> at(int i) const {
-			return _prefetched[i]
-		}*/
 		template<typename atT>
 		inline atT at(int i) const {
 			//attempt to get converted value first
 			if (_values.size() > i) {
-				return  std::static_pointer_cast<or ::value_holder<atT>>(_values[i])->Value;
+				return  std::dynamic_pointer_cast<or ::value_holder<atT>>(_values[i])->Value;
 			}
 
 			//no converted value, retrieve value_converter and attempt to convert params to atT
-			auto argprefetcher = std::static_pointer_cast<or ::value_converter<atT>>(_arguments[i]->value_converter);
+			auto argprefetcher = std::dynamic_pointer_cast<or ::value_converter<atT>>(_arguments[i]->value_converter);
 #ifdef DEBUG
 			if (argprefetcher == nullptr) {
 				throw new std::exception("argument value_converter does not match registered type");
@@ -87,9 +87,8 @@ namespace or {
 			return _info.GetReturnValue();
 		}
 
-		FunctionCallbackInfo(Nan::NAN_METHOD_ARGS_TYPE &info, std::vector<v8::Local<v8::Value>> &params, std::vector<std::shared_ptr<overload_info>> &arguments) :
-			_info(info), _params(params), _arguments(arguments) {
-
+		FunctionCallbackInfo(Nan::NAN_METHOD_ARGS_TYPE &info, std::vector<v8::Local<v8::Value>> &params, std::vector<std::shared_ptr<overload_info>> &arguments, bool async) :
+			_info(info), _params(params), _arguments(arguments), is_async(async) {
 		}
 
 
@@ -97,16 +96,37 @@ namespace or {
 		//stores a local cache of c++ objects from passed v8 arguments
 		void prefetch() {
 			for (auto i = 0; i < _arguments.size(); i++) {
-				auto oinfo = _arguments[i];
 				if (_params.size() > i) {
-					_values.push_back(_arguments[i]->value_converter->read(_params[i]));
+					auto converted_param = _arguments[i]->value_converter->read(_params[i]);
+
+					//when executing in async mode
+					if (is_async) {
+						//functions should know they are async
+						if (_arguments[i]->type == "Function") {
+							auto func = std::dynamic_pointer_cast< or ::value_holder< std::shared_ptr<or ::Callback>>>(converted_param);
+							assert(func != nullptr && "Function is not or::Callback");
+							func->Value->is_async = true;
+						}
+					}
+
+					_values.push_back(converted_param);
 				}
 			}
 		}
 
-		void post_process(bool async = false) {
-			if (_return != nullptr && !async) {
+		void post_process() {
+			if (_return != nullptr && !is_async) {
 				_info.GetReturnValue().Set(_return->Get());
+			}
+
+			if (is_async) {
+				for (auto i = 0; i < _arguments.size(); i++) {
+					if ((_arguments[i]->type == "Function") && (_values.size() > i)) {
+						auto func = std::dynamic_pointer_cast<or ::value_holder< std::shared_ptr<or ::Callback>>>(_values[i]);
+						assert(func != nullptr && "Function is not or::Callback");
+						func->Value->post_process();
+					}
+				}
 			}
 		}
 
@@ -115,6 +135,7 @@ namespace or {
 		}
 
 	protected:
+		bool is_async;
 
 		//friend class overload_resolution;
 

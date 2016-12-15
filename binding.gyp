@@ -18,6 +18,7 @@
 			, "overload_resolution.cpp"
 			
 			, "overload_resolution_types.h"
+			, "overload_resolution_types.cpp"
 			
 			, "IStructuredObject.h"
 			, "IStructuredObject.cpp"
