@@ -11,7 +11,7 @@ namespace or {
 	public:
 		uv_work_t request;
 
-		async_worker(PolyFunctionCallback &func, std::shared_ptr< or ::FunctionCallbackInfo<v8::Value>> params,std::shared_ptr< Nan::Callback> async_cb) :_func(func), _async_cb(async_cb)  {
+		async_worker(PolyFunctionCallback &func, std::shared_ptr< or ::FunctionCallbackInfo<v8::Value>> params, std::shared_ptr< or::Callback> async_cb) :_func(func), _async_cb(async_cb) {
 			_params = params;
 			request.data = this;
 			_params->prefetch();
@@ -30,7 +30,7 @@ namespace or {
 			Nan::HandleScope scope;
 
 			try {
-				_params->post_process(true);
+				_params->post_process();
 			}
 			catch (std::exception ex) {
 				_error = ex.what();
@@ -38,6 +38,7 @@ namespace or {
 
 
 			//TODO: !!!!!!!!!!! call ALL callbacks post process
+			
 
 			//TODO: call the async callback function
 			if (_error == "") {
@@ -60,13 +61,14 @@ namespace or {
 			/*if (_error != "") {
 				Nan::ThrowError(Nan::New(_error).ToLocalChecked());
 			}*/
+			_async_cb->post_process();
 		}
 
 	protected:
 		PolyFunctionCallback &_func;
 		std::shared_ptr< or ::FunctionCallbackInfo<v8::Value>> _params;
 		std::string _error;
-		std::shared_ptr< Nan::Callback> _async_cb;
+		std::shared_ptr< or::Callback> _async_cb;
 	};
 
 	inline void async_execute(uv_work_t* req) {
@@ -89,11 +91,11 @@ namespace or {
 			);
 	}
 
-	void queue_async_polyfunction(PolyFunctionCallback &func, std::shared_ptr< or ::FunctionCallbackInfo<v8::Value>> params, std::shared_ptr<Nan::Callback> async_cb) {
+	void queue_async_polyfunction(PolyFunctionCallback &func, std::shared_ptr< or ::FunctionCallbackInfo<v8::Value>> params, std::shared_ptr<or::Callback> async_cb) {
 		auto async_instance = new async_worker(func, params, async_cb);
 		async_queue_worker(async_instance);
 	}
-	
+
 }
 
 #endif
