@@ -11,8 +11,7 @@ namespace or {
 	public:
 		uv_work_t request;
 
-		async_worker(PolyFunctionCallback &func, std::shared_ptr< or ::FunctionCallbackInfo<v8::Value>> params, std::shared_ptr< or::Callback> async_cb) :_func(func), _async_cb(async_cb) {
-			_params = params;
+		async_worker(PolyFunctionCallback &func, std::shared_ptr< or ::FunctionCallbackInfo<v8::Value>> params, std::shared_ptr< or::Callback> async_cb) :_func(func), _async_cb(async_cb), _params(params) {
 			request.data = this;
 			_params->prefetch();
 		}

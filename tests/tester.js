@@ -28,8 +28,10 @@ var results = {
 var tapestream = tape.createStream({ objectMode: true });
 
 tapestream.on('data', (row) => {
-    //console.log(JSON.stringify(row));
-    if (row.type == "end") {
+    if (typeof row == typeof "") {
+        console.log(tablevel() + row);
+    }
+    else if (row.type == "end") {
         console.log();
         level--;
     }
@@ -39,7 +41,7 @@ tapestream.on('data', (row) => {
         console.log(tablevel() + "%d. Testing %s", row.id, row.name);
     }
     else {
-        if (row.ok) {
+       if (row.ok) {
             results.passed++;
             console.log(tablevel() + okColor("%d. \t %s \t %s"), row.id, row.ok, row.name);
             if (row.operator == "throws" && row.actual != undefined) {
@@ -135,97 +137,116 @@ for (var i = 0; i < 1; i++) {
 
     var dataTypes = [
         {
+            value_converter_exists : true,
             value: 1,
             defaultValue: 1,
             name: "number"
 
         }
         , {
+            value_converter_exists: true,
             value: 2 ^ 33,
             defaultValue: 1,
             name: "number"
         }
         , {
+            value_converter_exists: true,
             value: true,
             defaultValue: true,
             name: "bool"
         }
         , {
+            value_converter_exists: true,
             value: false,
             defaultValue: true,
             name: "bool"
         }
         , {
+            value_converter_exists: true,
             value: "1",
             defaultValue: "1",
             name: "string"
         }
         , {
+            value_converter_exists: true,
             value: "str",
             defaultValue: "1",
             name: "string"
         }
         , {
+            value_converter_exists: true,
             value: new Date(1234 * 1000),
             defaultValue: new Date(0),
             name: "date"
         }
         , {
+            value_converter_exists: true,
             value: function () { console.log("value function was called", arguments); },
             defaultValue: function () { console.log("defaultValue function was called", arguments); },
             name: "function"
         }
         , {
+            value_converter_exists: true,
             value: new Map([["s1", 1], ["s2", 2]]),
             defaultValue: new Map([["s1", 1], ["s2", 2]]),
             name: "map"
         }
         , {
+            value_converter_exists: true,
             value: new Set(["k1", "k2"]),
             defaultValue: new Set(["k1", "k2"]),
             name: "set"
         }
         , {
+            value_converter_exists: true,
             value: new Buffer([1, 2, 3]),
             defaultValue: new Buffer([]),
             name: "buffer"
         }
         , {
+            value_converter_exists: false,
             value: Promise.resolve(0),
             defaultValue: Promise.resolve(0),
             name: "promise"
         }
         , {
+            value_converter_exists: false,
             value: new Proxy({}, {}),
             defaultValue: new Proxy({}, {}),
             name: "proxy"
         }
         , {
+            value_converter_exists: false,
             value: new RegExp("[a-z]"),
             defaultValue: new RegExp("[a-z]"),
             name: "regexp"
         }
         , {
+            value_converter_exists: true,
             value: new addon.base_class(),
             defaultValue: new addon.base_class(),
             name: "base_class"
         }
         , {
+            value_converter_exists: true,
             value: new addon.derived_class(),
             defaultValue: new addon.base_class(),
             name: "derived_class"
         }
         , {
+            value_converter_exists: true,
             value: { "prop1": "val1", "prop2": "val2" },
             defaultValue: { "prop1": "val1", "prop2": "val2" },
             name: "struct_A"
         }
         , {
+            value_converter_exists: true,
             value: { "prop1": "val1", "prop2": 2 },
             defaultValue: { "prop1": "val1", "prop2": 2 },
             name: "struct_B"
         }
         , {
+            value_converter_exists: true,
             value: [],
             defaultValue: [],
             name: "array"
@@ -440,6 +461,10 @@ for (var i = 0; i < 1; i++) {
             t.equal(addon.value_converter(), ".no_parameters", "value_converter no_params");
 
             for (var dt of dataTypes) {
+                if (!dt.value_converter_exists) {
+                    t.comment("value converter doesn't exist for " + dt.name + ", skipping");
+                    continue;
+                }
                 t.doesNotThrow(function () {
                     var c_result = addon.value_converter(dt.value);
                     if (c_result.hasOwnProperty('value')) {
@@ -474,6 +499,11 @@ for (var i = 0; i < 1; i++) {
             t.equal(addon.value_converter(), ".no_parameters", "value_converter no_params");
 
             for (var dt of dataTypes) {
+                if (!dt.value_converter_exists) {
+                    t.comment("value converter doesn't exist for " + dt.name + ", skipping");
+                    continue;
+                }
+
                 t.doesNotThrow(function () {
                     executions++;
                     (() => {

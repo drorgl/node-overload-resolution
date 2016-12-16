@@ -21,7 +21,6 @@
 			, "overload_resolution_types.cpp"
 			
 			, "IStructuredObject.h"
-			, "IStructuredObject.cpp"
 			
 			, "FunctionCallbackInfo.h"
 			

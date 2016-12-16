@@ -293,6 +293,7 @@ std::string overload_resolution::determineType(v8::Local<v8::Value> param) {
 		assert(false && "object base was found but not object itself!");
 	}
 
+	//possible performance optimization by caching the all() values
 	auto structured = _structured_factory->all();
 	for (auto i = 0; i < structured.size(); i++) {
 		if (structured[i].second->verify(this,param)){
@@ -348,15 +349,10 @@ int overload_resolution::MatchOverload(std::shared_ptr<o_r_function> func, Nan::
 		return 1;
 	}
 
-
-
 	for (auto i = 0; i < parameterLength; i++) {
 		int local_rank = 0;
 		auto iparam = (info.Length() > i) ? info[i] : Nan::Undefined();
 		auto fparam = (func->parameters.size() > i) ? func->parameters.at(i) : nullptr;
-
-		
-		
 
 		if (fparam == nullptr) {
 			break;
@@ -499,12 +495,12 @@ void overload_resolution::executeBestOverload(const std::string ns, std::vector<
 
 			
 
-			//TODO: handle async callbacks:
+			//handle async callbacks:
 			// if last parameter is a function not part of the best overload function, it means an async was requested
 			// in this case, cache all the function parameters, create an async wrapper, execute the function in the threadpool
 			// post process the returned values as regular functions (both SetReturnValue and function return value)
 
-			//TODO: process returned values, check if SetReturnValue was called, if so, make sure to use the passed value, otherwise, proceed as normal
+			//process returned values, check if SetReturnValue was called, if so, make sure to use the passed value, otherwise, proceed as normal
 
 
 			//check if the call is async by checking if there is additional parameter which is a function
@@ -515,6 +511,8 @@ void overload_resolution::executeBestOverload(const std::string ns, std::vector<
 				auto async_cb = std::make_shared<or::Callback>(info[bestOverloadFunction->parameters.size()].As<v8::Function>());
 				async_cb->is_async = true;
 				queue_async_polyfunction(bestOverloadFunction->function, async_processed_info, async_cb);
+
+				
 
 				return;
 			}
@@ -528,9 +526,6 @@ void overload_resolution::executeBestOverload(const std::string ns, std::vector<
 
 				//execute post process on function callback info
 				processed_info->post_process();
-
-				//TODO: !!!!!!!!!!! call all callbacks post process
-				
 
 				return;
 			}
@@ -551,7 +546,6 @@ void overload_resolution::executeBestOverload(const std::string ns, std::vector<
 
 
 Nan::NAN_METHOD_RETURN_TYPE overload_resolution::execute(const std::string name_space, Nan::NAN_METHOD_ARGS_TYPE info){
-	//assert(false);
 	bool isConstructorCall = info.IsConstructCall();
 
 	std::string functionName = *Nan::Utf8String(info.Callee()->GetName());
@@ -573,7 +567,6 @@ Nan::NAN_METHOD_RETURN_TYPE overload_resolution::execute(const std::string name_
 		className = "";
 	}
 	
-
 	
 	if (isStatic) {
 		functionName = "-" + functionName;

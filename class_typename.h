@@ -4,8 +4,7 @@
 template <typename T>
 class Class_TypeName {
 public:
-	static const char *name; // Not private
-							 // ...
+	static const char *name; 
 };
 
 #define DECLARE_CLASS_TYPENAME(x) template<> const char *Class_TypeName<x>::name = #x;

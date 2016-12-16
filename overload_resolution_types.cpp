@@ -17,4 +17,3 @@ overload_info::overload_info(const std::string parameterName, const std::string 
 overload_info::overload_info(const std::string parameterName, const std::string type, bool defaultValue) : overload_info(parameterName, type, Nan::New(defaultValue)) {}
 overload_info::overload_info(const std::string parameterName, const std::string type, std::string defaultValue) : overload_info(parameterName, type, Nan::New(defaultValue).ToLocalChecked()) {}
 overload_info::overload_info(const std::string parameterName, const std::string type, double defaultValue) : overload_info(parameterName, type, Nan::New(defaultValue)) {}
-

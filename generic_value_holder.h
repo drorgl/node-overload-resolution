@@ -30,11 +30,6 @@ namespace or {
 			Set(returnPrefetcher, valueHolder);
 		}
 
-		//template<typename T>
-		//std::shared_ptr<T> GetValueHolder() {
-		//	return std::dynamic_pointer_cast<or ::value_holder<T>>(_value);
-		//}
-
 		v8::Local<v8::Value> Get() {
 			return _prefetcher->convert(_value);
 		}

@@ -29,7 +29,12 @@ namespace or {
 		}
 
 		v8::Local<v8::Value> Call(int argc, v8::Local<v8::Value> argv[]) {
-			return _callback->Call(argc, argv);
+			Nan::TryCatch tc;
+			auto returnValue = _callback->Call(argc, argv);
+			if (tc.HasCaught()) {
+				returnValue = tc.ReThrow();
+			}
+			return returnValue;
 		}
 
 		void Call(std::vector<std::shared_ptr<generic_value_holder>> args) {

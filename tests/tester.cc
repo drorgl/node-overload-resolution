@@ -22,7 +22,7 @@ NAN_METHOD(testfunction_no_overload_resolution) {
 
 
 void init(v8::Handle<v8::Object> target) {
-	assert(false);
+	//assert(false);
 	auto overload = std::make_shared<overload_resolution>();
 
 	overload->add_type_alias("int", "Number");
@@ -31,7 +31,6 @@ void init(v8::Handle<v8::Object> target) {
 	overload->add_type_alias("string", "String");
 	overload->add_type_alias("bool", "Boolean");
 
-	//overload->register_type<IStructuredObject>("", "IStructuredObject");
 	overload->register_type<struct_A>("", "struct_A");
 	overload->register_type<struct_B>("", "struct_B");
 
@@ -48,32 +47,6 @@ void init(v8::Handle<v8::Object> target) {
 	or_value_converter::RegisterORTesters(target, overload);
 
 	assert(overload->validate_type_registrations());
-
-
-	//test strong type parameters
-	//printf(MyClass<int>::name);
-	//printf("\r\n");
-	//printf(MyClass<std::vector<std::string>>::name);
-	//printf("\r\n");
-	//DECLARE_TYPE_NAME(std::vector<std::string>);
-
-
-	//printf(gettype<std::vector<std::string>>());
-	//printf("\r\n");
-
-	//printf(typeid(std::vector<std::string>).name());
-	//printf("\r\n");
-	//printf(typeid(v8::Object).name());
-	//printf("\r\n");
-
-
-	//array<string>
-	//array<int>
-	//array<array<int>>
-	//array<array<number>>
-	//array<array<struct_A>>
-	//overload->addOverload("", "derived_class", "base_function", { make_param("a","Array<Number>",Nan::Undefined()) }, base_function_number);
-	//overload->addOverload("", "derived_class", "base_function", { make_param("a","Array<Array<Number>>",Nan::Undefined()) }, base_function_number);
 
 }
 
