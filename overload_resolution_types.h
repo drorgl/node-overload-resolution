@@ -58,8 +58,6 @@ inline std::shared_ptr<overload_info> make_param(const std::string parameterName
 
 template<typename T>
 inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type) {
-	//todo: add default value conversion
-	//todo: add value_converter to overload_info
 	auto value_converter = std::make_shared < or ::value_converter<T>>();
 	auto oi = std::make_shared<overload_info>(parameterName, type);
 	oi->value_converter = value_converter;
@@ -69,17 +67,12 @@ inline std::shared_ptr<overload_info> make_param(const std::string parameterName
 
 template<typename T>
 inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type, std::shared_ptr<T> defaultValue) {
-	//todo: add default value conversion
-	//todo: add value_converter to overload_info
 	auto value_converter = std::make_shared < or ::value_converter<T>>();
 	auto oi = std::make_shared<overload_info>(parameterName, type, value_converter->convert(defaultValue));
 	oi->value_converter = value_converter;
 
 	return oi;
 }
-
-
-
 
 
 struct o_r_function {

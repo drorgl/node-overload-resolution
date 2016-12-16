@@ -52,72 +52,8 @@
 ////on constructor, register each function signature and c++ function that implements it
 ////supply global callback for all functions
 //
-////when called, get the function name callback
-////parse the registered functions, find possible matches:
-////1. by name
-////2. by passed parameters, give higher weight to passed parameters, lower weight to default parameters, even lower weight to convertible parameters
-////3. discard non-matching options
-////4. sort by highest score
-////5. execute
-//
-//
-////TODO:
-////1. figure out a way to check the exact parameter types passed and their convertible options
-////2. figure out a way to identify exposed types, Mat or Vec for example, and their parents/convertibles/interfaces
-////3. figure out a way to identify arrays of types and objects
-//
-////two ways to get the type
-////functiontemplate->HasInstance
-////name each class with className
-////GetConstructorName()
-//
-//
-////how to handle generic types? two options,
-////1. register each overload as different type, for example 
-////   register Matx<int> and Matx<double> as two different overloads, the problem will be with combined values as Cartesian product.
-////2. register as strings where T is replacable in comparison
-//
-////null or undefined are considered missing values
-//
-////how to handle inheritance, for example, is function expects Algorithm but MinProblemSolver instance was passed.
-//
-//
-////to distinguish between integer and double:
-////int64_t ival = val->IntegerValue();
-////double dval = val->NumberValue();
-////
-////if (ival != 0 && ival == dval) return ival;
-////
-////if (dval > std::numeric_limits<uint64_t>::max()
-////	|| dval < std::numeric_limits<uint64_t>::min())
-////	throw ML::Exception("Cannot fit " + cstr(val) + " into an integer");
-//
-//
 
-//
-//
-//struct o_r_typeinfo {
-//	const std::string type_name;
-//	const bool isString;
-//	const bool isNumber;
-//	const bool isArray;
-//	const bool isBuffer;
-//	const bool isDate;
-//	const bool isFunction;
-//	const bool isConstructorFunction;
-//	const bool isMap;
-//	const bool isSet;
-//	const bool isNull;
-//	const bool isPromise;
-//	const bool isProxy;
-//	const bool isRegExp;
-//	const bool isNativeStruct;
-//	const bool isNativeClass;
-//
-//
-//};
 
-class IStructuredObject;
 
 class overload_resolution {
 private:

@@ -76,7 +76,6 @@ namespace or {
 		inline void SetReturnValue(retT returnValue) const {
 			const_cast<FunctionCallbackInfo<T>*>(this)->_return = std::make_shared<generic_value_holder>();
 			_return->Set<retT>(returnValue);
-			////Nan::ThrowSyntaxError
 		}
 
 		
@@ -119,7 +118,8 @@ namespace or {
 				_info.GetReturnValue().Set(_return->Get());
 			}
 
-			if (is_async) {
+			//Call all callbacks post process
+			//if (is_async) {
 				for (auto i = 0; i < _arguments.size(); i++) {
 					if ((_arguments[i]->type == "Function") && (_values.size() > i)) {
 						auto func = std::dynamic_pointer_cast<or ::value_holder< std::shared_ptr<or ::Callback>>>(_values[i]);
@@ -127,7 +127,7 @@ namespace or {
 						func->Value->post_process();
 					}
 				}
-			}
+			//}
 		}
 
 		std::shared_ptr<generic_value_holder> Return() {
@@ -136,8 +136,6 @@ namespace or {
 
 	protected:
 		bool is_async;
-
-		//friend class overload_resolution;
 
 		Nan::NAN_METHOD_ARGS_TYPE _info;
 

@@ -10,7 +10,6 @@
 namespace or {
 	class DateTime {
 	private:
-		//time_t _datetime;
 		std::time_t _datetime;
 
 	public:

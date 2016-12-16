@@ -36,7 +36,6 @@ namespace or {
 
 		virtual T convert(v8::Local<v8::Value> from) {
 			DECLARE_CLASS_TYPENAME(T)
-
 #pragma message ("not implemented, need template specialization " T)
 			throw std::exception("not implemented, need template specialization for " + Class_TypeName<T>::name);
 		}
@@ -44,14 +43,9 @@ namespace or {
 
 		virtual v8::Local<v8::Value> convert(T from) {
 			DECLARE_CLASS_TYPENAME(T)
-
 #pragma message ("not implemented, need template specialization " T)
 			throw std::exception("not implemented, need template specialization for " + Class_TypeName<T>::name);
 		}
-
-		//virtual v8::Local<v8::Value> convert(std::shared_ptr<T> from) {
-		//	return Nan::New(*from);
-		//}
 
 		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
 			auto from_value = std::dynamic_pointer_cast<value_holder<T>>(from);
@@ -454,6 +448,7 @@ namespace or {
 	public:
 
 		virtual int convert(v8::Local<v8::Value> from) {
+			//TODO: decide if value should be checked against std::numeric_limits<T>::max() and std::numeric_limits<T>::min() 
 			return from->IntegerValue();
 		}
 
@@ -486,6 +481,7 @@ namespace or {
 	public:
 
 		virtual uint8_t convert(v8::Local<v8::Value> from) {
+			//TODO: decide if value should be checked against std::numeric_limits<T>::max() and std::numeric_limits<T>::min() 
 			return from->IntegerValue();
 		}
 
@@ -570,269 +566,6 @@ namespace or {
 		}
 
 	};
-
-
-
-	/*template<>
-	class value_converter<Nan::Callback> : public value_converter_base {
-	public:
-
-		virtual Nan::Callback convert(v8::Local<v8::Value> from) {
-			return Nan::Callback(from.As<v8::Function>());
-		}
-
-
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<Nan::Callback> from) {
-			return Nan::Undefined();
-		}
-
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
-			auto from_value = std::dynamic_pointer_cast<value_holder<Nan::Callback>>(from);
-			return Nan::Undefined();
-		}
-	};*/
-
-	//template<typename T>
-	//class value_converter : public value_converter_base{
-	//public:
-	//	T* convert(v8::Local<v8::Value> from) {
-	//		assert(from->IsObject() && "not a v8::Object for c++ object conversion");
-	//		auto obj = from.As<v8::Object>();
-	//		assert(!from.IsEmpty() && "empty");
-	//		assert(obj->InternalFieldCount() > 0 && "not a C++ object");
-
-	//		void* ptr = obj->GetAlignedPointerFromInternalField(0);
-	//		return (T*)(ptr);
-	//	}
-
-	//	v8::Local<v8::Value> convert(T* from) {
-	//		return Nan::Undefined();
-	//	}
-
-	//	v8::Local<v8::Value> convert(std::shared_ptr<T> from) {
-	//		return Nan::Undefined();
-	//	}
-
-	//	v8::Local<v8::Value> convert(value_holder<T> from) {
-	//		return Nan::Undefined();
-	//	}
-
-	//	virtual v8::Local<v8::Value> convert(std::shared_ptr< value_holder_base> from) {
-	//		auto from_value = std::dynamic_pointer_cast<value_holder<T>>(from);
-	//		return Nan::Undefined();
-	//	}
-
-	//	value_converter() : value_converter_base() {}
-
-	//	virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
-	//		auto parsed_value = std::make_shared<value_holder<T>>();
-	//		parsed_value->Value = convert(val);
-	//		return parsed_value;
-	//	}
-
-	//	virtual ~value_converter() {}
-	//};
-
-	//
-	//template<>
-	//class value_converter<IStructuredObject *> : public value_converter_base {
-	//public:
-	//	std::shared_ptr<IStructuredObject> convert(v8::Local<v8::Value> from) {
-	//		//return from->IntegerValue();
-	//		return nullptr;
-	//	}
-
-	//	v8::Local<v8::Value> convert(IStructuredObject *from) {
-	//		return from->ToObject();
-	//	}
-
-	//	v8::Local<v8::Value> convert(std::shared_ptr<IStructuredObject> from) {
-	//		if (from == nullptr) {
-	//			return Nan::Undefined();
-	//		}
-	//		return from->ToObject();
-	//	}
-
-	//	v8::Local<v8::Value> convert(value_holder<IStructuredObject *> from) {
-	//		
-	//		return from.Value->ToObject();
-	//	}
-
-
-	//	virtual v8::Local<v8::Value> convert(std::shared_ptr< value_holder_base> from) {
-	//		auto from_value = std::dynamic_pointer_cast<value_holder<IStructuredObject>>(from);
-	//		return from_value->Value->ToObject();
-	//	}
-
-	//	virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
-	//		auto parsed_value = std::make_shared<value_holder<std::shared_ptr<IStructuredObject>>>();
-	//		parsed_value->Value = convert(val);
-	//		return parsed_value;
-	//	}
-
-	//	value_converter() : value_converter_base() {}
-
-	//	virtual ~value_converter() {}
-	//};
-
-
-	//
-
-	//template<>
-	//class value_converter<int> : public value_converter_base {
-	//public:
-	//	int convert(v8::Local<v8::Value> from) {
-	//		return from->IntegerValue();
-	//	}
-
-	//	v8::Local<v8::Value> convert(int from) {
-	//		return Nan::New(from);
-	//	}
-
-	//	v8::Local<v8::Value> convert(std::shared_ptr<int> from) {
-	//		if (from == nullptr) {
-	//			return Nan::Undefined();
-	//		}
-	//		return Nan::New(*from);
-	//	}
-
-	//	v8::Local<v8::Value> convert(value_holder<int> from) {
-	//		return Nan::New(from.Value);
-	//	}
-
-	//	virtual v8::Local<v8::Value> convert(std::shared_ptr< value_holder_base> from) {
-	//		auto from_value = std::dynamic_pointer_cast<value_holder<int>>(from);
-	//		return Nan::New(from_value->Value);
-	//	}
-
-	//	virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
-	//		auto parsed_value = std::make_shared<value_holder<int>>();
-	//		parsed_value->Value = convert(val);
-	//		return parsed_value;
-	//	}
-
-	//	value_converter() : value_converter_base() {}
-
-	//	virtual ~value_converter() {}
-	//};
-
-	//template<>
-	//class value_converter<double> : public value_converter_base {
-	//public:
-	//	double convert(v8::Local<v8::Value> from) {
-	//		return from->IntegerValue();
-	//	}
-
-	//	v8::Local<v8::Value> convert(double from) {
-	//		return Nan::New(from);
-	//	}
-
-	//	v8::Local<v8::Value> convert(std::shared_ptr<double> from) {
-	//		if (from == nullptr) {
-	//			return Nan::Undefined();
-	//		}
-	//		return Nan::New(*from);
-	//	}
-
-	//	v8::Local<v8::Value> convert(value_holder<double> from) {
-	//		return Nan::New(from.Value);
-	//	}
-
-	//	virtual v8::Local<v8::Value> convert(std::shared_ptr< value_holder_base> from) {
-	//		auto from_value = std::dynamic_pointer_cast<value_holder<double>>(from);
-	//		return Nan::New(from_value->Value);
-	//	}
-
-	//	virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
-	//		auto parsed_value = std::make_shared<value_holder<double>>();
-	//		parsed_value->Value = convert(val);
-	//		return parsed_value;
-	//	}
-
-	//	value_converter() : value_converter_base() {}
-
-	//	virtual ~value_converter() {}
-	//};
-
-	//template<>
-	//class value_converter<bool> : public value_converter_base {
-	//public:
-	//	bool convert(v8::Local<v8::Value> from) {
-	//		return from->IntegerValue();
-	//	}
-
-	//	v8::Local<v8::Value> convert(bool from) {
-	//		return Nan::New(from);
-	//	}
-
-	//	v8::Local<v8::Value> convert(std::shared_ptr<bool> from) {
-	//		if (from == nullptr) {
-	//			return Nan::Undefined();
-	//		}
-	//		return Nan::New(*from);
-	//	}
-
-	//	v8::Local<v8::Value> convert(value_holder<bool> from) {
-	//		return Nan::New(from.Value);
-	//	}
-
-	//	virtual v8::Local<v8::Value> convert(std::shared_ptr< value_holder_base> from) {
-	//		auto from_value = std::dynamic_pointer_cast<value_holder<bool>>(from);
-	//		return Nan::New(from_value->Value);
-	//	}
-
-	//	virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
-	//		auto parsed_value = std::make_shared<value_holder<bool>>();
-	//		parsed_value->Value = convert(val);
-	//		return parsed_value;
-	//	}
-
-	//	value_converter() : value_converter_base() {}
-
-	//	virtual ~value_converter() {}
-	//};
-
-	//template<>
-	//class value_converter<std::string> : public value_converter_base {
-	//public:
-
-	//	std::string convert(v8::Local<v8::Value> from) {
-	//		return *Nan::Utf8String(from->ToString());
-	//	}
-
-	//	v8::Local<v8::Value> convert(std::string from) {
-	//		return Nan::New(from).ToLocalChecked();
-	//	}
-
-	//	v8::Local<v8::Value> convert(std::shared_ptr<std::string> from) {
-	//		if (from == nullptr) {
-	//			return Nan::Undefined();
-	//		}
-	//		return Nan::New(*from).ToLocalChecked();
-	//	}
-
-	//	v8::Local<v8::Value> convert(value_holder<std::string> from) {
-	//		return Nan::New(from.Value).ToLocalChecked();
-	//	}
-
-	//	virtual v8::Local<v8::Value> convert(std::shared_ptr< value_holder_base> from) {
-	//		auto from_value = std::dynamic_pointer_cast<value_holder<std::string>>(from);
-	//		return Nan::New(from_value->Value).ToLocalChecked();
-	//	}
-
-	//	virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
-	//		auto parsed_value = std::make_shared<value_holder<std::string>>();
-	//		parsed_value->Value = convert(val);
-	//		return parsed_value;
-	//	}
-
-	//	value_converter() : value_converter_base() {}
-
-	//	virtual ~value_converter() {}
-	//};
-
-
-
 
 }
 #endif
