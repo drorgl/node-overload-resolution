@@ -103,6 +103,11 @@ if (addon == null) {
     console.log("debug:", aoDebug);
 }
 
+addon.RegisterLogger(function (module, logLevel, message) {
+    console.log(module, logLevel, message);
+});
+
+addon.Flush();
 
 for (var i = 0; i < 1; i++) {
 
@@ -110,8 +115,6 @@ for (var i = 0; i < 1; i++) {
         t.equal(addon.testfunction_no_overload_resolution(), "testfunction_no_overload_resolution", "function without overload returned true");
         t.end();
     });
-
-
 
     tape('base_function on base_class', function (t) {
         var bc = new addon.base_class();
