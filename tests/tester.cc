@@ -14,6 +14,8 @@
 #include "or_default_tester.h"
 #include "or_value_converter.h"
 
+#include <tracer.h>
+
 
 NAN_METHOD(testfunction_no_overload_resolution) {
 	info.GetReturnValue().Set(Nan::New<v8::String>("testfunction_no_overload_resolution").ToLocalChecked());
@@ -22,6 +24,7 @@ NAN_METHOD(testfunction_no_overload_resolution) {
 
 
 void init(v8::Handle<v8::Object> target) {
+	tracer::Init(target);
 	//assert(false);
 	auto overload = std::make_shared<overload_resolution>();
 

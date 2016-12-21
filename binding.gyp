@@ -7,6 +7,9 @@
 			"./",
 			"<!(node -e \"require('nan')\")"
 		],
+		"dependencies":[
+			"../node-addon-tracer/binding.gyp:node-addon-tracer"
+		  ],
 		"direct_dependent_settings":{
 			"include_dirs":[
 				"./",
@@ -50,7 +53,8 @@
     {
       "target_name": "overload-tester",
 	  "dependencies":[
-		"node-overload-resolution"
+		"node-overload-resolution",
+		"../node-addon-tracer/binding.gyp:node-addon-tracer"
 	  ],
       "sources": [ 
 		  "tests/tester.cc"
