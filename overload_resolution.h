@@ -16,6 +16,7 @@
 #include <nan.h>
 
 #include <map>
+#include <unordered_map>
 #include <functional>
 
 #include <set>
@@ -78,6 +79,8 @@ private:
 	//overload registry
 	std::map<std::string, std::shared_ptr<o_r_namespace>> _namespaces;
 
+	std::unordered_map<std::string, std::string> _cached_normalization;
+
 	//new() : Affine3<T>;
 	//new (affine: _matx.Matx<T>) : Affine3<T>;
 	//new (data: _mat.Mat, t ? : _matx.Vec<T> /*= Vec3::all(0)*/) : Affine3<T>;
@@ -96,6 +99,8 @@ private:
 	std::string drill_type_aliases(std::string alias);
 
 	std::string normalize_types(std::string type);
+
+	void LogDebug(std::string message);
 public:
 	overload_resolution();
 
@@ -108,7 +113,8 @@ public:
 
 	//register struct
 	template <typename TDerived>
-	void register_type(const std::string ns, const std::string name) {
+	void register_type(const std::string ns, const std::string name) {	
+		LogDebug("registering type " + ns + "::" + name);
 		_structured_factory->register_type<TDerived>(name);
 	}
 

@@ -10,6 +10,8 @@ std::set<std::string> overload_resolution::_primitive_types = {"Number","String"
 
 overload_resolution::overload_resolution() {
 	tracer::Log("overload_resolution", LogLevel::DEBUG, "initializing");
+	tracer::Log("overload_resolution", LogLevel::DEBUG, []() {return "primitive types " + tracer::join(overload_resolution::_primitive_types, ", "); });
+	tracer::Log("overload_resolution", LogLevel::DEBUG, []() {return "convertible primitive types " + tracer::join(overload_resolution::_convertible_primitive_types, ", "); });
 	_structured_factory = std::make_shared<Factory<IStructuredObject>>();
 }
 
@@ -25,15 +27,19 @@ overload_resolution::~overload_resolution() {
 #endif
 }
 
+void overload_resolution::LogDebug(std::string message) {
+	tracer::Log("overload_resolution", LogLevel::DEBUG, message);
+}
+
 void overload_resolution::add_type_alias(std::string alias, std::string type) {
 	tracer::Log("overload_resolution", LogLevel::DEBUG, [&alias, &type]() {return "adding alias " + alias + " for " + type; });
 	_type_aliases[alias] = type;
 }
 
 std::string overload_resolution::drill_type_aliases(std::string alias) {
-	tracer::Log("overload_resolution", LogLevel::DEBUG, [&alias]() {return "drilling alias " + alias; });
 	if (_type_aliases.count(alias)) {
 		auto type = _type_aliases[alias];
+		tracer::Log("overload_resolution", LogLevel::TRACE, [&alias, &type]() {return "drilling alias " + alias + " of " + type; });
 		return drill_type_aliases(type);
 	}
 	else {
@@ -57,10 +63,19 @@ void overload_resolution::register_type(v8::Local<v8::FunctionTemplate> function
 }
 
 std::string overload_resolution::normalize_types(std::string type) {
-	tracer::Log("overload_resolution", LogLevel::DEBUG, [&type]() {return "normalizing type " + type; });
+	//if type was already normalized, return the cached normalization
+	if (_cached_normalization.count(type)) {
+		return _cached_normalization[type];
+	}
+
+	tracer::Log("overload_resolution", LogLevel::TRACE, [&type]() {return "normalizing type " + type; });
+
+	auto raw_type = type;
 	auto genericBegin = type.find("<");
 	if (genericBegin == std::string::npos) {
-		return drill_type_aliases(type);
+		auto drilled_types = drill_type_aliases(type);
+		_cached_normalization[raw_type] = drilled_types;
+		return drilled_types;
 	}
 
 	auto genericEnd = type.find_last_of(">");
@@ -75,11 +90,13 @@ std::string overload_resolution::normalize_types(std::string type) {
 	type = type.replace(0, genericBegin, normalize_types(genericType));
 	auto between = type.substr(genericBegin + 1, genericEnd - genericBegin - 1);
 	type = type.replace(genericBegin + 1, genericEnd - genericBegin - 1, normalize_types(between));
+
+	_cached_normalization[raw_type] = type;
 	return type;
 }
 
 void overload_resolution::split_generic_types(std::string type, std::set<std::string> &types) {
-	tracer::Log("overload_resolution", LogLevel::DEBUG, [&type, types]() {return "splitting generic types " + type; });
+	tracer::Log("overload_resolution", LogLevel::TRACE, [&type, types]() {return "splitting generic types " + type; });
 	auto genericBegin = type.find("<");
 	if (genericBegin == std::string::npos) {
 		types.insert(drill_type_aliases(type));
@@ -140,7 +157,7 @@ bool overload_resolution::validate_type_registrations() {
 }
 
 void overload_resolution::create_function_store(const std::string ns, const std::string className, const std::string functionName) {
-	tracer::Log("overload_resolution", LogLevel::DEBUG, [&ns, &className, &functionName]() {return "create function store " + ns + "::" + className + "::" + functionName; });
+	tracer::Log("overload_resolution", LogLevel::TRACE, [&ns, &className, &functionName]() {return "create function store " + ns + "::" + className + "::" + functionName; });
 	//check if namespace exists, if not, create
 	if (!_namespaces.count(ns)) {
 		_namespaces[ns] = std::make_shared<o_r_namespace>();
@@ -227,9 +244,13 @@ void overload_resolution::get_array_types(v8::Local<v8::Value> arr, std::set<std
 	for (auto i = 0; i < v8arr->Length(); i++) {
 		types.insert(drill_type_aliases(determineType(v8arr->Get(i))));
 	}
+	//TODO: add arr?... could be problematic
+	tracer::Log("overload_resolution", LogLevel::TRACE, [&arr, &types]() {return "get array types " + tracer::join(types,", ") ; });
 }
 
 std::string overload_resolution::determineType(v8::Local<v8::Value> param) {
+	//TODO: serialize param
+	tracer::Log("overload_resolution", LogLevel::TRACE, [&param]() {return "determine type " + std::string(*Nan::Utf8String(param->ToDetailString())); });
 	if (param->IsArray()) {
 		std::set <std::string> arrtypes;
 		get_array_types(param, arrtypes);
@@ -346,7 +367,7 @@ std::string overload_resolution::determineType(v8::Local<v8::Value> param) {
 }
 
 bool overload_resolution::isConvertibleTo(v8::Local<v8::Value> param, const std::string type) {
-	tracer::Log("overload_resolution", LogLevel::DEBUG, [&param, &type]() {return "checking if object " + std::string(*Nan::Utf8String( param->ToDetailString())) + " is convertible to " + type; });
+	tracer::Log("overload_resolution", LogLevel::TRACE, [&param, &type]() {return "checking if object " + std::string(*Nan::Utf8String( param->ToDetailString())) + " is convertible to " + type; });
 	//if converting to number, check that the numbervalue is not nan
 	if (type == "Number") {
 		if (std::isnan(param->NumberValue())) {
@@ -379,12 +400,13 @@ bool overload_resolution::isConvertibleTo(v8::Local<v8::Value> param, const std:
 
 int overload_resolution::MatchOverload(std::shared_ptr<o_r_function> func, Nan::NAN_METHOD_ARGS_TYPE info) {
 	//TODO: add parameters + static/constructor to log
-	tracer::Log("overload_resolution", LogLevel::DEBUG, [&func]() {return "matching overload for " + func->className + "::" + func->functionName; });
+	tracer::Log("overload_resolution", LogLevel::TRACE, [&func]() {return "matching overload for " + func->className + "::" + func->functionName; });
 	int parameterLength = std::max((int)func->parameters.size(), info.Length());
 	int rank = 0;
 
 	//in case there are no parameters to this function, its always a possible candidate, though low priority
 	if ((func->parameters.size() == 0)) {
+		tracer::Log("overload_resolution", LogLevel::TRACE, [&func]() {return "function has no parameters, low priority candidate"; });
 		return 1;
 	}
 
@@ -394,18 +416,24 @@ int overload_resolution::MatchOverload(std::shared_ptr<o_r_function> func, Nan::
 		auto fparam = (func->parameters.size() > i) ? func->parameters.at(i) : nullptr;
 
 		if (fparam == nullptr) {
+			tracer::Log("overload_resolution", LogLevel::TRACE, [&i]() {return "extra unused parameter passed at index " + std::to_string(i); });
 			break;
 		}
 		
 		//check if the function parameter and info parameter types are the same
-		if (normalize_types(fparam->type) == determineType(iparam)) {
+		auto fparam_normalized_type = normalize_types(fparam->type);
+		auto iparam_type = determineType(iparam);
+		if (fparam_normalized_type == iparam_type) {
+			tracer::Log("overload_resolution", LogLevel::TRACE, [&fparam, &iparam, &fparam_normalized_type, &iparam_type]() {return "exact type matched " + fparam_normalized_type + "(" + fparam->type + ") == " + iparam_type;  });
 			local_rank += 2^10;
 		}
 		
 
 		//check if the function parameter and info parameter types are convertible
 		//make sure undefined was actually passed so conversion to boolean won't be used
-		if ((info.Length() > i) && isConvertibleTo(iparam, drill_type_aliases(fparam->type))) {
+		auto fparam_aliases = drill_type_aliases(fparam->type);
+		if ((info.Length() > i) && isConvertibleTo(iparam, fparam_aliases )) {
+			tracer::Log("overload_resolution", LogLevel::TRACE, [&fparam_aliases]() {return "type is convertible to " + fparam_aliases ; });
 			local_rank += 2^2;
 		}
 
@@ -417,6 +445,7 @@ int overload_resolution::MatchOverload(std::shared_ptr<o_r_function> func, Nan::
 
 		//if no default value and no supplied parameter, this should not match
 		if (iparam->IsUndefined() && (fparam->defaultValue.IsEmpty() || Nan::New(fparam->defaultValue)->IsUndefined())){
+			tracer::Log("overload_resolution", LogLevel::TRACE, [&i]() {return "no parameter is available as either passed or default at index " + i; });
 			return -1;
 		}
 		else {
@@ -429,6 +458,7 @@ int overload_resolution::MatchOverload(std::shared_ptr<o_r_function> func, Nan::
 			rank += local_rank;
 		}
 		else {
+			tracer::Log("overload_resolution", LogLevel::TRACE, [&func]() {return "overload for " + func->className + "::" + func->functionName + " does not match"; });
 			return -1;
 		}
 	}
@@ -437,7 +467,6 @@ int overload_resolution::MatchOverload(std::shared_ptr<o_r_function> func, Nan::
 }
 
 void overload_resolution::getPrototypeChain(v8::Local<v8::Value> param, std::vector<std::string> &chain) {
-	tracer::Log("overload_resolution", LogLevel::DEBUG, [&param]() {return "checking prototype chain for " + std::string(*Nan::Utf8String(param->ToDetailString())); });
 	if (!param->IsObject()) {
 		return;
 	}
@@ -451,11 +480,21 @@ void overload_resolution::getPrototypeChain(v8::Local<v8::Value> param, std::vec
 
 	chain.push_back(constructorName);
 	getPrototypeChain(pobject->GetPrototype(), chain);
+	tracer::Log("overload_resolution", LogLevel::TRACE, [&param, &chain]() {return "checking prototype chain for " + std::string(*Nan::Utf8String(param->ToDetailString())) + ": " + tracer::join(chain,", "); });
 }
 
 void overload_resolution::executeBestOverload(const std::string ns, std::vector<std::string> &classNames, const std::string name, Nan::NAN_METHOD_ARGS_TYPE info) {
 	//TODO: add arguments to the log
-	tracer::Log("overload_resolution", LogLevel::DEBUG, [&ns, &classNames, &name]() {return "executing best overload for " + ns + "::(" + tracer::join(classNames, "/" ) + ")::" + name; });
+	tracer::Log("overload_resolution", LogLevel::DEBUG, [&ns, &classNames, &name, &info]() {
+		std::string arguments = "";
+		for (auto i = 0; i < info.Length(); i++) {
+			if (i > 0) {
+				arguments += ", ";
+			}
+			arguments += *Nan::Utf8String(info[i]->ToDetailString());
+		}
+		return "executing best overload for " + ns + "::(" + tracer::join(classNames, "/" ) + ")::" + name + "(" + arguments +  ")"; 
+	});
 	std::vector<std::pair<int,std::weak_ptr< o_r_function>>> candidates;
 
 	std::vector < std::shared_ptr< o_r_class>> classes;
@@ -518,11 +557,15 @@ void overload_resolution::executeBestOverload(const std::string ns, std::vector<
 
 	}
 
+	tracer::Log("overload_resolution", LogLevel::TRACE, [&ns, &classNames, &name,&candidates]() {return "function " + ns + "::(" + tracer::join(classNames, "/") + ")::" + name + " has " +std::to_string( candidates.size()) + " valid candidates"; });
+
 	//log the best one
 	//if none found, throw an exception that no overload satisfies the supplied parameters and the best overloaded candidate
 	if (candidates.size() > 0) {
 		auto bestOverload = std::max_element(candidates.begin(), candidates.end(), [](std::pair<int,std::weak_ptr< o_r_function>> a, std::pair<int,std::weak_ptr< o_r_function>> b) {return a.first < b.first; });
 		if (auto bestOverloadFunction = bestOverload->second.lock()) { // Has to be copied into a shared_ptr before usage
+			tracer::Log("overload_resolution", LogLevel::DEBUG, [&bestOverloadFunction,&ns, &classNames, &name]() {return "best candidate is " + ns + "::(" + tracer::join(classNames, "/") + ")::" + name + "(" + tracer::join<std::shared_ptr<overload_info>>(bestOverloadFunction->parameters, [](std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ") + ")";});
+
 
 			auto parametersLength = std::max(info.Length(), (int)bestOverloadFunction->parameters.size());
 			std::vector<v8::Local<v8::Value>> info_params;
@@ -553,6 +596,8 @@ void overload_resolution::executeBestOverload(const std::string ns, std::vector<
 			//if so, execute it as an async call
 			if (!bestOverloadFunction->is_constructor &&  info.Length() > bestOverloadFunction->parameters.size()
 				&& info[bestOverloadFunction->parameters.size()]->IsFunction()) {
+				tracer::Log("overload_resolution", LogLevel::DEBUG, [&ns, &classNames, &name]() {return "function " + ns + "::(" + tracer::join(classNames, "/") + ")::" + name + " was requested async execution"; });
+
 				auto async_processed_info = std::make_shared< or ::FunctionCallbackInfo<v8::Value>>(info, info_params, bestOverloadFunction->parameters,true);
 				auto async_cb = std::make_shared<or::Callback>(info[bestOverloadFunction->parameters.size()].As<v8::Function>());
 				async_cb->is_async = true;
@@ -565,7 +610,7 @@ void overload_resolution::executeBestOverload(const std::string ns, std::vector<
 
 
 			auto processed_info = std::make_shared< or ::FunctionCallbackInfo<v8::Value>>(info, info_params, bestOverloadFunction->parameters, false);
-
+			tracer::Log("overload_resolution", LogLevel::DEBUG, [&ns, &classNames, &name]() {return "function " + ns + "::(" + tracer::join(classNames, "/") + ")::" + name + " was requested sync execution"; });
 			try {
 				//execute the callback function
 				bestOverloadFunction->function(*processed_info);
@@ -597,7 +642,7 @@ void overload_resolution::executeBestOverload(const std::string ns, std::vector<
 
 Nan::NAN_METHOD_RETURN_TYPE overload_resolution::execute(const std::string name_space, Nan::NAN_METHOD_ARGS_TYPE info){
 	//TODO: add info to log entry
-	tracer::Log("overload_resolution", LogLevel::DEBUG, [&name_space]() {return "executing " + name_space; });
+	tracer::Log("overload_resolution", LogLevel::TRACE, [&name_space]() {return "executing in namespace " + name_space; });
 
 	bool isConstructorCall = info.IsConstructCall();
 
@@ -647,12 +692,14 @@ Nan::NAN_METHOD_RETURN_TYPE overload_resolution::execute(const std::string name_
 		prototypeClassChain.push_back("");
 	}
 
+	tracer::Log("overload_resolution", LogLevel::DEBUG, [&name_space, &prototypeClassChain, &functionName]() {return "executing " + name_space + "::(" + tracer::join(prototypeClassChain, "/") + ")" + functionName; });
+
 	return executeBestOverload(name_space, prototypeClassChain, functionName.c_str(), info);
 }
 
 bool overload_resolution::verifyObject(std::vector<std::shared_ptr<overload_info>> props, v8::Local<v8::Value> val) {
 	//TODO: add default values
-	tracer::Log("overload_resolution", LogLevel::DEBUG, [&props, &val]() {return "verifying object " + tracer::join<std::shared_ptr<overload_info>>(props, [](std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ") + std::string(*Nan::Utf8String(val->ToDetailString())); });
+	tracer::Log("overload_resolution", LogLevel::TRACE, [&props, &val]() {return "verifying object " + tracer::join<std::shared_ptr<overload_info>>(props, [](std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ") + std::string(*Nan::Utf8String(val->ToDetailString())); });
 
 	auto mctx = Nan::GetCurrentContext();
 
@@ -715,7 +762,7 @@ bool overload_resolution::verifyObject(std::vector<std::shared_ptr<overload_info
 
 v8::MaybeLocal<v8::Value>  overload_resolution::GetFromObject(v8::Local<v8::Value> obj, const std::string key) {
 	//TODO: add the return value to log entry
-	tracer::Log("overload_resolution", LogLevel::DEBUG, [&obj, &key]() {return "retrieving " + key + " from " + std::string(*Nan::Utf8String( obj->ToDetailString())); });
+	tracer::Log("overload_resolution", LogLevel::TRACE, [&obj, &key]() {return "retrieving " + key + " from " + std::string(*Nan::Utf8String( obj->ToDetailString())); });
 
 	auto mctx = Nan::GetCurrentContext();
 

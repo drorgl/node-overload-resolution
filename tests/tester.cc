@@ -24,8 +24,9 @@ NAN_METHOD(testfunction_no_overload_resolution) {
 
 
 void init(v8::Handle<v8::Object> target) {
-	tracer::Init(target);
 	//assert(false);
+	tracer::Init(target);
+	
 	auto overload = std::make_shared<overload_resolution>();
 
 	overload->add_type_alias("int", "Number");
