@@ -103,8 +103,22 @@ if (addon == null) {
     console.log("debug:", aoDebug);
 }
 
+function getLogLevel(logLevel){
+    switch (logLevel) {
+        case 0: return "TRACE";
+        case 1: return "DEBUG";
+        case 2: return "INFO";
+        case 3: return "WARN";
+        case 4: return "ERROR";
+        case 5: return "FATAL";
+    }
+    return "unknown";
+}
+
+addon.log_level = 2;
+
 addon.RegisterLogger(function (module, logLevel, message) {
-    console.log(module, logLevel, message);
+    console.log(module, getLogLevel(logLevel), message);
 });
 
 addon.Flush();
@@ -115,6 +129,7 @@ for (var i = 0; i < 1; i++) {
         t.equal(addon.testfunction_no_overload_resolution(), "testfunction_no_overload_resolution", "function without overload returned true");
         t.end();
     });
+    addon.Flush();
 
     tape('base_function on base_class', function (t) {
         var bc = new addon.base_class();
@@ -122,6 +137,7 @@ for (var i = 0; i < 1; i++) {
         t.ok(bc.base_function(), "function called on base_class");
         t.end();
     });
+    addon.Flush();
 
     tape('function on derived class', function (t) {
         var dc = new addon.derived_class();
@@ -129,6 +145,7 @@ for (var i = 0; i < 1; i++) {
         t.ok(dc.derived_function(), "function called on derived_class");
         t.end();
     });
+    addon.Flush();
 
     tape('base_class.base_function  test function on derived class', function (t) {
         var dc = new addon.derived_class();
@@ -136,6 +153,7 @@ for (var i = 0; i < 1; i++) {
         t.ok(dc.base_function(), "base_class.base_function function called on derived_class");
         t.end();
     });
+    addon.Flush();
 
 
     var dataTypes = [
@@ -277,9 +295,11 @@ for (var i = 0; i < 1; i++) {
             for (var dt of dataTypes) {
                 let ct = new addon.constructor_class_tester(dt.value);
                 t.equal(ct.ctype(), "." + dt.name, "constructor_testers " + dt.name);
+                addon.Flush();
             }
 
         }, "executing all new addon.constructor_class_tester(...)");
+        addon.Flush();
         t.end();
     });
 
@@ -295,9 +315,11 @@ for (var i = 0; i < 1; i++) {
             for (var dt of dataTypes) {
                 t.equal(addon.constructor_class_tester.static_function(dt.value), ".static." + dt.name, "base_class.static_function " + dt.name);
                 t.equal(cs.static_function(dt.value), ".instance." + dt.name, "instance constructor_class_tester.static_function " + dt.name);
+                addon.Flush();
             }
 
-        },"executing all constructor_class_tester.static_function(...) instance and static");
+        }, "executing all constructor_class_tester.static_function(...) instance and static");
+        addon.Flush();
         t.end();
     });
 
@@ -310,9 +332,11 @@ for (var i = 0; i < 1; i++) {
 
             for (var dt of dataTypes) {
                 t.equal(addon.number_testers(dt.value), "." + dt.name, "number_testers " + dt.name);
+                addon.Flush();
             }
 
         });
+        addon.Flush();
         t.end();
     });
 
@@ -328,9 +352,11 @@ for (var i = 0; i < 1; i++) {
 
             for (var dt of dataTypes) {
                 t.equal(bc.base_function(dt.value), "base_class.base_function." + dt.name, "number_testers " + dt.name);
+                addon.Flush();
             }
 
         });
+        addon.Flush();
         t.end();
     });
 
@@ -347,9 +373,11 @@ for (var i = 0; i < 1; i++) {
 
             for (var dt of dataTypes) {
                 t.equal(bc.base_function(dt.value), "derived_class.base_function." + dt.name, "derived_class.base_function " + dt.name);
+                addon.Flush();
             }
 
         });
+        addon.Flush();
         t.end();
     });
 
@@ -367,6 +395,7 @@ for (var i = 0; i < 1; i++) {
             t.equal(addon.structs_testers({ "prop1": "1", "prop2": 2 }, { "prop1": "1", "prop2": "2" }), "structs_testers.struct_B_struct_A", "structs_testers struct_B struct_A");
 
         });
+        addon.Flush();
         t.end();
     });
 
@@ -381,10 +410,12 @@ for (var i = 0; i < 1; i++) {
             for (var dt1 of dataTypes) {
                 for (var dt2 of dataTypes) {
                     t.equal(addon.two_testers(dt1.value, dt2.value), "." + dt1.name + "." + dt2.name, "two_testers " + dt1.name + " " + dt2.name);
+                    addon.Flush();
                 }
             }
 
         });
+        addon.Flush();
         t.end();
     });
 
@@ -395,10 +426,12 @@ for (var i = 0; i < 1; i++) {
 
             for (var dt of dataTypes) {
                 t.equal(addon.array_testers([dt.value]), ".array<" + dt.name + ">", "array_testers array<" + dt.name + ">");
+                addon.Flush();
             }
 
             for (var dt of dataTypes) {
                 t.equal(addon.array_testers([[dt.value]]), ".array<array<" + dt.name + ">>", "array_testers array<array<" + dt.name + ">>");
+                addon.Flush();
             }
 
             //test array with multiple types
@@ -407,6 +440,7 @@ for (var i = 0; i < 1; i++) {
                 for (var dt2 of dataTypes) {
                     if (dt1.name != dt2.name) {
                         t.equal(addon.array_testers([dt1.value, dt2.value]), ".array", "array_testers array (multiple types - " + dt1.name + "," + dt2.name + ")");
+                        addon.Flush();
                     }
                 }
             }
@@ -415,6 +449,7 @@ for (var i = 0; i < 1; i++) {
                 for (var dt2 of dataTypes) {
                     if (dt1.name != dt2.name) {
                         t.equal(addon.array_testers([[dt1.value, dt2.value]]), ".array<array>", "array_testers array<array> (multiple types - " + dt1.name + "," + dt2.name + ")");
+                        addon.Flush();
                     }
                 }
             }
@@ -423,6 +458,7 @@ for (var i = 0; i < 1; i++) {
                 for (var dt2 of dataTypes) {
                     if (dt1 != dt2) {
                         t.equal(addon.array_testers([[dt1.value], dt2.value]), ".array", "array_testers array<array> (multiple types - " + dt1.name + "," + dt2.name + ")");
+                        addon.Flush();
                     }
                 }
             }
@@ -431,13 +467,16 @@ for (var i = 0; i < 1; i++) {
 
             for (var dt of dataTypes) {
                 t.equal(addon.array_testers([dt.value, dt.value]), ".array<" + dt.name + ">", "array_testers array<" + dt.name + ">");
+                addon.Flush();
             }
 
             for (var dt of dataTypes) {
                 t.equal(addon.array_testers([[dt.value, dt.value]]), ".array<array<" + dt.name + ">>", "array_testers array<array<" + dt.name + ">>");
+                addon.Flush();
             }
 
         });
+        addon.Flush();
         t.end();
     });
 
@@ -450,11 +489,13 @@ for (var i = 0; i < 1; i++) {
                 t.equal(default_func(addon), ".no_params", "default testers " + dt1.name + ", no parameters");
                 for (var dt2 of dataTypes) {
                     t.equal(default_func(addon, dt2.value), "." + dt2.name + "(" + JSON.stringify(dt2.value) + ")." + dt1.name + "(" + JSON.stringify(dt1.defaultValue) + ")", "default testers " + dt2.name + ", default (2nd parameter):" + dt1.name);
-                    t.equal(default_func_2params(addon, dt2.value,dt1.value), "." + dt2.name + "(" + JSON.stringify(dt2.value) + ")." + dt1.name + "(" + JSON.stringify(dt1.value) + ")", "default testers " + dt2.name + ", passed 2nd parameter (instead of default):" + dt1.name);
+                    t.equal(default_func_2params(addon, dt2.value, dt1.value), "." + dt2.name + "(" + JSON.stringify(dt2.value) + ")." + dt1.name + "(" + JSON.stringify(dt1.value) + ")", "default testers " + dt2.name + ", passed 2nd parameter (instead of default):" + dt1.name);
+                    addon.Flush();
                 }
             }
 
         });
+        addon.Flush();
         t.end();
     });
 
@@ -486,10 +527,12 @@ for (var i = 0; i < 1; i++) {
 
                     }
                     t.equal(c_result, "." + dt.name + "(" + JSON.stringify(dt.value) + ")", "value_converter " + dt.name);
+                    addon.Flush();
                 }, "value converter executed successfully for " + dt.name);
             }
 
         });
+        addon.Flush();
         t.end();
     });
 
@@ -536,6 +579,7 @@ for (var i = 0; i < 1; i++) {
                             tlocal.equal(c_result, "." + dtlocal.name + "(" + JSON.stringify(dtlocal.value) + ")", "value_converter " + dtlocal.name);
                             executions--;
                         });
+                        addon.Flush();
                     })();
 
                 }, "value converter executed successfully for " + dt.name);
@@ -544,6 +588,7 @@ for (var i = 0; i < 1; i++) {
         });
         var shouldEnd = () => {
             if (executions == 0) {
+                addon.Flush();
                 t.end();
             } else {
                 setTimeout(shouldEnd, 1);
