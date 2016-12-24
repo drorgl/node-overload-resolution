@@ -43,7 +43,7 @@ namespace or {
 			auto argprefetcher = std::dynamic_pointer_cast<or ::value_converter<atT>>(_arguments[i]->value_converter);
 #ifdef DEBUG
 			if (argprefetcher == nullptr) {
-				throw new std::exception("argument value_converter does not match registered type");
+				throw std::exception("argument value_converter does not match registered type");
 			}
 #endif
 			return argprefetcher->convert(_params[i]);
@@ -52,6 +52,27 @@ namespace or {
 		inline v8::Local<v8::Function> Callee() const {
 			return _info.Callee();
 		}
+
+		template<typename TThis>
+		inline TThis This() const{
+			if (_this != nullptr && _this->value != nullptr) {
+				return  std::dynamic_pointer_cast<or ::value_holder<TThis>>(_this->value)->Value;
+			}
+			if (_this != nullptr && _this->prefetcher != nullptr) {
+				auto argprefetcher = std::dynamic_pointer_cast<or ::value_converter<TThis>>(_this->prefetcher);
+#ifdef DEBUG
+				if (argprefetcher == nullptr) {
+					throw std::exception("argument value_converter does not match registered type");
+				}
+#endif
+
+				return argprefetcher->convert(this->This());
+			}
+
+			throw std::exception("This is not convertible to TThis");
+
+		}
+
 		inline v8::Local<v8::Object> This() const {
 			return _info.This();
 		}
@@ -78,7 +99,7 @@ namespace or {
 			_return->Set<retT>(returnValue);
 		}
 
-		
+
 		inline Nan::ReturnValue<T> GetReturnValue() const {
 			if (_return != nullptr) {
 				throw std::exception("a return value was already set by SetReturnValue, this is most likely a bug");
@@ -86,14 +107,24 @@ namespace or {
 			return _info.GetReturnValue();
 		}
 
-		FunctionCallbackInfo(Nan::NAN_METHOD_ARGS_TYPE &info, std::vector<v8::Local<v8::Value>> &params, std::vector<std::shared_ptr<overload_info>> &arguments, bool async) :
+		FunctionCallbackInfo(Nan::NAN_METHOD_ARGS_TYPE &info, std::vector<v8::Local<v8::Value>> &params, std::vector<std::shared_ptr<overload_info>> &arguments, std::shared_ptr< or ::value_converter_base> this_converter, bool async) :
 			_info(info), _params(params), _arguments(arguments), is_async(async) {
+
+			if (this_converter != nullptr) {
+				_this = std::make_shared<generic_value_holder>();
+				_this->prefetcher = this_converter;
+			}
 		}
 
 
 
 		//stores a local cache of c++ objects from passed v8 arguments
 		void prefetch() {
+			//Store This
+			if (_this != nullptr && _this->prefetcher != nullptr) {
+				_this->value= _this->prefetcher->read(this->This());
+			}
+
 			for (auto i = 0; i < _arguments.size(); i++) {
 				if (_params.size() > i) {
 					auto converted_param = _arguments[i]->value_converter->read(_params[i]);
@@ -102,7 +133,7 @@ namespace or {
 					if (is_async) {
 						//functions should know they are async
 						if (_arguments[i]->type == "Function") {
-							auto func = std::dynamic_pointer_cast< or ::value_holder< std::shared_ptr<or ::Callback>>>(converted_param);
+							auto func = std::dynamic_pointer_cast<or ::value_holder< std::shared_ptr< or ::Callback>>>(converted_param);
 							assert(func != nullptr && "Function is not or::Callback");
 							func->Value->is_async = true;
 						}
@@ -120,13 +151,13 @@ namespace or {
 
 			//Call all callbacks post process
 			//if (is_async) {
-				for (auto i = 0; i < _arguments.size(); i++) {
-					if ((_arguments[i]->type == "Function") && (_values.size() > i)) {
-						auto func = std::dynamic_pointer_cast<or ::value_holder< std::shared_ptr<or ::Callback>>>(_values[i]);
-						assert(func != nullptr && "Function is not or::Callback");
-						func->Value->post_process();
-					}
+			for (auto i = 0; i < _arguments.size(); i++) {
+				if ((_arguments[i]->type == "Function") && (_values.size() > i)) {
+					auto func = std::dynamic_pointer_cast<or ::value_holder< std::shared_ptr< or ::Callback>>>(_values[i]);
+					assert(func != nullptr && "Function is not or::Callback");
+					func->Value->post_process();
 				}
+			}
 			//}
 		}
 
@@ -150,6 +181,9 @@ namespace or {
 
 		//return values, should be converted back to v8 objects when function returns
 		std::shared_ptr<generic_value_holder> _return;
+
+		//"This" holder
+		std::shared_ptr<generic_value_holder> _this;
 	};
 
 }

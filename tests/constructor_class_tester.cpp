@@ -94,7 +94,7 @@ void constructor_class_tester::Init(v8::Handle<v8::Object> target, std::shared_p
 
 
 	target->Set(Nan::New("constructor_class_tester").ToLocalChecked(), ctor->GetFunction());
-	overload->register_type(ctor,"", "constructor_class_tester");
+	overload->register_type<constructor_class_tester>(ctor,"", "constructor_class_tester");
 };
 
 v8::Local<v8::Object> constructor_class_tester::New() {

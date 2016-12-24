@@ -112,22 +112,22 @@ namespace or_tester {
 
 	void RegisterORTesters(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
 		auto loverload = overload;
-		overload->addOverload("or_tester", "", "number_testers", { make_param("a","int",Nan::Undefined()) }, number_testers_number);
-		overload->addOverload("or_tester", "", "number_testers", { make_param("a","string",Nan::Undefined()) }, number_testers_string);
-		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Boolean",Nan::Undefined()) }, number_testers_bool);
-		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Date",Nan::Undefined()) }, number_testers_date);
-		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Function",Nan::Undefined()) }, number_testers_function);
-		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Buffer",Nan::Undefined()) }, number_testers_buffer);
-		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Map",Nan::Undefined()) }, number_testers_map);
-		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Set",Nan::Undefined()) }, number_testers_set);
-		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Promise",Nan::Undefined()) }, number_testers_promise);
-		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Proxy",Nan::Undefined()) }, number_testers_proxy);
-		overload->addOverload("or_tester", "", "number_testers", { make_param("a","RegExp",Nan::Undefined()) }, number_testers_regexp);
-		overload->addOverload("or_tester", "", "number_testers", { make_param("a","base_class",Nan::Undefined()) }, number_testers_base_class);
-		overload->addOverload("or_tester", "", "number_testers", { make_param("a","derived_class",Nan::Undefined()) }, number_testers_derived_class);
-		overload->addOverload("or_tester", "", "number_testers", { make_param("a","struct_A",Nan::Undefined()) }, number_testers_struct_A);
-		overload->addOverload("or_tester", "", "number_testers", { make_param("a","struct_B",Nan::Undefined()) }, number_testers_struct_B);
-		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Array",Nan::Undefined()) }, number_testers_array);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","int") }, number_testers_number);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","string") }, number_testers_string);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Boolean") }, number_testers_bool);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Date") }, number_testers_date);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Function") }, number_testers_function);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Buffer") }, number_testers_buffer);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Map") }, number_testers_map);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Set") }, number_testers_set);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Promise") }, number_testers_promise);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Proxy") }, number_testers_proxy);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","RegExp") }, number_testers_regexp);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","base_class") }, number_testers_base_class);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","derived_class") }, number_testers_derived_class);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","struct_A") }, number_testers_struct_A);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","struct_B") }, number_testers_struct_B);
+		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Array") }, number_testers_array);
 		overload->addOverload("or_tester", "", "number_testers", {}, number_testers);
 
 		general_callback::overload = overload;

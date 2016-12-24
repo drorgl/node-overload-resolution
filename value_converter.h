@@ -474,6 +474,38 @@ namespace or {
 
 	};
 
+
+	template<>
+	class value_converter<double> : public value_converter_base {
+	public:
+
+		virtual double convert(v8::Local<v8::Value> from) {
+			//TODO: decide if value should be checked against std::numeric_limits<T>::max() and std::numeric_limits<T>::min() 
+			return from->NumberValue();
+		}
+
+		virtual v8::Local<v8::Value> convert(double from) {
+			return Nan::New(from);
+		}
+
+
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<double> from) {
+			return Nan::New(*from);
+		}
+
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+			auto from_value = std::dynamic_pointer_cast<value_holder<double>>(from);
+			return Nan::New(from_value->Value);
+		}
+
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+			auto parsed_value = std::make_shared<value_holder<double>>();
+			parsed_value->Value = convert(val);
+			return parsed_value;
+		}
+
+	};
+
 	//uint8_t / number
 
 	template<>

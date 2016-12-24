@@ -47,6 +47,8 @@
 
 #include "overload_resolution_types.h"
 
+#include <loglevels.h>
+
 
 ////overload resolution module
 //
@@ -100,7 +102,8 @@ private:
 
 	std::string normalize_types(std::string type);
 
-	void LogDebug(std::string message);
+	static void Log(LogLevel level, std::string message);
+	static void Log(LogLevel level, std::function<std::string()> message);
 public:
 	overload_resolution();
 
@@ -109,12 +112,28 @@ public:
 	//function should be registerType
 	//should add to it all the basics, string, number, integer, boolean, array, object(?), buffer (?), function (is it possible to know the function signature?), promises(?)
 	//in case of array, which type is inside it, what to do if multiple types are in the array?
-	void register_type(v8::Local<v8::FunctionTemplate> functionTemplate, const std::string ns, const std::string name);
+	template <typename TObjectWrap>
+	void register_type(v8::Local<v8::FunctionTemplate> functionTemplate, const std::string ns, const std::string name) {
+		static_assert(std::is_base_of<or::ObjectWrap, TObjectWrap>::value, "TObjectWrap must inherit from ObjectWrap");
+
+		Log(LogLevel::DEBUG, [&ns, &name]() { return "registering type " + ns + "::" + name; });
+		assert(_types.count(name) == 0 && "type name already exists");
+		if (_types.count(name) != 0) {
+			Log(LogLevel::WARN, [&ns, &name]() {return "register type " + ns + "::" + name + " already exists"; });
+		}
+
+		auto ot = std::make_shared< object_type>();
+		ot->function_template.Reset(functionTemplate);
+		ot->ns = ns;
+		ot->name = name;
+		ot->value_converter = std::make_shared < or ::value_converter<TObjectWrap*>>();
+		_types[name] = ot;
+	}
 
 	//register struct
 	template <typename TDerived>
 	void register_type(const std::string ns, const std::string name) {	
-		LogDebug("registering type " + ns + "::" + name);
+		Log(LogLevel::DEBUG, "registering type " + ns + "::" + name);
 		_structured_factory->register_type<TDerived>(name);
 	}
 

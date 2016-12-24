@@ -43,7 +43,7 @@ namespace base_class_general_callback {
 
 		target->Set(Nan::New("base_class").ToLocalChecked(), ctor->GetFunction());
 
-		overload->register_type(ctor,"", "base_class");
+		overload->register_type<base_class>(ctor,"", "base_class");
 	};
 
 	v8::Local<v8::Object> base_class::New() {

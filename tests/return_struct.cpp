@@ -1,8 +1,8 @@
 //#include "return_struct.h"
 //
 //std::vector<std::shared_ptr<overload_info>> return_struct::_definition = { 
-//	make_param("type","String",Nan::Undefined()) ,
-//	make_param("value","String",Nan::Undefined())
+//	make_param("type","String") ,
+//	make_param("value","String")
 //};
 //
 //

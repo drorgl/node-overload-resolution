@@ -15,6 +15,7 @@ struct object_type {
 	Nan::Persistent<v8::FunctionTemplate, Nan::CopyablePersistentTraits<v8::FunctionTemplate>> function_template;
 	std::string ns;
 	std::string name;
+	std::shared_ptr< or ::value_converter_base> value_converter;
 };
 
 
@@ -65,6 +66,16 @@ inline std::shared_ptr<overload_info> make_param(const std::string parameterName
 	return oi;
 }
 
+template<typename T, typename std::enable_if<!std::is_base_of<T, v8::Local<v8::Value>>::value>::type>
+inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type, T defaultValue) {
+
+	auto value_converter = std::make_shared < or ::value_converter<T>>();
+	auto oi = std::make_shared<overload_info>(parameterName, type, value_converter->convert(defaultValue));
+	oi->value_converter = value_converter;
+
+	return oi;
+}
+
 template<typename T>
 inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type, std::shared_ptr<T> defaultValue) {
 	auto value_converter = std::make_shared < or ::value_converter<T>>();
@@ -74,6 +85,14 @@ inline std::shared_ptr<overload_info> make_param(const std::string parameterName
 	return oi;
 }
 
+template<typename T>
+inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type, v8::Local<v8::Value> defaultValue) {
+	auto value_converter = std::make_shared < or ::value_converter<T>>();
+	auto oi = std::make_shared<overload_info>(parameterName, type, value_converter->convert(defaultValue));
+	oi->value_converter = value_converter;
+
+	return oi;
+}
 
 struct o_r_function {
 	PolyFunctionCallback function;

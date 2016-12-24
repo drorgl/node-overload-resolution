@@ -2,9 +2,19 @@
 
 #include "base_class.h"
 
+namespace derived_class_general_callback {
+	std::shared_ptr<overload_resolution> overload;
+	NAN_METHOD(overload_callback) {
+		return overload->execute("", info);
+	}
+}
+
 Nan::Persistent<v8::FunctionTemplate> derived_class::constructor;
 
 void derived_class::Init(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
+	derived_class_general_callback::overload = overload;
+
+
 	v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(derived_class::New);
 	constructor.Reset(ctor);
 	ctor->InstanceTemplate()->SetInternalFieldCount(1);
@@ -16,26 +26,31 @@ void derived_class::Init(v8::Handle<v8::Object> target, std::shared_ptr<overload
 	Nan::SetPrototypeMethod(ctor, "derived_function", derived_function);
 
 	overload->addOverload("", "derived_class", "base_function", {}, base_function);
-	overload->addOverload("", "derived_class", "base_function", { make_param("a","Number",Nan::Undefined()) }, base_function_number);
-	overload->addOverload("", "derived_class", "base_function", { make_param("a","String",Nan::Undefined()) }, base_function_string);
-	overload->addOverload("", "derived_class", "base_function", { make_param("a","Boolean",Nan::Undefined()) }, base_function_bool);
-	overload->addOverload("", "derived_class", "base_function", { make_param("a","Date",Nan::Undefined()) }, base_function_date);
-	overload->addOverload("", "derived_class", "base_function", { make_param("a","Function",Nan::Undefined()) }, base_function_function);
-	overload->addOverload("", "derived_class", "base_function", { make_param("a","Buffer",Nan::Undefined()) }, base_function_buffer);
-	overload->addOverload("", "derived_class", "base_function", { make_param("a","Map",Nan::Undefined()) }, base_function_map);
-	overload->addOverload("", "derived_class", "base_function", { make_param("a","Set",Nan::Undefined()) }, base_function_set);
-	overload->addOverload("", "derived_class", "base_function", { make_param("a","Promise",Nan::Undefined()) }, base_function_promise);
-	overload->addOverload("", "derived_class", "base_function", { make_param("a","Proxy",Nan::Undefined()) }, base_function_proxy);
-	overload->addOverload("", "derived_class", "base_function", { make_param("a","RegExp",Nan::Undefined()) }, base_function_regexp);
-	overload->addOverload("", "derived_class", "base_function", { make_param("a","base_class",Nan::Undefined()) }, base_function_base_class);
-	overload->addOverload("", "derived_class", "base_function", { make_param("a","derived_class",Nan::Undefined()) }, base_function_derived_class);
-	overload->addOverload("", "derived_class", "base_function", { make_param("a","struct_A",Nan::Undefined()) }, base_function_struct_A);
-	overload->addOverload("", "derived_class", "base_function", { make_param("a","struct_B",Nan::Undefined()) }, base_function_struct_B);
-	overload->addOverload("", "derived_class", "base_function", { make_param("a","Array",Nan::Undefined()) }, base_function_array);
+	overload->addOverload("", "derived_class", "base_function", { make_param("a","Number") }, base_function_number);
+	overload->addOverload("", "derived_class", "base_function", { make_param("a","String") }, base_function_string);
+	overload->addOverload("", "derived_class", "base_function", { make_param("a","Boolean") }, base_function_bool);
+	overload->addOverload("", "derived_class", "base_function", { make_param("a","Date") }, base_function_date);
+	overload->addOverload("", "derived_class", "base_function", { make_param("a","Function") }, base_function_function);
+	overload->addOverload("", "derived_class", "base_function", { make_param("a","Buffer") }, base_function_buffer);
+	overload->addOverload("", "derived_class", "base_function", { make_param("a","Map") }, base_function_map);
+	overload->addOverload("", "derived_class", "base_function", { make_param("a","Set") }, base_function_set);
+	overload->addOverload("", "derived_class", "base_function", { make_param("a","Promise") }, base_function_promise);
+	overload->addOverload("", "derived_class", "base_function", { make_param("a","Proxy") }, base_function_proxy);
+	overload->addOverload("", "derived_class", "base_function", { make_param("a","RegExp") }, base_function_regexp);
+	overload->addOverload("", "derived_class", "base_function", { make_param("a","base_class") }, base_function_base_class);
+	overload->addOverload("", "derived_class", "base_function", { make_param("a","derived_class") }, base_function_derived_class);
+	overload->addOverload("", "derived_class", "base_function", { make_param("a","struct_A") }, base_function_struct_A);
+	overload->addOverload("", "derived_class", "base_function", { make_param("a","struct_B") }, base_function_struct_B);
+	overload->addOverload("", "derived_class", "base_function", { make_param("a","Array") }, base_function_array);
 
+
+	Nan::SetPrototypeMethod(ctor, "this_check", derived_class_general_callback::overload_callback);
+	overload->addOverload("", "derived_class", "this_check", {}, this_check);
+	
+	
 
 	target->Set(Nan::New("derived_class").ToLocalChecked(), ctor->GetFunction());
-	overload->register_type(ctor,"", "derived_class");
+	overload->register_type<derived_class>(ctor,"", "derived_class");
 };
 
 v8::Local<v8::Object> derived_class::New() {
@@ -55,6 +70,13 @@ NAN_METHOD(derived_class::New) {
 
 	pt->Wrap(info.This());
 	//info.GetReturnValue().Set(info.This());
+}
+
+POLY_METHOD(derived_class::this_check) {
+	auto t = info.This<derived_class*>();
+	auto unwrapped = or ::ObjectWrap::Unwrap<derived_class>(info.This());
+	
+	info.GetReturnValue().Set(Nan::New(t == unwrapped));
 }
 
 NAN_METHOD(derived_class::derived_function) {
