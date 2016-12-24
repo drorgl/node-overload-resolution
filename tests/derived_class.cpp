@@ -74,9 +74,14 @@ NAN_METHOD(derived_class::New) {
 
 POLY_METHOD(derived_class::this_check) {
 	auto t = info.This<derived_class*>();
-	auto unwrapped = or ::ObjectWrap::Unwrap<derived_class>(info.This());
-	
-	info.GetReturnValue().Set(Nan::New(t == unwrapped));
+
+	if (info.is_async) {
+		info.SetReturnValue(t != NULL);
+	}
+	else {
+		auto unwrapped = or ::ObjectWrap::Unwrap<derived_class>(info.This());
+		info.GetReturnValue().Set(Nan::New(t == unwrapped));
+	}
 }
 
 NAN_METHOD(derived_class::derived_function) {
