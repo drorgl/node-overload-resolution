@@ -21,7 +21,7 @@ namespace or {
 		}
 		inline v8::Local<v8::Value> operator[](int i) const {
 			if (is_async) {
-				throw std::exception("attempted info[] access on async call");
+				throw std::exception("info[] does not work in async, use at<T> instead");
 			}
 
 			if (i < _params.size()) {
@@ -74,6 +74,10 @@ namespace or {
 		}
 
 		inline v8::Local<v8::Object> This() const {
+			if (is_async) {
+				throw std::exception("This does not work in async, use This<T> instead");
+			}
+
 			return _info.This();
 		}
 		inline v8::Local<v8::Object> Holder() const {
@@ -101,6 +105,9 @@ namespace or {
 
 
 		inline Nan::ReturnValue<T> GetReturnValue() const {
+			if (is_async) {
+				throw std::exception("GetReturnValue() does not work in async, use SetReturnValue<T> instead");
+			}
 			if (_return != nullptr) {
 				throw std::exception("a return value was already set by SetReturnValue, this is most likely a bug");
 			}
@@ -122,7 +129,7 @@ namespace or {
 		void prefetch() {
 			//Store This
 			if (_this != nullptr && _this->prefetcher != nullptr) {
-				_this->value= _this->prefetcher->read(this->This());
+				_this->value= _this->prefetcher->read(_info.This());
 			}
 
 			for (auto i = 0; i < _arguments.size(); i++) {
@@ -165,8 +172,11 @@ namespace or {
 			return _return;
 		}
 
+
+		//indicator if call is being executed in async
+		const bool is_async;
+
 	protected:
-		bool is_async;
 
 		Nan::NAN_METHOD_ARGS_TYPE _info;
 
