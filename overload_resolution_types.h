@@ -66,7 +66,7 @@ inline std::shared_ptr<overload_info> make_param(const std::string parameterName
 	return oi;
 }
 
-template<typename T, typename std::enable_if<!std::is_base_of<T, v8::Local<v8::Value>>::value>::type>
+template<typename T, typename std::enable_if<!std::is_convertible<T, v8::Local<v8::Value>>::value>::type* = nullptr>
 inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type, T defaultValue) {
 
 	auto value_converter = std::make_shared < or ::value_converter<T>>();
