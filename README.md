@@ -41,7 +41,7 @@ constructor:
 overload->addOverloadConstructor(
 			"", 
 					"constructor_class_tester", 
-							{ make_param("a","Number",Nan::Undefined()) }, 
+							{ make_param("a","Number") }, 
 									New_number);
 			^ namespace or empty
 					^ class name 
@@ -55,7 +55,7 @@ overload->addStaticOverload(
 			"", 
 					"constructor_class_tester", 
 							"static_function", 
-									{ make_param("a","String",Nan::Undefined()) }, 
+									{ make_param("a","String") }, 
 											static_function_static_string);
 			^ namespace or empty
 					^ class name or function group name or empty
@@ -69,7 +69,7 @@ overload->addOverload(
 			"", 
 					"constructor_class_tester", 
 							"member_function", 
-									{ make_param("a","Map",Nan::Undefined()) }, 
+									{ make_param("a","Map") }, 
 											static_function_instance_map);
 			^ namespace or empty
 					^ class name

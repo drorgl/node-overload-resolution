@@ -143,6 +143,7 @@ for (var i = 0; i < 1; i++) {
         var dc = new addon.derived_class();
         t.ok(dc, "derived class created successfully");
         t.ok(dc.derived_function(), "function called on derived_class");
+        t.ok(dc.this_check(), "function got This()");
         t.end();
     });
     addon.Flush();
@@ -596,6 +597,11 @@ for (var i = 0; i < 1; i++) {
         }
         shouldEnd();
 
+    });
+
+    tape('async check This()', function (t) {
+        t.fail("This() async not implemented yet");
+        t.end();
     });
 
 }

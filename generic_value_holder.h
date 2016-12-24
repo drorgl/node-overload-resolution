@@ -9,14 +9,15 @@
 namespace or {
 
 	class generic_value_holder {
-	private:
-		std::shared_ptr< or ::value_converter_base> _prefetcher;
-		std::shared_ptr< or ::value_holder_base> _value;
+		
 	public:
-		void Set(std::shared_ptr< or ::value_converter_base> value_converter, std::shared_ptr< or ::value_holder_base> value) {
-			_prefetcher = value_converter;
-			_value = value;
+		void Set(std::shared_ptr< or ::value_converter_base> value_converter, std::shared_ptr< or ::value_holder_base> value_) {
+			prefetcher = value_converter;
+			value = value_;
 		}
+
+		std::shared_ptr< or ::value_converter_base> prefetcher;
+		std::shared_ptr< or ::value_holder_base> value;
 
 		template<typename T>
 		void Set(T returnValue) {
@@ -31,7 +32,7 @@ namespace or {
 		}
 
 		v8::Local<v8::Value> Get() {
-			return _prefetcher->convert(_value);
+			return prefetcher->convert(value);
 		}
 	};
 

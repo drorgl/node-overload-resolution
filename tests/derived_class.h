@@ -43,6 +43,8 @@ public:
 	static POLY_METHOD(base_function_struct_B);
 	static POLY_METHOD(base_function_array);
 
+	static POLY_METHOD(this_check);
+
 };
 
 

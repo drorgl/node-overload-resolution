@@ -20,7 +20,7 @@ namespace or {
 			try {
 				_func(*_params);
 			}
-			catch (std::exception ex) {
+			catch (std::exception &ex) {
 				_error = ex.what();
 			}
 		}
@@ -31,7 +31,7 @@ namespace or {
 			try {
 				_params->post_process();
 			}
-			catch (std::exception ex) {
+			catch (std::exception &ex) {
 				_error = ex.what();
 			}
 
