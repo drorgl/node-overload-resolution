@@ -7,6 +7,14 @@ std::set<std::string> overload_resolution::_convertible_primitive_types = {"Numb
 
 std::set<std::string> overload_resolution::_primitive_types = {"Number","String","Boolean","Date","Buffer","Function","Map","Set","Null","Promise","Proxy","RegExp","Array"};
 
+static void Log(LogLevel level, std::string message) {
+	tracer::Log("overload_resolution", level, message);
+}
+
+static void Log(LogLevel level, std::function<std::string()> message) {
+	tracer::Log("overload_resolution", level, message);
+}
+
 
 overload_resolution::overload_resolution() {
 	Log( LogLevel::DEBUG, "initializing");
@@ -27,13 +35,13 @@ overload_resolution::~overload_resolution() {
 #endif
 }
 
-void overload_resolution::Log(LogLevel level, std::string message) {
-	tracer::Log("overload_resolution", level, message);
+void overload_resolution::LogDebug(std::function<std::string()> message) {
+	Log(LogLevel::DEBUG, message);
+}
+void overload_resolution::LogWarn(std::function<std::string()> message) {
+	Log(LogLevel::WARN, message);
 }
 
-void overload_resolution::Log(LogLevel level, std::function<std::string()> message) {
-	tracer::Log("overload_resolution", level, message);
-}
 
 void overload_resolution::add_type_alias(std::string alias, std::string type) {
 	Log(LogLevel::DEBUG, [&alias, &type]() {return "adding alias " + alias + " for " + type; });
