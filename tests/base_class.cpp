@@ -46,6 +46,10 @@ namespace base_class_general_callback {
 		overload->register_type<base_class>(ctor,"", "base_class");
 	};
 
+	 v8::Local<v8::Function> base_class::get_constructor() {
+		return Nan::New(constructor)->GetFunction();
+	}
+
 	v8::Local<v8::Object> base_class::New() {
 		auto retval = Nan::NewInstance(Nan::GetFunction(Nan::New<v8::FunctionTemplate>(base_class::constructor)).ToLocalChecked()).ToLocalChecked();
 

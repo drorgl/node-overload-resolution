@@ -116,6 +116,7 @@ void overload_resolution::split_generic_types(std::string type, std::set<std::st
 }
 
 bool overload_resolution::validate_type_registrations() {
+	bool valid = true;
 	for (std::map<std::string, std::shared_ptr<o_r_namespace>>::iterator ns = std::begin(_namespaces); ns != std::end(_namespaces); ns++) {
 		//for each namespace
 		for (std::map<std::string, std::shared_ptr< o_r_class>>::iterator cls = std::begin(ns->second->classes); cls != std::end(ns->second->classes); cls++) {
@@ -143,7 +144,7 @@ bool overload_resolution::validate_type_registrations() {
 									(_primitive_types.count(*separate_type) == 0)){
 									printf("cannot find type %s in %s::%s::%s\r\n", separate_type->c_str(),ns->second->name.c_str(),cls->second->className.c_str(), (*fnoverload)->functionName.c_str());
 									Log( LogLevel::ERROR, [&separate_type, &ns, &cls, &fnoverload]() {return "cannot find type " + *separate_type + " in " + ns->second->name + "::" + cls->second->className + "::" + (*fnoverload)->functionName; });
-									return false;
+									valid = false;
 								}
 							}
 						}
@@ -152,7 +153,7 @@ bool overload_resolution::validate_type_registrations() {
 			}
 		}
 	}
-	return true;
+	return valid;
 }
 
 void overload_resolution::create_function_store(const std::string ns, const std::string className, const std::string functionName) {
