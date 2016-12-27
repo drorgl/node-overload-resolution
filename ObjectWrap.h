@@ -6,6 +6,7 @@
 namespace or {
 	class ObjectWrap : public Nan::ObjectWrap {
 	public:
+
 		ObjectWrap() : Nan::ObjectWrap() {}
 
 		using Nan::ObjectWrap::Wrap;
@@ -19,7 +20,7 @@ namespace or {
 
 		virtual ~ObjectWrap() {}
 
-		
+		virtual v8::Local<v8::Function> get_constructor() = 0;
 	};
 }
 

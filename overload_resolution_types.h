@@ -76,8 +76,8 @@ inline std::shared_ptr<overload_info> make_param(const std::string parameterName
 	return oi;
 }
 
-template<typename T>
-inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type, std::shared_ptr<T> defaultValue) {
+template<typename T, typename TREF = std::remove_reference<T>::type>
+inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type, std::shared_ptr<TREF> defaultValue) {
 	auto value_converter = std::make_shared < or ::value_converter<T>>();
 	auto oi = std::make_shared<overload_info>(parameterName, type, value_converter->convert(defaultValue));
 	oi->value_converter = value_converter;

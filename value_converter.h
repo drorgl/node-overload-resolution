@@ -98,9 +98,15 @@ namespace or {
 	public:
 
 		virtual T* convert(v8::Local<v8::Value> from) {
+			if (from.IsEmpty() || from->IsNull() || from->IsUndefined()) {
+				return NULL;
+			}
 			return or::ObjectWrap::Unwrap<T>(from.As<v8::Object>());
 		}
 
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<T> from) {
+			return from->Wrap();
+		}
 
 		virtual v8::Local<v8::Value> convert(T* from) {
 			return from->Wrap();

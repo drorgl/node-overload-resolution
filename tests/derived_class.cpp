@@ -53,6 +53,10 @@ void derived_class::Init(v8::Handle<v8::Object> target, std::shared_ptr<overload
 	overload->register_type<derived_class>(ctor,"", "derived_class");
 };
 
+v8::Local<v8::Function> derived_class::get_constructor() {
+	return Nan::New(constructor)->GetFunction();
+}
+
 v8::Local<v8::Object> derived_class::New() {
 	auto retval = Nan::NewInstance(Nan::GetFunction(Nan::New<v8::FunctionTemplate>(derived_class::constructor)).ToLocalChecked()).ToLocalChecked();
 

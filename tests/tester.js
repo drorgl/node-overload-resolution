@@ -608,3 +608,7 @@ for (var i = 0; i < 1; i++) {
 
 
 }
+
+//TODO: 
+//add make_param<T>("name","type",default T) test
+//add instantiate one type from another type test

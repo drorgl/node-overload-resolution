@@ -97,6 +97,10 @@ void constructor_class_tester::Init(v8::Handle<v8::Object> target, std::shared_p
 	overload->register_type<constructor_class_tester>(ctor,"", "constructor_class_tester");
 };
 
+v8::Local<v8::Function> constructor_class_tester::get_constructor() {
+	return Nan::New(constructor)->GetFunction();
+}
+
 v8::Local<v8::Object> constructor_class_tester::New() {
 	auto retval = Nan::NewInstance(Nan::GetFunction(Nan::New<v8::FunctionTemplate>(constructor_class_tester::constructor)).ToLocalChecked()).ToLocalChecked();
 

@@ -8,7 +8,9 @@ namespace or {
 			return Nan::New(this->persistent());
 		}
 
-		auto return_object = Nan::New<v8::Object>();
+		auto return_object = get_constructor()->NewInstance();
+		//auto return_object = Nan::New<v8::Object>();
+		//return_object->InternalFieldCount ->SetInternalFieldCount(1)
 		this->Wrap(return_object);
 		return return_object;
 	}
