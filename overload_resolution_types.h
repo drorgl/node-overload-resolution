@@ -81,6 +81,9 @@ inline std::shared_ptr<overload_info> make_param(const std::string parameterName
 	auto value_converter = std::make_shared < or ::value_converter<T>>();
 	auto oi = std::make_shared<overload_info>(parameterName, type, value_converter->convert(defaultValue));
 	oi->value_converter = value_converter;
+	
+	//a workaround for locker for defaultValue, should be stored in overload_info and released on removal
+	auto lockptr = new std::shared_ptr<TREF>(defaultValue);
 
 	return oi;
 }
