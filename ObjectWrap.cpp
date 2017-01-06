@@ -9,6 +9,7 @@ namespace or {
 		}
 
 		auto return_object = get_constructor()->NewInstance();
+		assert(!return_object.IsEmpty() && "problem with constructor, not generating new instance, most probably missing constructor or not initialized yet");
 		//auto return_object = Nan::New<v8::Object>();
 		//return_object->InternalFieldCount ->SetInternalFieldCount(1)
 		this->Wrap(return_object);

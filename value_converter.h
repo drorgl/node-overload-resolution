@@ -25,6 +25,8 @@
 
 #include "class_typename.h"
 
+using namespace std::literals::string_literals;
+
 namespace or {
 	
 
@@ -35,16 +37,14 @@ namespace or {
 	public:
 
 		virtual T convert(v8::Local<v8::Value> from) {
-			DECLARE_CLASS_TYPENAME(T)
 #pragma message ("not implemented, need template specialization " T)
-			throw std::exception("not implemented, need template specialization for " + Class_TypeName<T>::name);
+			throw std::exception(("not implemented, need template specialization for "s + GetTypeName<T>()).c_str());
 		}
 
 
 		virtual v8::Local<v8::Value> convert(T from) {
-			DECLARE_CLASS_TYPENAME(T)
 #pragma message ("not implemented, need template specialization " T)
-			throw std::exception("not implemented, need template specialization for " + Class_TypeName<T>::name);
+			throw std::exception(("not implemented, need template specialization for "s + GetTypeName<T>()).c_str());
 		}
 
 		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
@@ -224,17 +224,24 @@ namespace or {
 		
 		virtual v8::Local<v8::Value> convert(std::shared_ptr<std::vector<T>> from) {
 			if (std::is_same<T, uint8_t>::value) {
-				//create a manual instance of shared_ptr to increment the ref counter manually, which will be deleted by FreeBufferCallback when Buffer is free'd
-				auto copy_for_ref_inc = new std::shared_ptr<std::vector<T>>(from);
+				if (from != nullptr) {
+					//create a manual instance of shared_ptr to increment the ref counter manually, which will be deleted by FreeBufferCallback when Buffer is free'd
+					auto copy_for_ref_inc = new std::shared_ptr<std::vector<T>>(from);
 
-				auto v8buffer = Nan::NewBuffer((char*)&(*from)[0], from->size(),FreeBufferCallback,copy_for_ref_inc);
-				return v8buffer.ToLocalChecked();
+					auto v8buffer = Nan::NewBuffer((char*)&(*from)[0], from->size(), FreeBufferCallback, copy_for_ref_inc);
+					return v8buffer.ToLocalChecked();
+				}
+				else {
+					return Nan::NewBuffer(0).ToLocalChecked();
+				}
 			}
 
 			auto v8array = Nan::New<v8::Array>();
-			auto converter = std::make_shared<value_converter<T>>();
-			for (auto i = 0; i < from->size(); i++) {
-				v8array->Set(i, converter->convert( (*from)[i]));
+			if (from != nullptr) {
+				auto converter = std::make_shared<value_converter<T>>();
+				for (auto i = 0; i < from->size(); i++) {
+					v8array->Set(i, converter->convert((*from)[i]));
+				}
 			}
 			return v8array;
 			
@@ -480,6 +487,107 @@ namespace or {
 
 	};
 
+
+	//ushort
+	typedef unsigned short ushort;
+
+	template<>
+	class value_converter<ushort> : public value_converter_base {
+	public:
+
+		virtual ushort convert(v8::Local<v8::Value> from) {
+			//TODO: decide if value should be checked against std::numeric_limits<T>::max() and std::numeric_limits<T>::min() 
+			return from->NumberValue();
+		}
+
+		virtual v8::Local<v8::Value> convert(ushort from) {
+			return Nan::New(from);
+		}
+
+
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<ushort> from) {
+			return Nan::New(*from);
+		}
+
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+			auto from_value = std::dynamic_pointer_cast<value_holder<ushort>>(from);
+			return Nan::New(from_value->Value);
+		}
+
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+			auto parsed_value = std::make_shared<value_holder<ushort>>();
+			parsed_value->Value = convert(val);
+			return parsed_value;
+		}
+
+	};
+
+	//short
+
+	template<>
+	class value_converter<short> : public value_converter_base {
+	public:
+
+		virtual short convert(v8::Local<v8::Value> from) {
+			//TODO: decide if value should be checked against std::numeric_limits<T>::max() and std::numeric_limits<T>::min() 
+			return from->NumberValue();
+		}
+
+		virtual v8::Local<v8::Value> convert(short from) {
+			return Nan::New(from);
+		}
+
+
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<short> from) {
+			return Nan::New(*from);
+		}
+
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+			auto from_value = std::dynamic_pointer_cast<value_holder<short>>(from);
+			return Nan::New(from_value->Value);
+		}
+
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+			auto parsed_value = std::make_shared<value_holder<short>>();
+			parsed_value->Value = convert(val);
+			return parsed_value;
+		}
+
+	};
+
+
+	//float
+
+	template<>
+	class value_converter<float> : public value_converter_base {
+	public:
+
+		virtual double convert(v8::Local<v8::Value> from) {
+			//TODO: decide if value should be checked against std::numeric_limits<T>::max() and std::numeric_limits<T>::min() 
+			return from->NumberValue();
+		}
+
+		virtual v8::Local<v8::Value> convert(float from) {
+			return Nan::New(from);
+		}
+
+
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<float> from) {
+			return Nan::New(*from);
+		}
+
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+			auto from_value = std::dynamic_pointer_cast<value_holder<float>>(from);
+			return Nan::New(from_value->Value);
+		}
+
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+			auto parsed_value = std::make_shared<value_holder<float>>();
+			parsed_value->Value = convert(val);
+			return parsed_value;
+		}
+
+	};
 
 	template<>
 	class value_converter<double> : public value_converter_base {

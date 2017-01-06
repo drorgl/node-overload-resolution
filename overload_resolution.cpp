@@ -141,7 +141,7 @@ bool overload_resolution::validate_type_registrations() {
 							for (std::set<std::string>::iterator separate_type = std::begin(types); separate_type != std::end(types); separate_type++) {
 								if ((_types.count(*separate_type) == 0) &&
 									(!_structured_factory->has_type(separate_type->c_str())) &&
-									(_primitive_types.count(*separate_type) == 0)){
+									(_primitive_types.count(*separate_type) == 0) && (*separate_type != "Object")){
 									printf("cannot find type %s in %s::%s::%s\r\n", separate_type->c_str(),ns->second->name.c_str(),cls->second->className.c_str(), (*fnoverload)->functionName.c_str());
 									Log( LogLevel::ERROR, [&separate_type, &ns, &cls, &fnoverload]() {return "cannot find type " + *separate_type + " in " + ns->second->name + "::" + cls->second->className + "::" + (*fnoverload)->functionName; });
 									valid = false;
