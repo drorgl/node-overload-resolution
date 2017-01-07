@@ -487,6 +487,38 @@ namespace or {
 
 	};
 
+	template<>
+	class value_converter<int64_t> : public value_converter_base {
+	public:
+
+		virtual int64_t convert(v8::Local<v8::Value> from) {
+			//TODO: decide if value should be checked against std::numeric_limits<T>::max() and std::numeric_limits<T>::min() 
+			return from->IntegerValue();
+		}
+
+		virtual v8::Local<v8::Value> convert(int64_t from) {
+			//TODO: decide if value should be checked against std::numeric_limits<T>::max() and std::numeric_limits<T>::min() 
+			return Nan::New((double)from);
+		}
+
+
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<int64_t> from) {
+			return Nan::New((double)*from);
+		}
+
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+			auto from_value = std::dynamic_pointer_cast<value_holder<int64_t>>(from);
+			return Nan::New((double)from_value->Value);
+		}
+
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+			auto parsed_value = std::make_shared<value_holder<int64_t>>();
+			parsed_value->Value = convert(val);
+			return parsed_value;
+		}
+
+	};
+
 
 	//ushort
 	typedef unsigned short ushort;
