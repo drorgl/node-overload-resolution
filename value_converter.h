@@ -62,6 +62,7 @@ namespace or {
 
 	//Callback
 
+
 	template<typename T>
 	class value_converter<std::shared_ptr<T>, typename std::enable_if<std::is_base_of<Callback, T>::value>::type> : public value_converter_base {
 	public:
@@ -73,8 +74,12 @@ namespace or {
 			return std::make_shared<T>(from.As<v8::Function>());
 		}
 
+		static void EmptyFunctionCallback(const Nan::FunctionCallbackInfo<v8::Value>& info) {}
 
 		virtual v8::Local<v8::Value> convert(std::shared_ptr<T> from) {
+			if (from == nullptr) {
+				return Nan::New<v8::Function>(EmptyFunctionCallback);
+			}
 			return from->GetFunction();
 		}
 
