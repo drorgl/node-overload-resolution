@@ -99,7 +99,7 @@ namespace or {
 
 		template<typename retT>
 		inline void SetReturnValue(retT returnValue) const {
-			const_cast<FunctionCallbackInfo<T>*>(this)->_return = std::make_shared<generic_value_holder>();
+			_return = std::make_shared<generic_value_holder>();
 			_return->Set<retT>(returnValue);
 		}
 
@@ -190,8 +190,7 @@ namespace or {
 		std::vector<std::shared_ptr< or ::value_holder_base>> _values;
 
 		//return values, should be converted back to v8 objects when function returns
-		//mutable?...
-		std::shared_ptr<generic_value_holder> _return;
+		mutable std::shared_ptr<generic_value_holder> _return;
 
 		//"This" holder
 		std::shared_ptr<generic_value_holder> _this;
