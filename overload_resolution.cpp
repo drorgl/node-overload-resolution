@@ -419,7 +419,7 @@ int overload_resolution::MatchOverload(std::vector<std::string> &classNames, std
 	}
 
 	for (auto i = 0; i < parameterLength; i++) {
-		int local_rank = 0;
+		int local_rank = -1;
 		auto iparam = (info.Length() > i) ? info[i] : Nan::Undefined();
 		auto fparam = (func->parameters.size() > i) ? func->parameters.at(i) : nullptr;
 
@@ -437,14 +437,20 @@ int overload_resolution::MatchOverload(std::vector<std::string> &classNames, std
 
 		if (fparam_normalized_type == iparam_type) {
 			Log( LogLevel::TRACE, [&fparam, &iparam, &fparam_normalized_type, &iparam_type]() {return "exact type matched " + fparam_normalized_type + "(" + fparam->type + ") == " + iparam_type;  });
-			local_rank += 2^10;
+			local_rank += std::pow(2, 10);
 		}
 		
 		//check if the function parameter and info parameter types are convertible
 		//make sure undefined was actually passed so conversion to boolean won't be used
 		else if ((info.Length() > i) && isConvertibleTo(iparam, fparam_aliases )) {
-			Log( LogLevel::TRACE, [&fparam_aliases]() {return "type is convertible to " + fparam_aliases ; });
-			local_rank += 2^2;
+			Log(LogLevel::TRACE, [&fparam_aliases]() {return "type is convertible to " + fparam_aliases; });
+			//if its convertible to boolean, it should be a valid function, but not on any priority
+			if (fparam_aliases == "Boolean") {
+				local_rank = 0;
+			}
+			else {
+				local_rank += std::pow(2, 2);
+			}
 		}
 
 		//if this is undefined AND a default value is supplied, this is valid and gets one point
@@ -453,9 +459,9 @@ int overload_resolution::MatchOverload(std::vector<std::string> &classNames, std
 			local_rank += 1;
 		}
 		//if this is the last parameter AND its a function, this is valid but no score
-		else if ((i == (func->parameters.size() - 1)) && fparam_normalized_type == "Function") {
+		else if (iparam_type == "Function" && (i == (func->parameters.size() - 1)) && fparam_normalized_type == "Function") {
 			Log(LogLevel::TRACE, [&i]() {return "a function is available in the last position, which could mean its an async call, ignore it"; });
-			local_rank = local_rank;
+			local_rank = 0;
 		}
 		//otherwise, its not valid
 		else {
@@ -470,7 +476,7 @@ int overload_resolution::MatchOverload(std::vector<std::string> &classNames, std
 
 		//if any of the function parameter is not convertible, return -1;
 
-		if (local_rank > 0) {
+		if (local_rank > -1) {
 			rank += local_rank;
 		}
 		else {

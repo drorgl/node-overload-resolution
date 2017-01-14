@@ -93,4 +93,7 @@ If there will be future development, it should do the following:
 - implement macros
 - cleanup function registration
 - add logging and instrumentation
+- add proper v8 exceptions with more information about the failure
+- add tests for function overload detection of convertible types (base/derived)
+
 
