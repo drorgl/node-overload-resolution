@@ -405,9 +405,17 @@ int overload_resolution::MatchOverload(std::vector<std::string> &classNames, std
 	int rank = 0;
 
 	//in case there are no parameters to this function, its always a possible candidate, though low priority
-	if ((func->parameters.size() == 0)) {
+	if ((func->parameters.size() == 0) && (info.Length() == 0)) {
+		Log(LogLevel::TRACE, [&func]() {return "function has no parameters, no parameters supplied"; });
+		return std::pow(2, 10);
+	}
+	else if ((func->parameters.size() == 0)) {
 		Log( LogLevel::TRACE, [&func]() {return "function has no parameters, low priority candidate"; });
 		return 1;
+	}
+
+	if ((int)func->parameters.size() == info.Length()) {
+		rank += 1;
 	}
 
 	//check conversion of prototype types, give higher score to closer conversions, don't check if only one className exists
@@ -419,7 +427,7 @@ int overload_resolution::MatchOverload(std::vector<std::string> &classNames, std
 	}
 
 	for (auto i = 0; i < parameterLength; i++) {
-		int local_rank = -1;
+		int local_rank = 0;
 		auto iparam = (info.Length() > i) ? info[i] : Nan::Undefined();
 		auto fparam = (func->parameters.size() > i) ? func->parameters.at(i) : nullptr;
 
@@ -437,7 +445,7 @@ int overload_resolution::MatchOverload(std::vector<std::string> &classNames, std
 
 		if (fparam_normalized_type == iparam_type) {
 			Log( LogLevel::TRACE, [&fparam, &iparam, &fparam_normalized_type, &iparam_type]() {return "exact type matched " + fparam_normalized_type + "(" + fparam->type + ") == " + iparam_type;  });
-			local_rank += std::pow(2, 10);
+			local_rank = std::pow(2, 10);
 		}
 		
 		//check if the function parameter and info parameter types are convertible
@@ -445,23 +453,26 @@ int overload_resolution::MatchOverload(std::vector<std::string> &classNames, std
 		else if ((info.Length() > i) && isConvertibleTo(iparam, fparam_aliases )) {
 			Log(LogLevel::TRACE, [&fparam_aliases]() {return "type is convertible to " + fparam_aliases; });
 			//if its convertible to boolean, it should be a valid function, but not on any priority
-			if (fparam_aliases == "Boolean") {
-				local_rank = 0;
+			if (iparam_type == "Undefined") {
+				local_rank = 1;
+			}
+			else if (fparam_aliases == "Boolean") {
+				local_rank = 2;
 			}
 			else {
-				local_rank += std::pow(2, 2);
+				local_rank = std::pow(2, 4);
 			}
 		}
 
 		//if this is undefined AND a default value is supplied, this is valid and gets one point
 		else if (iparam->IsUndefined() && ((!fparam->defaultValue.IsEmpty() && !(Nan::New(fparam->defaultValue)->IsUndefined())))) {
 			Log(LogLevel::TRACE, [&i]() {return "no parameter is available but a default value is supplied at index " + i; });
-			local_rank += 1;
+			local_rank = 3;
 		}
 		//if this is the last parameter AND its a function, this is valid but no score
 		else if (iparam_type == "Function" && (i == (func->parameters.size() - 1)) && fparam_normalized_type == "Function") {
 			Log(LogLevel::TRACE, [&i]() {return "a function is available in the last position, which could mean its an async call, ignore it"; });
-			local_rank = 0;
+			local_rank = 1;
 		}
 		//otherwise, its not valid
 		else {
