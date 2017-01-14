@@ -125,43 +125,43 @@ addon.Flush();
 
 for (var i = 0; i < 1; i++) {
 
-    tape('test function without overload resolution', function (t) {
-        t.equal(addon.testfunction_no_overload_resolution(), "testfunction_no_overload_resolution", "function without overload returned true");
-        t.end();
-    });
-    addon.Flush();
+    //tape('test function without overload resolution', function (t) {
+    //    t.equal(addon.testfunction_no_overload_resolution(), "testfunction_no_overload_resolution", "function without overload returned true");
+    //    t.end();
+    //});
+    //addon.Flush();
 
-    tape('base_function on base_class', function (t) {
-        var bc = new addon.base_class();
-        t.ok(bc, "base class created successfully");
-        t.ok(bc.base_function(), "function called on base_class");
-        t.end();
-    });
-    addon.Flush();
+    //tape('base_function on base_class', function (t) {
+    //    var bc = new addon.base_class();
+    //    t.ok(bc, "base class created successfully");
+    //    t.ok(bc.base_function(), "function called on base_class");
+    //    t.end();
+    //});
+    //addon.Flush();
 
-    tape('function on derived class', function (t) {
-        var dc = new addon.derived_class();
-        t.ok(dc, "derived class created successfully");
-        t.ok(dc.derived_function(), "function called on derived_class");
-        t.ok(dc.this_check(), "function got This()");
-        dc.this_check(function (err, res) {
-            if (err) {
-                t.fail("This() doesn't work in async");
-            }
-            t.ok(res, "async function got This()");
-            t.end();
-        });
+    //tape('function on derived class', function (t) {
+    //    var dc = new addon.derived_class();
+    //    t.ok(dc, "derived class created successfully");
+    //    t.ok(dc.derived_function(), "function called on derived_class");
+    //    t.ok(dc.this_check(), "function got This()");
+    //    dc.this_check(function (err, res) {
+    //        if (err) {
+    //            t.fail("This() doesn't work in async");
+    //        }
+    //        t.ok(res, "async function got This()");
+    //        t.end();
+    //    });
         
-    });
-    addon.Flush();
+    //});
+    //addon.Flush();
 
-    tape('base_class.base_function  test function on derived class', function (t) {
-        var dc = new addon.derived_class();
-        t.ok(dc, "derived class created successfully");
-        t.ok(dc.base_function(), "base_class.base_function function called on derived_class");
-        t.end();
-    });
-    addon.Flush();
+    //tape('base_class.base_function  test function on derived class', function (t) {
+    //    var dc = new addon.derived_class();
+    //    t.ok(dc, "derived class created successfully");
+    //    t.ok(dc.base_function(), "base_class.base_function function called on derived_class");
+    //    t.end();
+    //});
+    //addon.Flush();
 
 
     var dataTypes = [
@@ -492,9 +492,10 @@ for (var i = 0; i < 1; i++) {
     tape('function overload 1 parameter, 2nd parameter default', function (t) {
         t.doesNotThrow(function () {
             for (var dt1 of dataTypes) {
+                var default_func_no_params = new Function("addon", "return addon.default_testers_" + dt1.name + "()");
                 var default_func = new Function("addon, val", "return addon.default_testers_" + dt1.name + "(val)");
                 var default_func_2params = new Function("addon, val1,val2", "return addon.default_testers_" + dt1.name + "(val1,val2)");
-                t.equal(default_func(addon), ".no_params", "default testers " + dt1.name + ", no parameters");
+                t.equal(default_func_no_params(addon), ".no_params", "default testers " + dt1.name + ", no parameters");
                 for (var dt2 of dataTypes) {
                     t.equal(default_func(addon, dt2.value), "." + dt2.name + "(" + JSON.stringify(dt2.value) + ")." + dt1.name + "(" + JSON.stringify(dt1.defaultValue) + ")", "default testers " + dt2.name + ", default (2nd parameter):" + dt1.name);
                     t.equal(default_func_2params(addon, dt2.value, dt1.value), "." + dt2.name + "(" + JSON.stringify(dt2.value) + ")." + dt1.name + "(" + JSON.stringify(dt1.value) + ")", "default testers " + dt2.name + ", passed 2nd parameter (instead of default):" + dt1.name);
