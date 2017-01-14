@@ -34,31 +34,38 @@ struct overload_info {
 };
 
 inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type) {
+	assert(!type.empty() && "type cannot be empty");
 	return std::make_shared<overload_info>(parameterName, type);
 }
 
 inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type, v8::Local<v8::Value> defaultValue) {
+	assert(!type.empty() && "type cannot be empty");
 	return std::make_shared<overload_info>(parameterName, type, defaultValue);
 }
 
 inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type, bool defaultValue) {
+	assert(!type.empty() && "type cannot be empty");
 	return std::make_shared<overload_info>(parameterName, type, defaultValue);
 }
 
 inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type, int defaultValue) {
+	assert(!type.empty() && "type cannot be empty");
 	return std::make_shared<overload_info>(parameterName, type, defaultValue);
 }
 
 inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type, double defaultValue) {
+	assert(!type.empty() && "type cannot be empty");
 	return std::make_shared<overload_info>(parameterName, type, defaultValue);
 }
 
 inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type, std::string defaultValue) {
+	assert(!type.empty() && "type cannot be empty");
 	return std::make_shared<overload_info>(parameterName, type, defaultValue);
 }
 
 template<typename T>
 inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type) {
+	assert(!type.empty() && "type cannot be empty" );
 	auto value_converter = std::make_shared < or ::value_converter<T>>();
 	auto oi = std::make_shared<overload_info>(parameterName, type);
 	oi->value_converter = value_converter;
@@ -68,7 +75,7 @@ inline std::shared_ptr<overload_info> make_param(const std::string parameterName
 
 template<typename T, typename std::enable_if<!std::is_convertible<T, v8::Local<v8::Value>>::value>::type* = nullptr>
 inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type, T defaultValue) {
-
+	assert(!type.empty() && "type cannot be empty");
 	auto value_converter = std::make_shared < or ::value_converter<T>>();
 	auto oi = std::make_shared<overload_info>(parameterName, type, value_converter->convert(defaultValue));
 	oi->value_converter = value_converter;
@@ -78,6 +85,7 @@ inline std::shared_ptr<overload_info> make_param(const std::string parameterName
 
 template<typename T, typename TREF = std::remove_reference<T>::type>
 inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type, std::shared_ptr<TREF> defaultValue) {
+	assert(!type.empty() && "type cannot be empty");
 	auto value_converter = std::make_shared < or ::value_converter<T>>();
 	auto oi = std::make_shared<overload_info>(parameterName, type, value_converter->convert(defaultValue));
 	oi->value_converter = value_converter;
@@ -90,6 +98,7 @@ inline std::shared_ptr<overload_info> make_param(const std::string parameterName
 
 template<typename T>
 inline std::shared_ptr<overload_info> make_param(const std::string parameterName, const std::string type, v8::Local<v8::Value> defaultValue) {
+	assert(!type.empty() && "type cannot be empty");
 	auto value_converter = std::make_shared < or ::value_converter<T>>();
 	auto oi = std::make_shared<overload_info>(parameterName, type, value_converter->convert(defaultValue));
 	oi->value_converter = value_converter;

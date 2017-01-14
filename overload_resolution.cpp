@@ -398,7 +398,7 @@ bool overload_resolution::isConvertibleTo(v8::Local<v8::Value> param, const std:
 	return false;
 }
 
-int overload_resolution::MatchOverload(std::shared_ptr<o_r_function> func, Nan::NAN_METHOD_ARGS_TYPE info) {
+int overload_resolution::MatchOverload(std::vector<std::string> &classNames, std::shared_ptr<o_r_function> func, Nan::NAN_METHOD_ARGS_TYPE info) {
 	//TODO: add parameters + static/constructor to log
 	Log( LogLevel::TRACE, [&func]() {return "matching overload for " + func->className + "::" + func->functionName; });
 	int parameterLength = std::max((int)func->parameters.size(), info.Length());
@@ -410,11 +410,20 @@ int overload_resolution::MatchOverload(std::shared_ptr<o_r_function> func, Nan::
 		return 1;
 	}
 
+	//check conversion of prototype types, give higher score to closer conversions, don't check if only one className exists
+	if (!func->className.empty() && (std::size(classNames) > 1)) {
+		auto classNameIndex = std::find(std::begin(classNames), std::end(classNames), func->className) - std::begin(classNames);
+		if (classNameIndex < std::size(classNames)) {
+			rank += std::size(classNames) - classNameIndex;
+		}
+	}
+
 	for (auto i = 0; i < parameterLength; i++) {
 		int local_rank = 0;
 		auto iparam = (info.Length() > i) ? info[i] : Nan::Undefined();
 		auto fparam = (func->parameters.size() > i) ? func->parameters.at(i) : nullptr;
 
+		//if a function parameer is not present, this is an extra parameter which should be ignored. a function is considered valid but on a lower rank
 		if (fparam == nullptr) {
 			Log( LogLevel::TRACE, [&i]() {return "extra unused parameter passed at index " + std::to_string(i); });
 			break;
@@ -422,35 +431,42 @@ int overload_resolution::MatchOverload(std::shared_ptr<o_r_function> func, Nan::
 		
 		//check if the function parameter and info parameter types are the same
 		auto fparam_normalized_type = normalize_types(fparam->type);
+		auto fparam_aliases = drill_type_aliases(fparam->type);
+
 		auto iparam_type = determineType(iparam);
+
 		if (fparam_normalized_type == iparam_type) {
 			Log( LogLevel::TRACE, [&fparam, &iparam, &fparam_normalized_type, &iparam_type]() {return "exact type matched " + fparam_normalized_type + "(" + fparam->type + ") == " + iparam_type;  });
 			local_rank += 2^10;
 		}
 		
-
 		//check if the function parameter and info parameter types are convertible
 		//make sure undefined was actually passed so conversion to boolean won't be used
-		auto fparam_aliases = drill_type_aliases(fparam->type);
-		if ((info.Length() > i) && isConvertibleTo(iparam, fparam_aliases )) {
+		else if ((info.Length() > i) && isConvertibleTo(iparam, fparam_aliases )) {
 			Log( LogLevel::TRACE, [&fparam_aliases]() {return "type is convertible to " + fparam_aliases ; });
 			local_rank += 2^2;
 		}
 
-		//TODO: check conversion of prototype types, give higher score to closer conversions, if base/descendant, prefer the exact type.
+		//if this is undefined AND a default value is supplied, this is valid and gets one point
+		else if (iparam->IsUndefined() && ((!fparam->defaultValue.IsEmpty() && !(Nan::New(fparam->defaultValue)->IsUndefined())))) {
+			Log(LogLevel::TRACE, [&i]() {return "no parameter is available but a default value is supplied at index " + i; });
+			local_rank += 1;
+		}
+		//if this is the last parameter AND its a function, this is valid but no score
+		else if ((i == (func->parameters.size() - 1)) && fparam_normalized_type == "Function") {
+			Log(LogLevel::TRACE, [&i]() {return "a function is available in the last position, which could mean its an async call, ignore it"; });
+			local_rank = local_rank;
+		}
+		//otherwise, its not valid
+		else {
+			Log(LogLevel::TRACE, [&i]() {return "no matching lower priority parameter is available, this overload is not valid"; });
+			return -1;
+		}
 
 		//TODO: how to handle array types?
 
 		//TODO: check interface/structures?
 
-		//if no default value and no supplied parameter, this should not match
-		if (iparam->IsUndefined() && (fparam->defaultValue.IsEmpty() || Nan::New(fparam->defaultValue)->IsUndefined())){
-			Log( LogLevel::TRACE, [&i]() {return "no parameter is available as either passed or default at index " + i; });
-			return -1;
-		}
-		else {
-			local_rank += 1;
-		}
 
 		//if any of the function parameter is not convertible, return -1;
 
@@ -550,7 +566,7 @@ void overload_resolution::executeBestOverload(const std::string ns, std::vector<
 		}
 
 		//check if the function parameter count equals the info parameters count, give a point in favor but only if reached maximum points
-		auto rank = MatchOverload(check, info);
+		auto rank = MatchOverload(classNames, check, info);
 		if (rank > 0) {
 			candidates.push_back(std::pair<int,std::weak_ptr< o_r_function>>(rank, check));
 		}
@@ -646,6 +662,7 @@ void overload_resolution::executeBestOverload(const std::string ns, std::vector<
 
 	//TODO: add details to this log entry
 	Log( LogLevel::ERROR, []() {return "no overload fulfills the parameters passed"; });
+
 	return Nan::ThrowError("no overload fulfills the parameters passed");
 }
 

@@ -163,7 +163,7 @@ public:
 	//1. by name
 	//2. by passed parameters, give higher weight to passed parameters, lower weight to default parameters, even lower weight to convertible parameters
 	//3. discard non-matching options
-	int MatchOverload(std::shared_ptr<o_r_function> func, Nan::NAN_METHOD_ARGS_TYPE info);
+	int MatchOverload(std::vector<std::string> &classNames, std::shared_ptr<o_r_function> func, Nan::NAN_METHOD_ARGS_TYPE info);
 
 	void executeBestOverload(const std::string ns, std::vector<std::string> & className, const std::string name, Nan::NAN_METHOD_ARGS_TYPE info);
 	

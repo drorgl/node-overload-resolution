@@ -1,16 +1,6 @@
 #ifndef _O_R_CLASS_TYPENAME_H_
 #define _O_R_CLASS_TYPENAME_H_
 
-//template <typename T>
-//class Class_TypeName {
-//public:
-//	static const char *name; 
-//};
-//
-//#define DECLARE_CLASS_TYPENAME(x) template<> const char *Class_TypeName<x>::name = #x;
-//#define CLASS_TYPENAME(x) #x
-
-
 #include <iostream>
 #include <string>
 
@@ -57,21 +47,6 @@ const std::string GetTypeName(void)
 {
 	return or ::internal::GetTypeNameHelper<T>::GetTypeName();
 }
-
-//struct foo {};
-//struct bar {};
-//
-//template <class T1, class T2>
-//struct templated_struct {};
-//
-//int main() {
-//	std::cout << GetTypeName<foo>() << '\n';
-//	std::cout << GetTypeName<bar>() << '\n';
-//	std::cout << GetTypeName< templated_struct<foo, int> >() << '\n';
-//
-//	std::cout << GetTypeName<int>() << '\n';
-//	std::cout << GetTypeName<float>() << '\n';
-//}
 
 
 #endif
