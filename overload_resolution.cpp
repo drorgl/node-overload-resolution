@@ -44,6 +44,8 @@ void overload_resolution::LogWarn(std::function<std::string()> message) {
 
 
 void overload_resolution::add_type_alias(std::string alias, std::string type) {
+	assert(!alias.empty() && "alias can not be empty");
+	assert(!type.empty() && "alias type can not be empty");
 	Log(LogLevel::DEBUG, [&alias, &type]() {return "adding alias " + alias + " for " + type; });
 	_type_aliases[alias] = type;
 }
