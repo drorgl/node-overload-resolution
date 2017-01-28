@@ -97,7 +97,7 @@ private:
 
 	void create_function_store(const std::string ns, const std::string className, const std::string functionName);
 
-	std::string drill_type_aliases(std::string alias);
+	std::string drill_type_aliases(std::string& alias);
 
 	std::string normalize_types(std::string type);
 

@@ -7,12 +7,16 @@ std::set<std::string> overload_resolution::_convertible_primitive_types = {"Numb
 
 std::set<std::string> overload_resolution::_primitive_types = {"Number","String","Boolean","Date","Buffer","Function","Map","Set","Null","Promise","Proxy","RegExp","Array"};
 
-static void Log(LogLevel level, std::string message) {
-	tracer::Log("overload_resolution", level, message);
+static void Log(LogLevel level, std::string &&message) {
+	if (tracer::log_level <= level) {
+		tracer::Log("overload_resolution", level, std::move(message));
+	}
 }
 
 static void Log(LogLevel level, std::function<std::string()> message) {
-	tracer::Log("overload_resolution", level, message);
+	if (tracer::log_level <= level) {
+		tracer::Log("overload_resolution", level, message);
+	}
 }
 
 
@@ -50,9 +54,10 @@ void overload_resolution::add_type_alias(std::string alias, std::string type) {
 	_type_aliases[alias] = type;
 }
 
-std::string overload_resolution::drill_type_aliases(std::string alias) {
-	if (_type_aliases.count(alias)) {
-		auto type = _type_aliases[alias];
+std::string overload_resolution::drill_type_aliases(std::string& alias) {
+	auto type_alias = _type_aliases.find(alias);
+	if (type_alias != _type_aliases.end()){
+		auto type = type_alias->second;
 		Log( LogLevel::TRACE, [&alias, &type]() {return "drilling alias " + alias + " of " + type; });
 		return drill_type_aliases(type);
 	}
@@ -65,8 +70,9 @@ std::string overload_resolution::drill_type_aliases(std::string alias) {
 
 std::string overload_resolution::normalize_types(std::string type) {
 	//if type was already normalized, return the cached normalization
-	if (_cached_normalization.count(type)) {
-		return _cached_normalization[type];
+	auto cached = _cached_normalization.find(type);
+	if (cached != _cached_normalization.end()) {
+		return cached->second;
 	}
 
 	Log( LogLevel::TRACE, [&type]() {return "normalizing type " + type; });
@@ -243,8 +249,17 @@ void overload_resolution::addOverloadConstructor(const std::string ns, const std
 //TODO: possibly improve the performance by limiting the number of array object read
 void overload_resolution::get_array_types(v8::Local<v8::Value> arr, std::set<std::string> &types) {
 	auto v8arr = arr.As<v8::Array>();
-	for (auto i = 0; i < v8arr->Length(); i++) {
-		types.insert(drill_type_aliases(determineType(v8arr->Get(i))));
+
+	//speed optimization, could create problems for large inconsistent arrays
+	if (v8arr->Length() <= 10) {
+		for (auto i = 0; i < v8arr->Length(); i++) {
+			types.insert(drill_type_aliases(determineType(v8arr->Get(i))));
+		}
+	}
+	else {
+		for (auto i = 0; i < v8arr->Length(); i+=(v8arr->Length() / 10)) {
+			types.insert(drill_type_aliases(determineType(v8arr->Get(i))));
+		}
 	}
 	//TODO: add arr?... could be problematic
 	Log( LogLevel::TRACE, [&arr, &types]() {return "get array types " + tracer::join(types,", ") ; });
@@ -335,9 +350,10 @@ std::string overload_resolution::determineType(v8::Local<v8::Value> param) {
 	std::vector<std::shared_ptr<object_type>> alternatives;
 
 	//might be able to optimize with FindInstanceInPrototypeChain
+	auto param_name = *Nan::Utf8String(param.As<v8::Object>()->GetConstructorName());
 	for (auto &&it : _types){
 		if (Nan::New<v8::FunctionTemplate>(it.second-> function_template)->HasInstance(param)) {
-			if (strcmp(*Nan::Utf8String(param.As<v8::Object>()->GetConstructorName()), it.second->name.c_str()) == 0) {
+			if (strcmp(param_name, it.second->name.c_str()) == 0) {
 				return drill_type_aliases(it.second->name);
 			}
 			else {
