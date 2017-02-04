@@ -2,12 +2,25 @@
 	
 	'target_defaults' : {
 		 # enable exceptions for all targets
+		 
 		'conditions' : [
 			['1==1', {
+					'configurations': {
+						'Release':{
+							'msvs_settings': {
+							  'VCCLCompilerTool': {
+								'RuntimeTypeInfo': 'true'
+							  }
+							}
+						}
+					 },
+			
+			
 					'msvs_settings' : {
 						'VCCLCompilerTool' : {
 							'WarningLevel' : 0,
 							'WholeProgramOptimization' : 'false',
+							'RuntimeTypeInfo': 'true',
 							'AdditionalOptions' : ['/EHsc'],
 							'ExceptionHandling' : 1,
 							 #  / EHsc

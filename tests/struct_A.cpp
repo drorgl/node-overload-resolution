@@ -6,13 +6,13 @@ std::vector<std::shared_ptr<overload_info>> struct_A::_definition = {
 };
 
 
-bool struct_A::verify(overload_resolution * ovres, v8::Local<v8::Value> obj) {
+bool struct_A::verify(or::type_system * ovres, v8::Local<v8::Value> obj) {
 	return ovres->verifyObject(struct_A::_definition, obj);
 }
 
 bool struct_A::parse(v8::Local<v8::Value> obj) {
-	this->prop1 = *Nan::Utf8String(overload_resolution::GetFromObject(obj, "prop1").ToLocalChecked());
-	this->prop2 = *Nan::Utf8String(overload_resolution::GetFromObject(obj, "prop2").ToLocalChecked());
+	this->prop1 = *Nan::Utf8String(or::type_system::GetFromObject(obj, "prop1").ToLocalChecked());
+	this->prop2 = *Nan::Utf8String(or::type_system::GetFromObject(obj, "prop2").ToLocalChecked());
 
 	return true;
 }

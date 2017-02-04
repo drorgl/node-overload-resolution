@@ -19,6 +19,15 @@
 		"sources":[			
 			  "overload_resolution.h"
 			, "overload_resolution.cpp"
+						
+			, "function_arguments.h"
+			, "function_arguments.cpp"
+			
+			, "function_rank_cache.h"
+			, "function_rank_cache.cpp"
+			
+			, "type_system.h"
+			, "type_system.cpp"
 			
 			, "overload_resolution_types.h"
 			, "overload_resolution_types.cpp"

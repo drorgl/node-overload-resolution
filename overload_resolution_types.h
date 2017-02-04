@@ -2,6 +2,7 @@
 #define _O_R_OVERLOAD_RESOLUTION_TYPES_H_
 
 #include <nan.h>
+#include <unordered_map>
 #include "FunctionCallbackInfo.h"
 
 typedef const or ::FunctionCallbackInfo<v8::Value>& POLY_METHOD_ARGS_TYPE;
@@ -117,12 +118,12 @@ struct o_r_function {
 
 struct o_r_class {
 	std::string className;
-	std::map<std::string, std::vector<std::shared_ptr< o_r_function>>> functions;
+	std::unordered_map<std::string, std::vector<std::shared_ptr< o_r_function>>> functions;
 };
 
 struct o_r_namespace {
 	std::string name;
-	std::map<std::string, std::shared_ptr< o_r_class>> classes;
+	std::unordered_map<std::string, std::shared_ptr< o_r_class>> classes;
 };
 
 #endif
