@@ -132,6 +132,9 @@ namespace or {
 				_this->value= _this->prefetcher->read(_info.This());
 			}
 
+
+			_values.resize(_arguments.size());
+
 			for (auto i = 0; i < _arguments.size(); i++) {
 				if (_params.size() > i) {
 					auto converted_param = _arguments[i]->value_converter->read(_params[i]);
@@ -146,7 +149,7 @@ namespace or {
 						}
 					}
 
-					_values.push_back(converted_param);
+					_values[i] = converted_param;
 				}
 			}
 		}
