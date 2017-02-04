@@ -1,9 +1,9 @@
 #ifndef _O_R_VALUE_CONVERTER_H_
 #define _O_R_VALUE_CONVERTER_H_
 
-#include "v8.h"
+//#include "v8.h"
 
-#include "node_modules/nan/nan.h"
+//#include <nan.h>
 
 #include "value_converter_base.h"
 #include "value_holder.h"

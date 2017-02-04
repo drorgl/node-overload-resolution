@@ -7,13 +7,14 @@
 #include <node_version.h>
 #include <node_buffer.h>
 #include <string.h>
+#include <nan.h>
 //#include "node_modules/nan/nan.h"
 
 #include <memory>
 #include <string>
 //#include "../IStructuredObject.h"
 
-#include "../overload_resolution.h"
+#include "../type_system.h"
 
 
 
@@ -25,7 +26,7 @@ public:
 	std::string prop1;
 	int prop2;
 
-	virtual bool verify(overload_resolution * ovres, v8::Local<v8::Value> obj);
+	virtual bool verify(or::type_system * ovres, v8::Local<v8::Value> obj);
 	virtual bool parse(v8::Local<v8::Value> obj);
 
 	 v8::Local<v8::Value> ToObject();

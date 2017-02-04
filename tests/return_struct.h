@@ -9,11 +9,12 @@
 #include <string.h>
 //#include "node_modules/nan/nan.h"
 
+
 #include <memory>
 #include <string>
 //#include "../IStructuredObject.h"
 
-#include "../overload_resolution.h"
+#include "../type_system.h"
 
 
 
@@ -39,14 +40,14 @@ public:
 	std::string type;
 	T value;
 
-	virtual bool verify(overload_resolution * ovres, v8::Local<v8::Value> obj) {
+	virtual bool verify(or::type_system * ovres, v8::Local<v8::Value> obj) {
 		return ovres->verifyObject(return_struct::_definition, obj);
 	}
 	virtual bool parse(v8::Local<v8::Value> obj) {
-		this->type = *Nan::Utf8String(overload_resolution::GetFromObject(obj, "type").ToLocalChecked());
+		this->type = *Nan::Utf8String(or::type_system::GetFromObject(obj, "type").ToLocalChecked());
 
 		auto vconverter = std::make_shared< or ::value_converter<T>>();
-		this->value = vconverter->convert(overload_resolution::GetFromObject(obj, "value").ToLocalChecked());
+		this->value = vconverter->convert(or::type_system::GetFromObject(obj, "value").ToLocalChecked());
 		//this->value = *Nan::Utf8String(ovres->GetFromObject(obj, "value").ToLocalChecked());
 
 		return true;
