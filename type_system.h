@@ -44,9 +44,7 @@ namespace or {
 		void get_array_types(v8::Local<v8::Value> arr, std::set<std::string> &types);
 
 
-		//takes a generic type in the form of Array<Number> or Array<Array<Number> and returns the list of separate types for type validation
-		void split_generic_types(std::string type, std::set<std::string> &types);
-
+		
 		
 		static void LogDebug(std::function<std::string()> message);
 		static void LogWarn(std::function<std::string()> message);
@@ -102,6 +100,12 @@ namespace or {
 
 		std::shared_ptr<object_type> get_type(std::string &type);
 
+		//takes a generic type in the form of Array<Number> or Array<Array<Number> and returns the list of separate types for type validation
+		void split_generic_types(std::string type, std::unordered_set<std::string> &types);
+
+
+		//check array is convertible to type
+		bool isArrayConvertibleTo(v8::Local<v8::Value> param, std::string &param_type, const std::string type);
 
 		//checks if param type is convertible to type
 		bool isConvertibleTo(v8::Local<v8::Value> param, std::string &param_type, const std::string type);

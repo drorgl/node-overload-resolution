@@ -179,10 +179,11 @@ int overload_resolution::MatchOverload(std::vector<std::string> &classNames, std
 		
 		//check if the function parameter and info parameter types are convertible
 		//make sure undefined was actually passed so conversion to boolean won't be used
-		else if (fargs.length() > i && fargs.is_convertible_to(i,fparam_aliases)){ 
+		
+		else if (fargs.length() > i && (fargs.is_convertible_to(i,fparam_aliases))) {
 			Log(LogLevel::TRACE, [&fparam_aliases]() {return "type is convertible to " + fparam_aliases; });
 			//if its convertible to boolean, it should be a valid function, but not on any priority
-			if (iparam_type == "Undefined") {
+			if (iparam_type == "Undefined" || fargs.is_array(i)) {
 				local_rank = 1;
 			}
 			else if (fparam_aliases == "Boolean") {
@@ -192,7 +193,6 @@ int overload_resolution::MatchOverload(std::vector<std::string> &classNames, std
 				local_rank = std::pow(2, 4);
 			}
 		}
-
 		//if this is undefined AND a default value is supplied, this is valid and gets one point
 		else if (iparam_type == "Undefined" && ((!fparam->defaultValue.IsEmpty() && !(Nan::New(fparam->defaultValue)->IsUndefined())))) {
 			Log(LogLevel::TRACE, [&i]() {return "no parameter is available but a default value is supplied at index " + i; });

@@ -14,6 +14,7 @@ namespace or {
 		type_system &_typesys;
 
 		std::vector<std::string> _types;
+		std::vector<bool> _is_array;
 
 		mutable std::unordered_map<std::string, bool> _cache_convertible;
 
@@ -28,6 +29,8 @@ namespace or {
 		std::string get_type(int index) const;
 
 		std::string get_type_key() const;
+
+		bool is_array(int index);
 
 		bool is_convertible_to(int index, std::string &alias) const;
 
