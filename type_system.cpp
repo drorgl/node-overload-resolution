@@ -96,7 +96,7 @@ namespace or {
 
 
 
-	void type_system::split_generic_types(std::string type, std::set<std::string> &types) {
+	void type_system::split_generic_types(std::string type, std::unordered_set<std::string> &types) {
 		Log(LogLevel::TRACE, [&type, types]() {return "splitting generic types " + type; });
 		auto genericBegin = type.find("<");
 		if (genericBegin == std::string::npos) {
@@ -258,6 +258,44 @@ namespace or {
 		}
 
 		return "Unknown";
+	}
+
+	bool type_system::isArrayConvertibleTo(v8::Local<v8::Value> param, std::string &param_type, const std::string type) {
+		Log(LogLevel::TRACE, [&param_type, &type]() {return "is array convertible " + param_type + " > " + type; });
+
+
+		std::unordered_set<std::string> generic_param_types;
+		std::unordered_set<std::string> generic_types;
+
+		split_generic_types(param_type, generic_param_types);
+		split_generic_types(type, generic_types);
+
+		std::vector<std::string> generic_param_types_vec(generic_param_types.begin(), generic_param_types.end());
+		std::vector<std::string> generic_types_vec(generic_types.begin(), generic_types.end());
+
+		int generic_array_types_length = (std::max)(generic_param_types_vec.size(), generic_types_vec.size());
+		if (generic_array_types_length > 0) {
+			if (normalize_types(generic_param_types_vec[0]) != "Array"){
+				return false;
+			}
+			if (normalize_types(generic_types_vec[0]) != "Array") {
+				return false;
+			}
+		}
+
+		for (auto i = 0; i < generic_array_types_length; i++) {
+			if (generic_param_types_vec.size() > i && generic_types_vec.size() > i) {
+				auto normalized_param = normalize_types(generic_param_types_vec[i]);
+				auto normalized_type = normalize_types(generic_types_vec[i]);
+
+				if (normalized_param != normalized_type) {
+					if (!isConvertibleTo(param, normalized_param, normalized_type)) {
+						return false;
+					}
+				}
+			}
+		}
+		return true;
 	}
 
 	bool type_system::isConvertibleTo(v8::Local<v8::Value> param, std::string &param_type, const std::string type) {
@@ -429,15 +467,15 @@ namespace or {
 								(primitive_types.count(type) == 0))
 							{
 								//if normal type checking failed, do a generic type checking
-								std::set<std::string> types;
+								std::unordered_set<std::string> types;
 								split_generic_types(type, types);
 
-								for (std::set<std::string>::iterator separate_type = std::begin(types); separate_type != std::end(types); separate_type++) {
-									if ((_types.count(*separate_type) == 0) &&
-										(!_structured_factory->has_type(separate_type->c_str())) &&
-										(primitive_types.count(*separate_type) == 0) && (*separate_type != "Object")) {
-										printf("cannot find type %s in %s::%s::%s\r\n", separate_type->c_str(), ns->second->name.c_str(), cls->second->className.c_str(), (*fnoverload)->functionName.c_str());
-										Log(LogLevel::ERROR, [&separate_type, &ns, &cls, &fnoverload]() {return "cannot find type " + *separate_type + " in " + ns->second->name + "::" + cls->second->className + "::" + (*fnoverload)->functionName; });
+								for (auto &&separate_type : types){// = std::begin(types); separate_type != std::end(types); separate_type++) {
+									if ((_types.count(separate_type) == 0) &&
+										(!_structured_factory->has_type(separate_type.c_str())) &&
+										(primitive_types.count(separate_type) == 0) && (separate_type != "Object")) {
+										printf("cannot find type %s in %s::%s::%s\r\n", separate_type.c_str(), ns->second->name.c_str(), cls->second->className.c_str(), (*fnoverload)->functionName.c_str());
+										Log(LogLevel::ERROR, [&separate_type, &ns, &cls, &fnoverload]() {return "cannot find type " + separate_type + " in " + ns->second->name + "::" + cls->second->className + "::" + (*fnoverload)->functionName; });
 										valid = false;
 									}
 								}

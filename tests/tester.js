@@ -427,6 +427,15 @@ for (var i = 0; i < 1; i++) {
         t.end();
     });
 
+    tape('function overload for empty array', function (t) {
+        t.doesNotThrow(function () {
+            t.equal(addon.array_fallback_testers([]), '.array<int>', "array_fallback_testers([])");
+            t.equal(addon.array_fallback_testers([1]), '.array<int>', "array_fallback_testers([1])");
+            t.equal(addon.array_fallback_testers(["1"]), '.array<int>', "array_fallback_testers([1])");
+            t.end();
+        });
+    });
+
     //test array types, array types overloads, array types defaults, array<struct>, array<array<struct>>
     tape('function overload for arrays, no defaults', function (t) {
         t.doesNotThrow(function () {
