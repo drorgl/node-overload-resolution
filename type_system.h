@@ -101,7 +101,7 @@ namespace or {
 		std::shared_ptr<object_type> get_type(std::string &type);
 
 		//takes a generic type in the form of Array<Number> or Array<Array<Number> and returns the list of separate types for type validation
-		void split_generic_types(std::string type, std::unordered_set<std::string> &types);
+		void split_generic_types(std::string type, std::vector<std::string> &types);
 
 
 		//check array is convertible to type
