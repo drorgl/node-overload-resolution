@@ -101,7 +101,9 @@ public:
 	//catch-all function, looks up the function in the overloads collections and executing the right one
 	Nan::NAN_METHOD_RETURN_TYPE execute(const std::string name_space, Nan::NAN_METHOD_ARGS_TYPE info);
 
-	
+	inline std::string get_type(v8::Local<v8::Value> param) {
+		return _type_system.determineType(param);
+	}
 };
 
 #endif
