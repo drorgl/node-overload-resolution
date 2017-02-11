@@ -432,6 +432,9 @@ for (var i = 0; i < 1; i++) {
             t.equal(addon.array_fallback_testers([]), '.array<int>', "array_fallback_testers([])");
             t.equal(addon.array_fallback_testers([1]), '.array<int>', "array_fallback_testers([1])");
             t.equal(addon.array_fallback_testers(["1"]), '.array<int>', "array_fallback_testers([1])");
+            t.throws(function () {
+                t.notEqual(addon.array_fallback_testers([["1"]]), '.array<int>', "array_fallback_testers([1])");
+            });
             t.end();
         });
     });

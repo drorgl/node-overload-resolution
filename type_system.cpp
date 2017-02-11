@@ -96,11 +96,11 @@ namespace or {
 
 
 
-	void type_system::split_generic_types(std::string type, std::unordered_set<std::string> &types) {
+	void type_system::split_generic_types(std::string type, std::vector<std::string> &types) {
 		Log(LogLevel::TRACE, [&type, types]() {return "splitting generic types " + type; });
 		auto genericBegin = type.find("<");
 		if (genericBegin == std::string::npos) {
-			types.insert(drill_type_aliases(type));
+			types.push_back(drill_type_aliases(type));
 			return;
 		}
 
@@ -112,7 +112,7 @@ namespace or {
 		}
 
 		auto genericType = type.substr(0, genericBegin);
-		types.insert(genericType);
+		types.push_back(genericType);
 		auto between = type.substr(genericBegin + 1, genericEnd - genericBegin - 1);
 		split_generic_types(between, types);
 	}
@@ -264,31 +264,32 @@ namespace or {
 		Log(LogLevel::TRACE, [&param_type, &type]() {return "is array convertible " + param_type + " > " + type; });
 
 
-		std::unordered_set<std::string> generic_param_types;
-		std::unordered_set<std::string> generic_types;
+		std::vector<std::string> generic_param_types;
+		std::vector<std::string> generic_types;
 
 		split_generic_types(param_type, generic_param_types);
 		split_generic_types(type, generic_types);
 
-		std::vector<std::string> generic_param_types_vec(generic_param_types.begin(), generic_param_types.end());
-		std::vector<std::string> generic_types_vec(generic_types.begin(), generic_types.end());
 
-		int generic_array_types_length = (std::max)(generic_param_types_vec.size(), generic_types_vec.size());
+		int generic_array_types_length = (std::max)(generic_param_types.size(), generic_types.size());
 		if (generic_array_types_length > 0) {
-			if (normalize_types(generic_param_types_vec[0]) != "Array"){
+			if (normalize_types(generic_param_types[0]) != "Array"){
 				return false;
 			}
-			if (normalize_types(generic_types_vec[0]) != "Array") {
+			if (normalize_types(generic_types[0]) != "Array") {
 				return false;
 			}
 		}
 
 		for (auto i = 0; i < generic_array_types_length; i++) {
-			if (generic_param_types_vec.size() > i && generic_types_vec.size() > i) {
-				auto normalized_param = normalize_types(generic_param_types_vec[i]);
-				auto normalized_type = normalize_types(generic_types_vec[i]);
+			if (generic_param_types.size() > i && generic_types.size() > i) {
+				auto normalized_param = normalize_types(generic_param_types[i]);
+				auto normalized_type = normalize_types(generic_types[i]);
 
-				if (normalized_param != normalized_type) {
+				if ((normalized_param == "Array" && normalized_type != "Array") || 
+					(normalized_param != "Array" && normalized_type == "Array")) {
+					return false;
+				} else if (normalized_param != normalized_type) {
 					if (!isConvertibleTo(param, normalized_param, normalized_type)) {
 						return false;
 					}
@@ -467,7 +468,7 @@ namespace or {
 								(primitive_types.count(type) == 0))
 							{
 								//if normal type checking failed, do a generic type checking
-								std::unordered_set<std::string> types;
+								std::vector<std::string> types;
 								split_generic_types(type, types);
 
 								for (auto &&separate_type : types){// = std::begin(types); separate_type != std::end(types); separate_type++) {
