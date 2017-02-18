@@ -10,6 +10,7 @@
 
 #include "DateTime.h"
 #include "Callback.h"
+#include "AsyncCallback.h"
 #include "ObjectWrap.h"
 #include "IStructuredObject.h"
 
@@ -95,6 +96,43 @@ namespace or {
 		}
 
 	};
+
+	//async callback
+
+
+	template<typename T>
+	class value_converter<std::shared_ptr<T>, typename std::enable_if<std::is_base_of<AsyncCallback, T>::value>::type> : public value_converter_base {
+	public:
+
+		virtual std::shared_ptr<T> convert(v8::Local<v8::Value> from) {
+			if (!from->IsFunction()) {
+				throw std::exception("attempting to convert a non-function to Callback");
+			}
+			return std::make_shared<T>(from.As<v8::Function>());
+		}
+
+		static void EmptyFunctionCallback(const Nan::FunctionCallbackInfo<v8::Value>& info) {}
+
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<T> from) {
+			if (from == nullptr) {
+				return Nan::New<v8::Function>(EmptyFunctionCallback);
+			}
+			return from->GetFunction();
+		}
+
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+			auto from_value = std::dynamic_pointer_cast<value_holder<std::shared_ptr<T>>>(from);
+			return from_value->Value->GetFunction();
+		}
+
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+			auto parsed_value = std::make_shared<value_holder<std::shared_ptr<T>>>();
+			parsed_value->Value = convert(val);
+			return parsed_value;
+		}
+
+	};
+
 
 	//ObjectWrap
 

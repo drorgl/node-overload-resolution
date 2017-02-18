@@ -39,6 +39,7 @@
 			, "ObjectWrap.cpp"
 			, "ObjectWrap.h"
 			
+			, "AsyncCallback.h"
 			, "Callback.h"
 			
 			, "DateTime.h"
@@ -92,6 +93,8 @@
 		, "tests/or_array_tester.h"
 		, "tests/or_default_tester.h"
 		, "tests/or_value_converter.h"
+		
+		, "tests/threaded_tester.h"
 	  ]
     }
   ]

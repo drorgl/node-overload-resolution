@@ -622,6 +622,26 @@ for (var i = 0; i < 1; i++) {
 
 }
 
+
+tape('async function callback from stand alone thread', function (t) {
+    var counter = 5;
+    t.doesNotThrow(function () {
+        addon.async_callback(counter, function () {
+            counter--;
+        });
+    });
+
+    var shouldEnd = () => {
+        if (counter == 0) {
+            t.pass("async called 5 times");
+            t.end();
+        } else {
+            setTimeout(shouldEnd, 1);
+        }
+    }
+    shouldEnd();
+});
+
 //TODO: 
 //add make_param<T>("name","type",default T) test
 //add instantiate one type from another type test

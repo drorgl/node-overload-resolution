@@ -6,8 +6,12 @@
 
 #include <map>
 
+#include "threaded_tester.h"
+
 
 namespace or_value_converter {
+	ThreadedTester _threaded_tester;
+
 
 	namespace general_callback {
 		std::shared_ptr<overload_resolution> overload;
@@ -160,6 +164,18 @@ namespace or_value_converter {
 		info.GetReturnValue().Set(Nan::New(".no_parameters").ToLocalChecked());
 	}
 
+	POLY_METHOD(value_converter_async_callback) {
+		auto times = info.at<int>(0);
+		auto cb = info.at<std::shared_ptr< or ::AsyncCallback>>(1);
+		cb->set_ref(true);
+		_threaded_tester.Enqueue(times, [=]() {
+			auto callback = cb;
+			callback->Call({or::make_value(0)});
+		});
+		_threaded_tester.Start();
+		info.SetReturnValue("hello"s);
+	}
+
 	void RegisterORTesters(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
 		auto loverload = overload;
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<int>("a","int") }, value_converter_number);
@@ -181,8 +197,15 @@ namespace or_value_converter {
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<std::shared_ptr<std::vector<int>>>("a","Array") }, value_converter_array);
 		overload->addOverload("or_value_converter", "", "value_converter", {}, value_converter);
 
+
+		overload->addOverload("or_value_converter", "", "async_callback", {
+			make_param<int>("times","int"), 
+			make_param < std::shared_ptr< or ::AsyncCallback>>("cb","Function") 
+		}, value_converter_async_callback);
+
 		general_callback::overload = overload;
 		Nan::SetMethod(target, "value_converter", general_callback::tester_callback);
+		Nan::SetMethod(target, "async_callback", general_callback::tester_callback);
 	}
 
 }
