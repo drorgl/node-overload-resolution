@@ -55,6 +55,9 @@
 			, "class_typename.h"
 			
 			, "async_worker.h"
+			, "utilities/threadsafe_queue.h"
+			, "utilities/uvasync.cpp"
+			, "utilities/uvasync.h"
 			
 			, "README.md"
 			, "package.json"
