@@ -18,7 +18,7 @@
 
 #include "generic_value_holder.h"
 
-namespace or {
+namespace overres {
 	class generic_value_holder;
 
 	class AsyncCallback {
@@ -26,12 +26,12 @@ namespace or {
 	public:
 		AsyncCallback() {
 			_callback = std::make_shared<Nan::Callback>();
-			_uvasync = std::make_unique<or_utilities::uvasync>(AsyncCallback::async_uv_callback, this);
+			_uvasync = std::make_unique<overres_utilities::uvasync>(AsyncCallback::async_uv_callback, this);
 		}
 
 		AsyncCallback(const v8::Local<v8::Function> &fn) {
 			_callback = std::make_shared<Nan::Callback>(fn);
-			_uvasync = std::make_unique<or_utilities::uvasync>(AsyncCallback::async_uv_callback, this);
+			_uvasync = std::make_unique<overres_utilities::uvasync>(AsyncCallback::async_uv_callback, this);
 		}
 
 		virtual ~AsyncCallback() {
@@ -90,7 +90,7 @@ namespace or {
 			this_->async_process();
 		}
 
-		std::unique_ptr< or_utilities::uvasync> _uvasync;
+		std::unique_ptr< overres_utilities::uvasync> _uvasync;
 	};
 }
 

@@ -9,7 +9,7 @@
 
 
 
-	class base_class : public or::ObjectWrap {
+	class base_class : public overres::ObjectWrap {
 	private:
 
 	public:

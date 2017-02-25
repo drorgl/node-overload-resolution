@@ -1,6 +1,6 @@
 #include "ObjectWrap.h"
 
-namespace or {
+namespace overres {
 
 	v8::Local<v8::Object> ObjectWrap::Wrap() {
 		//if the object was already wrapped, returned the persistent object

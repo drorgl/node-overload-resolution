@@ -34,22 +34,22 @@
 ////supply global callback for all functions
 //
 
-namespace or {
+namespace overres {
 	class function_arguments;
 };
 
 
 class overload_resolution {
 private:
-	or::type_system _type_system;
-	or::function_rank_cache _function_cache;
+	overres::type_system _type_system;
+	overres::function_rank_cache _function_cache;
 	
 
 	//parse the registered functions, find possible matches:
 	//1. by name
 	//2. by passed parameters, give higher weight to passed parameters, lower weight to default parameters, even lower weight to convertible parameters
 	//3. discard non-matching options
-	int MatchOverload(std::vector<std::string> &classNames, std::shared_ptr<o_r_function> func, or ::function_arguments &fargs);
+	int MatchOverload(std::vector<std::string> &classNames, std::shared_ptr<o_r_function> func, overres::function_arguments &fargs);
 
 	static void LogDebug(std::function<std::string()> message);
 	static void LogWarn(std::function<std::string()> message);

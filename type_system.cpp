@@ -1,7 +1,7 @@
 #include "type_system.h"
 #include <tracer.h>
 
-namespace or {
+namespace overres {
 	static void Log(LogLevel level, std::string &&message) {
 		if (tracer::log_level <= level) {
 			tracer::Log("type_system", level, std::move(message));

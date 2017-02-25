@@ -2,7 +2,7 @@
 #define _O_R_TWO_PARAMETERS_TESTER_H_
 #include "../overload_resolution.h"
 
-namespace or_two_parameters_tester {
+namespace overres_two_parameters_tester {
 
 	namespace general_callback {
 		std::shared_ptr<overload_resolution> overload;

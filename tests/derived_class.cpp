@@ -83,7 +83,7 @@ POLY_METHOD(derived_class::this_check) {
 		info.SetReturnValue(t != NULL);
 	}
 	else {
-		auto unwrapped = or ::ObjectWrap::Unwrap<derived_class>(info.This());
+		auto unwrapped = overres::ObjectWrap::Unwrap<derived_class>(info.This());
 		info.GetReturnValue().Set(Nan::New(t == unwrapped));
 	}
 }

@@ -3,7 +3,7 @@
 
 #include <nan.h>
 
-namespace or {
+namespace overres {
 	class ObjectWrap : public Nan::ObjectWrap {
 	public:
 

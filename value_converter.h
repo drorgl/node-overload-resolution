@@ -28,7 +28,7 @@
 
 using namespace std::literals::string_literals;
 
-namespace or {
+namespace overres {
 	
 
 	//default value
@@ -144,7 +144,7 @@ namespace or {
 			if (from.IsEmpty() || from->IsNull() || from->IsUndefined()) {
 				return NULL;
 			}
-			return or::ObjectWrap::Unwrap<T>(from.As<v8::Object>());
+			return overres::ObjectWrap::Unwrap<T>(from.As<v8::Object>());
 		}
 
 		virtual v8::Local<v8::Value> convert(std::shared_ptr<T> from) {

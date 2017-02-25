@@ -348,7 +348,7 @@ POLY_METHOD(constructor_class_tester::New_array) {
 
 NAN_METHOD(constructor_class_tester::ctype_function) {
 	//return the constructor types called
-	constructor_class_tester * obj = or::ObjectWrap::Unwrap<constructor_class_tester>(info.Holder());
+	constructor_class_tester * obj = overres::ObjectWrap::Unwrap<constructor_class_tester>(info.Holder());
 	info.GetReturnValue().Set(Nan::New(obj->_constructor_type).ToLocalChecked());
 }
 

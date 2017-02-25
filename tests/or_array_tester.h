@@ -2,7 +2,7 @@
 #define _O_R_ARRAY_TESTER_H_
 #include "../overload_resolution.h"
 
-namespace or_array_tester {
+namespace overres_array_tester {
 
 	namespace general_callback {
 		std::shared_ptr<overload_resolution> overload;

@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 
-namespace or {
+namespace overres {
 	namespace internal{
 
 #ifdef _MSC_VER
@@ -45,7 +45,7 @@ namespace or {
 template <typename T>
 const std::string GetTypeName(void)
 {
-	return or ::internal::GetTypeNameHelper<T>::GetTypeName();
+	return overres::internal::GetTypeNameHelper<T>::GetTypeName();
 }
 
 

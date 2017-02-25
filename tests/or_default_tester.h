@@ -8,7 +8,7 @@
 #include "struct_A.h"
 #include "struct_B.h"
 
-namespace or_default_parameters_tester {
+namespace overres_default_parameters_tester {
 
 	namespace general_callback {
 		std::shared_ptr<overload_resolution> overload;

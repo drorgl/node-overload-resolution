@@ -19,7 +19,7 @@
 
 
 
-namespace or {
+namespace overres {
 	class type_system {
 	private:
 		
@@ -58,7 +58,7 @@ namespace or {
 
 		template <typename TObjectWrap>
 		void register_type(v8::Local<v8::FunctionTemplate> functionTemplate, const std::string ns, const std::string name) {
-			static_assert(std::is_base_of< or ::ObjectWrap, TObjectWrap>::value, "TObjectWrap must inherit from ObjectWrap");
+			static_assert(std::is_base_of< overres::ObjectWrap, TObjectWrap>::value, "TObjectWrap must inherit from ObjectWrap");
 
 			LogDebug([&ns, &name]() { return "registering type " + ns + "::" + name; });
 			assert(_types.count(name) == 0 && "type name already exists");
@@ -70,7 +70,7 @@ namespace or {
 			ot->function_template.Reset(functionTemplate);
 			ot->ns = ns;
 			ot->name = name;
-			ot->value_converter = std::make_shared < or ::value_converter<TObjectWrap*>>();
+			ot->value_converter = std::make_shared < overres::value_converter<TObjectWrap*>>();
 			_types[name] = ot;
 		}
 

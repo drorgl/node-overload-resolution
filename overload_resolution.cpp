@@ -26,8 +26,8 @@ static void Log(LogLevel level, std::function<std::string()> message) {
 
 overload_resolution::overload_resolution() {
 	Log( LogLevel::DEBUG, "initializing");
-	Log(LogLevel::DEBUG, []() {return "primitive types " + tracer::join(or ::type_system::primitive_types, [](const std::string &s) {return s; }, ", "); });
-	Log(LogLevel::DEBUG, []() {return "convertible primitive types " + tracer::join(or ::type_system::convertible_primitive_types, [](const std::string &s) {return s; }, ", "); });
+	Log(LogLevel::DEBUG, []() {return "primitive types " + tracer::join(overres::type_system::primitive_types, [](const std::string &s) {return s; }, ", "); });
+	Log(LogLevel::DEBUG, []() {return "convertible primitive types " + tracer::join(overres::type_system::convertible_primitive_types, [](const std::string &s) {return s; }, ", "); });
 }
 
 overload_resolution::~overload_resolution() {
@@ -126,7 +126,7 @@ void overload_resolution::addOverloadConstructor(const std::string ns, const std
 }
 
 
-int overload_resolution::MatchOverload(std::vector<std::string> &classNames, std::shared_ptr<o_r_function> func, or::function_arguments &fargs) {
+int overload_resolution::MatchOverload(std::vector<std::string> &classNames, std::shared_ptr<o_r_function> func, overres::function_arguments &fargs) {
 	//TODO: add parameters + static/constructor to log
 	Log( LogLevel::TRACE, [&func]() {return "matching overload for " + func->className + "::" + func->functionName; });
 	int parameterLength = (std::max)((int)func->parameters.size(), fargs.length());
@@ -256,7 +256,7 @@ void overload_resolution::execute_overload(const std::string &ns, std::vector<st
 
 
 
-	std::shared_ptr< or ::value_converter_base> this_converter;
+	std::shared_ptr< overres::value_converter_base> this_converter;
 
 	if (function->className != "") {
 		auto this_type = _type_system.get_type(function->className);
@@ -277,8 +277,8 @@ void overload_resolution::execute_overload(const std::string &ns, std::vector<st
 
 
 
-		auto async_processed_info = std::make_shared< or ::FunctionCallbackInfo<v8::Value>>(info, info_params, function->parameters, this_converter, true);
-		auto async_cb = std::make_shared< or ::Callback>(info[function->parameters.size()].As<v8::Function>());
+		auto async_processed_info = std::make_shared< overres::FunctionCallbackInfo<v8::Value>>(info, info_params, function->parameters, this_converter, true);
+		auto async_cb = std::make_shared< overres::Callback>(info[function->parameters.size()].As<v8::Function>());
 		async_cb->is_async = true;
 		queue_async_polyfunction(function->function, async_processed_info, async_cb);
 
@@ -288,7 +288,7 @@ void overload_resolution::execute_overload(const std::string &ns, std::vector<st
 	}
 
 
-	auto processed_info = std::make_shared< or ::FunctionCallbackInfo<v8::Value>>(info, info_params, function->parameters, this_converter, false);
+	auto processed_info = std::make_shared< overres::FunctionCallbackInfo<v8::Value>>(info, info_params, function->parameters, this_converter, false);
 	Log(LogLevel::DEBUG, [&ns, &classNames, &name]() {return "function " + ns + "::(" + tracer::join(classNames, "/") + ")::" + name + " was requested sync execution"; });
 	try {
 		//execute the callback function
@@ -320,7 +320,7 @@ void overload_resolution::executeBestOverload(const std::string &ns, std::vector
 	});
 
 
-	or ::function_arguments func_args(_type_system, info);
+	overres::function_arguments func_args(_type_system, info);
 
 	auto cached = _function_cache.get_function(ns, classNames, name, func_args);
 	if (auto cachedOverloadFunction = cached.lock()) {

@@ -10,7 +10,7 @@
 
 #include "function_arguments.h"
 
-namespace or {
+namespace overres {
 	class function_rank_cache {
 	private:
 		std::unordered_map<std::string, std::weak_ptr<o_r_function>> _cache;

@@ -5,7 +5,7 @@
 
 #include "node_modules/nan/nan.h"
 
-namespace or {
+namespace overres {
 
 
 	class value_holder_base {

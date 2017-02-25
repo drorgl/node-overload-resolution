@@ -1,6 +1,6 @@
 #include "function_rank_cache.h"
 
-namespace or {
+namespace overres {
 
 	std::string function_rank_cache::get_function_arguments_key(const function_arguments &fargs)const  {
 		return fargs.get_type_key();

@@ -7,7 +7,7 @@
 #include <ctime>
 #include <time.h>  
 
-namespace or {
+namespace overres {
 	class DateTime {
 	private:
 		std::time_t _datetime;
