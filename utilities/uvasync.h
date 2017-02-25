@@ -5,7 +5,7 @@
 #include <atomic>
 #include <unordered_set>
 
-namespace or_utilities {
+namespace overres_utilities {
 
 	class uvasync {
 	private:

@@ -7,7 +7,7 @@
 
 
 
-class constructor_class_tester : public or::ObjectWrap {
+class constructor_class_tester : public overres::ObjectWrap {
 private:
 	std::string _constructor_type;
 

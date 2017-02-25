@@ -1,12 +1,11 @@
 #include "uvasync.h"
 
-namespace or_utilities {
+namespace overres_utilities {
 
 	std::unordered_set<uv_async_t*> uvasync::_inuseasyncs;
 
-	uvasync::uvasync(uv_async_cb callback, void * data)
+	uvasync::uvasync(uv_async_cb callback, void * data) : _is_active(false)
 	{
-		_is_active = false;
 		_async_inst = new uv_async_t();
 		_async_inst->data = data;
 		uv_async_init(uv_default_loop(), _async_inst, callback);

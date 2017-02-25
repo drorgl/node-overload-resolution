@@ -3,7 +3,7 @@
 #include "../overload_resolution.h"
 
 
-namespace or_tester {
+namespace overres_tester {
 
 	namespace general_callback {
 		std::shared_ptr<overload_resolution> overload;

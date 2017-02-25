@@ -43,12 +43,12 @@ void init(v8::Handle<v8::Object> target) {
 	base_class::Init(target,overload);
 	derived_class::Init(target,overload);
 	constructor_class_tester::Init(target, overload);
-	or_tester::RegisterORTesters(target, overload);
-	or_struct_tester::RegisterORTesters(target, overload);
-	or_two_parameters_tester::RegisterORTesters(target, overload);
-	or_array_tester::RegisterORTesters(target, overload);
-	or_default_parameters_tester::RegisterORTesters(target, overload);
-	or_value_converter::RegisterORTesters(target, overload);
+	overres_tester::RegisterORTesters(target, overload);
+	overres_struct_tester::RegisterORTesters(target, overload);
+	overres_two_parameters_tester::RegisterORTesters(target, overload);
+	overres_array_tester::RegisterORTesters(target, overload);
+	overres_default_parameters_tester::RegisterORTesters(target, overload);
+	overres_value_converter::RegisterORTesters(target, overload);
 
 	assert(overload->validate_type_registrations());
 

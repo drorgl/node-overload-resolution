@@ -7,7 +7,7 @@
 #include <string>
 #include "type_system.h"
 
-namespace or {
+namespace overres {
 	class function_arguments {
 	protected:
 		Nan::NAN_METHOD_ARGS_TYPE _info;

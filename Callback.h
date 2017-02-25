@@ -5,7 +5,7 @@
 
 #include "generic_value_holder.h"
 
-namespace or {
+namespace overres {
 	class generic_value_holder;
 
 	class Callback {

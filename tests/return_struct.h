@@ -40,14 +40,14 @@ public:
 	std::string type;
 	T value;
 
-	virtual bool verify(or::type_system * ovres, v8::Local<v8::Value> obj) {
+	virtual bool verify(overres::type_system * ovres, v8::Local<v8::Value> obj) {
 		return ovres->verifyObject(return_struct::_definition, obj);
 	}
 	virtual bool parse(v8::Local<v8::Value> obj) {
-		this->type = *Nan::Utf8String(or::type_system::GetFromObject(obj, "type").ToLocalChecked());
+		this->type = *Nan::Utf8String(overres::type_system::GetFromObject(obj, "type").ToLocalChecked());
 
-		auto vconverter = std::make_shared< or ::value_converter<T>>();
-		this->value = vconverter->convert(or::type_system::GetFromObject(obj, "value").ToLocalChecked());
+		auto vconverter = std::make_shared< overres::value_converter<T>>();
+		this->value = vconverter->convert(overres::type_system::GetFromObject(obj, "value").ToLocalChecked());
 		//this->value = *Nan::Utf8String(ovres->GetFromObject(obj, "value").ToLocalChecked());
 
 		return true;
@@ -57,7 +57,7 @@ public:
 		auto retval = Nan::New<v8::Object>();
 		retval->Set(Nan::New<v8::String>("type").ToLocalChecked(), Nan::New<v8::String>(this->type).ToLocalChecked());
 
-		auto vconverter = std::make_shared< or ::value_converter<T>>();
+		auto vconverter = std::make_shared< overres::value_converter<T>>();
 		retval->Set(Nan::New<v8::String>("value").ToLocalChecked(), vconverter->convert( this->value ));
 		//retval->Set(Nan::New<v8::String>("value").ToLocalChecked(), Nan::New<v8::String>(this->value).ToLocalChecked());
 		return retval;

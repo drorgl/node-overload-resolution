@@ -11,7 +11,7 @@
 
 struct overload_info;
 
-namespace or {
+namespace overres {
 
 	template<typename T>
 	class FunctionCallbackInfo {
@@ -36,11 +36,11 @@ namespace or {
 		inline atT at(int i) const {
 			//attempt to get converted value first
 			if (_values.size() > i) {
-				return  std::dynamic_pointer_cast<or ::value_holder<atT>>(_values[i])->Value;
+				return  std::dynamic_pointer_cast<overres::value_holder<atT>>(_values[i])->Value;
 			}
 
 			//no converted value, retrieve value_converter and attempt to convert params to atT
-			auto argprefetcher = std::dynamic_pointer_cast<or ::value_converter<atT>>(_arguments[i]->value_converter);
+			auto argprefetcher = std::dynamic_pointer_cast<overres::value_converter<atT>>(_arguments[i]->value_converter);
 #ifdef DEBUG
 			if (argprefetcher == nullptr) {
 				throw std::exception("argument value_converter does not match registered type");
@@ -56,10 +56,10 @@ namespace or {
 		template<typename TThis>
 		inline TThis This() const{
 			if (_this != nullptr && _this->value != nullptr) {
-				return  std::dynamic_pointer_cast<or ::value_holder<TThis>>(_this->value)->Value;
+				return  std::dynamic_pointer_cast<overres::value_holder<TThis>>(_this->value)->Value;
 			}
 			if (_this != nullptr && _this->prefetcher != nullptr) {
-				auto argprefetcher = std::dynamic_pointer_cast<or ::value_converter<TThis>>(_this->prefetcher);
+				auto argprefetcher = std::dynamic_pointer_cast<overres::value_converter<TThis>>(_this->prefetcher);
 #ifdef DEBUG
 				if (argprefetcher == nullptr) {
 					throw std::exception("argument value_converter does not match registered type");
@@ -114,7 +114,7 @@ namespace or {
 			return _info.GetReturnValue();
 		}
 
-		FunctionCallbackInfo(Nan::NAN_METHOD_ARGS_TYPE &info, std::vector<v8::Local<v8::Value>> &params, std::vector<std::shared_ptr<overload_info>> &arguments, std::shared_ptr< or ::value_converter_base> this_converter, bool async) :
+		FunctionCallbackInfo(Nan::NAN_METHOD_ARGS_TYPE &info, std::vector<v8::Local<v8::Value>> &params, std::vector<std::shared_ptr<overload_info>> &arguments, std::shared_ptr< overres::value_converter_base> this_converter, bool async) :
 			_info(info), _params(params), _arguments(arguments), is_async(async) {
 
 			if (this_converter != nullptr) {
@@ -143,8 +143,8 @@ namespace or {
 					if (is_async) {
 						//functions should know they are async
 						if (_arguments[i]->type == "Function") {
-							auto func = std::dynamic_pointer_cast<or ::value_holder< std::shared_ptr< or ::Callback>>>(converted_param);
-							assert(func != nullptr && "Function is not or::Callback");
+							auto func = std::dynamic_pointer_cast<overres::value_holder< std::shared_ptr< overres::Callback>>>(converted_param);
+							assert(func != nullptr && "Function is not overres::Callback");
 							func->Value->is_async = true;
 						}
 					}
@@ -163,8 +163,8 @@ namespace or {
 			//if (is_async) {
 			for (auto i = 0; i < _arguments.size(); i++) {
 				if ((_arguments[i]->type == "Function") && (_values.size() > i)) {
-					auto func = std::dynamic_pointer_cast<or ::value_holder< std::shared_ptr< or ::Callback>>>(_values[i]);
-					assert(func != nullptr && "Function is not or::Callback");
+					auto func = std::dynamic_pointer_cast<overres::value_holder< std::shared_ptr< overres::Callback>>>(_values[i]);
+					assert(func != nullptr && "Function is not overres::Callback");
 					func->Value->post_process();
 				}
 			}
@@ -190,7 +190,7 @@ namespace or {
 		std::vector<std::shared_ptr<overload_info>> &_arguments;
 
 		//parsed values, cached before using async methods
-		std::vector<std::shared_ptr< or ::value_holder_base>> _values;
+		std::vector<std::shared_ptr< overres::value_holder_base>> _values;
 
 		//return values, should be converted back to v8 objects when function returns
 		mutable std::shared_ptr<generic_value_holder> _return;

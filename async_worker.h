@@ -5,13 +5,13 @@
 #include <uv.h>
 #include "overload_resolution_types.h"
 
-namespace or {
+namespace overres {
 
 	class async_worker {
 	public:
 		uv_work_t request;
 
-		async_worker(PolyFunctionCallback &func, std::shared_ptr< or ::FunctionCallbackInfo<v8::Value>> params, std::shared_ptr< or::Callback> async_cb) :_func(func), _async_cb(async_cb), _params(params) {
+		async_worker(PolyFunctionCallback &func, std::shared_ptr< overres::FunctionCallbackInfo<v8::Value>> params, std::shared_ptr< overres::Callback> async_cb) :_func(func), _async_cb(async_cb), _params(params) {
 			request.data = this;
 			_params->prefetch();
 		}
@@ -65,9 +65,9 @@ namespace or {
 
 	protected:
 		PolyFunctionCallback &_func;
-		std::shared_ptr< or ::FunctionCallbackInfo<v8::Value>> _params;
+		std::shared_ptr< overres::FunctionCallbackInfo<v8::Value>> _params;
 		std::string _error;
-		std::shared_ptr< or::Callback> _async_cb;
+		std::shared_ptr< overres::Callback> _async_cb;
 	};
 
 	inline void async_execute(uv_work_t* req) {
@@ -90,7 +90,7 @@ namespace or {
 			);
 	}
 
-	void queue_async_polyfunction(PolyFunctionCallback &func, std::shared_ptr< or ::FunctionCallbackInfo<v8::Value>> params, std::shared_ptr<or::Callback> async_cb) {
+	void queue_async_polyfunction(PolyFunctionCallback &func, std::shared_ptr< overres::FunctionCallbackInfo<v8::Value>> params, std::shared_ptr<overres::Callback> async_cb) {
 		auto async_instance = new async_worker(func, params, async_cb);
 		async_queue_worker(async_instance);
 	}

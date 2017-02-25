@@ -9,7 +9,7 @@
 #include "threaded_tester.h"
 
 
-namespace or_value_converter {
+namespace overres_value_converter {
 	ThreadedTester _threaded_tester;
 
 
@@ -42,18 +42,18 @@ namespace or_value_converter {
 	}
 
 	POLY_METHOD(value_converter_date) {
-		auto rt = std::make_shared<return_struct<or::DateTime>>("Date");
+		auto rt = std::make_shared<return_struct<overres::DateTime>>("Date");
 		rt->type = "date";
-		rt->value = info.at<or::DateTime>(0);
-		info.SetReturnValue<std::shared_ptr<return_struct<or::DateTime>>>(rt);
+		rt->value = info.at<overres::DateTime>(0);
+		info.SetReturnValue<std::shared_ptr<return_struct<overres::DateTime>>>(rt);
 	}
 
 	POLY_METHOD(value_converter_function) {
-		auto rt = std::make_shared<return_struct<std::shared_ptr<or ::Callback>>>("Function");
+		auto rt = std::make_shared<return_struct<std::shared_ptr<overres::Callback>>>("Function");
 		rt->type = "function";
-		rt->value = info.at<std::shared_ptr< or ::Callback>>(0);
-		rt->value->Call({or::make_value<std::string>("callback called")});
-		info.SetReturnValue<std::shared_ptr<return_struct<std::shared_ptr< or ::Callback>>>>(rt);
+		rt->value = info.at<std::shared_ptr< overres::Callback>>(0);
+		rt->value->Call({ overres::make_value<std::string>("callback called")});
+		info.SetReturnValue<std::shared_ptr<return_struct<std::shared_ptr< overres::Callback>>>>(rt);
 	}
 
 	POLY_METHOD(value_converter_buffer) {
@@ -166,11 +166,11 @@ namespace or_value_converter {
 
 	POLY_METHOD(value_converter_async_callback) {
 		auto times = info.at<int>(0);
-		auto cb = info.at<std::shared_ptr< or ::AsyncCallback>>(1);
+		auto cb = info.at<std::shared_ptr< overres::AsyncCallback>>(1);
 		cb->set_ref(true);
 		_threaded_tester.Enqueue(times, [=]() {
 			auto callback = cb;
-			callback->Call({or::make_value(0)});
+			callback->Call({ overres::make_value(0)});
 		});
 		_threaded_tester.Start();
 		info.SetReturnValue("hello"s);
@@ -181,8 +181,8 @@ namespace or_value_converter {
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<int>("a","int") }, value_converter_number);
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<std::string>("a","string") }, value_converter_string);
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<bool>("a","Boolean") }, value_converter_bool);
-		overload->addOverload("or_value_converter", "", "value_converter", { make_param<or::DateTime>("a","Date") }, value_converter_date);
-		overload->addOverload("or_value_converter", "", "value_converter", { make_param<std::shared_ptr<or::Callback>>("a","Function") }, value_converter_function);
+		overload->addOverload("or_value_converter", "", "value_converter", { make_param<overres::DateTime>("a","Date") }, value_converter_date);
+		overload->addOverload("or_value_converter", "", "value_converter", { make_param<std::shared_ptr<overres::Callback>>("a","Function") }, value_converter_function);
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<std::shared_ptr<std::vector<uint8_t>>>("a","Buffer") }, value_converter_buffer);
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<std::shared_ptr<std::map<std::string,int>>>("a","Map") }, value_converter_map);
 		//overload->addOverload("or_value_converter", "", "value_converter", { make_param<std::shared_ptr<std::map<int,int>>>("a","Map") }, value_converter_map);
@@ -200,7 +200,7 @@ namespace or_value_converter {
 
 		overload->addOverload("or_value_converter", "", "async_callback", {
 			make_param<int>("times","int"), 
-			make_param < std::shared_ptr< or ::AsyncCallback>>("cb","Function") 
+			make_param < std::shared_ptr< overres::AsyncCallback>>("cb","Function")
 		}, value_converter_async_callback);
 
 		general_callback::overload = overload;
