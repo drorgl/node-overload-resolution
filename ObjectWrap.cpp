@@ -15,4 +15,4 @@ namespace overres {
 		this->Wrap(return_object);
 		return return_object;
 	}
-}
+};

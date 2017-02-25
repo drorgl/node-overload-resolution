@@ -31,7 +31,7 @@ public:
 
 	std::vector<std::pair<std::string, std::shared_ptr<T>>> all() {
 		std::vector<std::pair<std::string, std::shared_ptr<T>>> v;
-		for (std::map<std::string, PCreateFunc>::const_iterator it =std::begin(_createFuncs); it != std::end( _createFuncs); ++it) {
+		for (auto it =std::begin(_createFuncs); it != std::end( _createFuncs); ++it) {
 
 			v.push_back(std::pair<std::string, std::shared_ptr<T>>(it->first, it->second()));
 

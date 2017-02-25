@@ -18,7 +18,7 @@ namespace overres {
 		return _length;
 	}
 
-	std::string function_arguments::get_type(int index) const {
+	std::string function_arguments::get_type(size_t index) const {
 		if (index >= _types.size()) {
 			return "Undefined";
 		}
@@ -37,14 +37,14 @@ namespace overres {
 		return key;
 	}
 
-	bool function_arguments::is_array(int index) {
+	bool function_arguments::is_array(size_t index) {
 		if (index >= _is_array.size()) {
 			return _is_array[index];
 		}
 		return false;
 	}
 
-	bool function_arguments::is_convertible_to(int index, std::string &alias) const {
+	bool function_arguments::is_convertible_to(size_t index, std::string &alias) const {
 		auto param_type = get_type(index);
 		auto convertible_key = param_type + ":" + alias;
 

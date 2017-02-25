@@ -17,14 +17,17 @@
 
 
 
-#include <memory>
-#include <string>
-#include <vector>
-#include <functional>
-#include "overload_resolution_types.h"
-
+//#include <memory>
+//#include <string>
+//#include <vector>
+//#include <functional>
 #include "type_system.h"
 #include "function_rank_cache.h"
+
+#define	POLY_METHOD(name)                                                       \
+		Nan::NAN_METHOD_RETURN_TYPE name(POLY_METHOD_ARGS_TYPE info)
+
+
 
 
 
@@ -36,6 +39,13 @@
 
 namespace overres {
 	class function_arguments;
+
+	template<typename T>
+	std::shared_ptr<generic_value_holder> make_value(T value) {
+		auto gvalue = std::make_shared<generic_value_holder>();
+		gvalue->Set(std::make_shared < overres::value_converter<T>>(), std::make_shared < overres::value_holder<T>>(value));
+		return gvalue;
+	}
 };
 
 

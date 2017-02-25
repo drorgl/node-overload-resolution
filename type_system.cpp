@@ -1,5 +1,7 @@
 #include "type_system.h"
 #include <tracer.h>
+#include "overload_info.h"
+#include <cmath>
 
 namespace overres {
 	static void Log(LogLevel level, std::string &&message) {
@@ -43,7 +45,7 @@ namespace overres {
 		_type_aliases[alias] = type;
 	}
 
-	std::string type_system::drill_type_aliases(std::string& alias) {
+	std::string type_system::drill_type_aliases(const std::string& alias) {
 		auto type_alias = _type_aliases.find(alias);
 		if (type_alias != _type_aliases.end()) {
 			auto type = type_alias->second;
@@ -124,12 +126,12 @@ namespace overres {
 
 		//speed optimization, could create problems for large inconsistent arrays
 		if (v8arr->Length() <= 10) {
-			for (auto i = 0; i < v8arr->Length(); i++) {
+			for (uint32_t i = 0; i < v8arr->Length(); i++) {
 				types.insert(drill_type_aliases(determineType(v8arr->Get(i))));
 			}
 		}
 		else {
-			for (auto i = 0; i < v8arr->Length(); i += (v8arr->Length() / 10)) {
+			for (uint32_t i = 0; i < v8arr->Length(); i += (v8arr->Length() / 10)) {
 				types.insert(drill_type_aliases(determineType(v8arr->Get(i))));
 			}
 		}
@@ -246,7 +248,7 @@ namespace overres {
 
 		//possible performance optimization by caching the all() values
 		auto structured = _structured_factory->all();
-		for (auto i = 0; i < structured.size(); i++) {
+		for (size_t i = 0; i < structured.size(); i++) {
 			if (structured[i].second->verify(this, param)) {
 				return drill_type_aliases(structured[i].first);
 			}
@@ -271,7 +273,7 @@ namespace overres {
 		split_generic_types(type, generic_types);
 
 
-		int generic_array_types_length = (std::max)(generic_param_types.size(), generic_types.size());
+		auto generic_array_types_length = (std::max)(generic_param_types.size(), generic_types.size());
 		if (generic_array_types_length > 0) {
 			if (normalize_types(generic_param_types[0]) != "Array"){
 				return false;
@@ -281,7 +283,7 @@ namespace overres {
 			}
 		}
 
-		for (auto i = 0; i < generic_array_types_length; i++) {
+		for (size_t i = 0; i < generic_array_types_length; i++) {
 			if (generic_param_types.size() > i && generic_types.size() > i) {
 				auto normalized_param = normalize_types(generic_param_types[i]);
 				auto normalized_type = normalize_types(generic_types[i]);

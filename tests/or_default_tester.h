@@ -38,8 +38,6 @@ namespace overres_default_parameters_tester {
 		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}
 	POLY_METHOD(number_testers_number_string) {
-		auto xx = info[0];
-		
 		std::string retval = ".number(" + stringify(info[0]) + ").string(" + stringify(info[1]) + ")";
 		info.GetReturnValue().Set(Nan::New(retval).ToLocalChecked());
 	}

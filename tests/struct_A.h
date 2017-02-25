@@ -19,6 +19,7 @@
 
 
 
+
 class struct_A : public IStructuredObject {
 private:
 	static std::vector<std::shared_ptr<overload_info>> _definition;

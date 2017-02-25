@@ -17,7 +17,10 @@
 
 #include "overload_resolution_types.h"
 
-
+#include "object_type.h"
+#include "ObjectWrap.h"
+#include "value_converter.h"
+#include "overload_info.h"
 
 namespace overres {
 	class type_system {
@@ -84,7 +87,7 @@ namespace overres {
 		void reset();
 
 		std::string normalize_types(std::string type);
-		std::string drill_type_aliases(std::string& alias);
+		std::string drill_type_aliases(const std::string& alias);
 
 		//add type alias
 		void add_type_alias(std::string alias, std::string type);
