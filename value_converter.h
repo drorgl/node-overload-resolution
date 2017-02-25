@@ -3,7 +3,14 @@
 
 //#include "v8.h"
 
-//#include <nan.h>
+#include <nan.h>
+
+#include <type_traits>
+#include <memory>
+#include <set>
+#include <map>
+#include <vector>
+#include <string>
 
 #include "value_converter_base.h"
 #include "value_holder.h"
@@ -15,21 +22,12 @@
 #include "IStructuredObject.h"
 
 
-
-
-#include <type_traits>
-#include <memory>
-#include <set>
-#include <map>
-#include <vector>
-#include <string>
-
 #include "class_typename.h"
 
 using namespace std::literals::string_literals;
 
 namespace overres {
-	
+	typedef unsigned short ushort;
 
 	//default value
 
@@ -38,13 +36,13 @@ namespace overres {
 	public:
 
 		virtual T convert(v8::Local<v8::Value> from) {
-#pragma message ("not implemented, need template specialization " T)
+//#pragma message "not implemented, need template specialization "
 			throw std::exception(("not implemented, need template specialization for "s + GetTypeName<T>()).c_str());
 		}
 
 
 		virtual v8::Local<v8::Value> convert(T from) {
-#pragma message ("not implemented, need template specialization " T)
+//#pragma message "not implemented, need template specialization "
 			throw std::exception(("not implemented, need template specialization for "s + GetTypeName<T>()).c_str());
 		}
 
@@ -70,7 +68,7 @@ namespace overres {
 
 		virtual std::shared_ptr<T> convert(v8::Local<v8::Value> from) {
 			if (!from->IsFunction()) {
-				throw std::exception("attempting to convert a non-function to Callback");
+				throw std::runtime_error("attempting to convert a non-function to Callback");
 			}
 			return std::make_shared<T>(from.As<v8::Function>());
 		}
@@ -106,7 +104,7 @@ namespace overres {
 
 		virtual std::shared_ptr<T> convert(v8::Local<v8::Value> from) {
 			if (!from->IsFunction()) {
-				throw std::exception("attempting to convert a non-function to Callback");
+				throw std::runtime_error("attempting to convert a non-function to Callback");
 			}
 			return std::make_shared<T>(from.As<v8::Function>());
 		}
@@ -242,7 +240,7 @@ namespace overres {
 				auto arr = std::make_shared<std::vector<T>>();
 				auto converter = std::make_shared<value_converter<T>>();
 				auto fromArray = from.As<v8::Array>();
-				for (auto i = 0; i < fromArray->Length(); i++) {
+				for (uint32_t i = 0; i < fromArray->Length(); i++) {
 					arr->push_back(converter->convert(fromArray->Get(i)));
 				}
 
@@ -258,7 +256,7 @@ namespace overres {
 				return arr;
 			}
 			
-			throw std::exception("converted v8 value does not contain an array or buffer");
+			throw std::runtime_error("converted v8 value does not contain an array or buffer");
 		}
 
 		static void FreeBufferCallback(char *data, void *hint) {
@@ -282,7 +280,7 @@ namespace overres {
 			auto v8array = Nan::New<v8::Array>();
 			if (from != nullptr) {
 				auto converter = std::make_shared<value_converter<T>>();
-				for (auto i = 0; i < from->size(); i++) {
+				for (size_t i = 0; i < from->size(); i++) {
 					v8array->Set(i, converter->convert((*from)[i]));
 				}
 			}
@@ -314,7 +312,7 @@ namespace overres {
 
 		virtual std::shared_ptr<std::map<std::string, T>> convert(v8::Local<v8::Value> from) {
 			if (!from->IsMap()) {
-				throw std::exception("converted v8 value does not contain a v8::Map");
+				throw std::runtime_error("converted v8 value does not contain a v8::Map");
 			}
 
 			auto converter = std::make_shared<value_converter<T>>();
@@ -322,7 +320,7 @@ namespace overres {
 			auto map_value = std::make_shared<std::map<std::string, T>>();
 			auto from_map = from.As<v8::Map>()->AsArray();
 			assert((from_map->Length() % 2) == 0 && "v8::Map::AsArray returned length other than % 2");
-			for (auto i = 0; i < from_map->Length(); i+=2) {
+			for (uint32_t i = 0; i < from_map->Length(); i+=2) {
 				auto key = *Nan::Utf8String(from_map->Get(i));
 				auto value = converter->convert(from_map->Get(i + 1));
 
@@ -367,18 +365,18 @@ namespace overres {
 		virtual std::shared_ptr<std::map<K, T>> convert(v8::Local<v8::Value> from) {
 			
 			if (!from->IsMap()) {
-				throw std::exception("converted v8 value does not contain a v8::Map");
+				throw std::runtime_error("converted v8 value does not contain a v8::Map");
 			}
 
-			auto value_converter = std::make_shared<value_converter<T>>();
-			auto key_converter = std::make_shared<value_converter<K>>();
+			auto value_convert = std::make_shared<value_converter<T>>();
+			auto key_convert = std::make_shared<value_converter<K>>();
 
 			auto map_value = std::make_shared<std::map<std::string, T>>();
 			auto from_map = from.As<v8::Map>()->AsArray();
 			assert((from_map->Length() % 2) == 0 && "v8::Map::AsArray returned length other than % 2");
 			for (auto i = 0; i < from_map->Length(); i += 2) {
-				auto key = key_converter->convert(from_map->Get(i));
-				auto value = value_converter->convert(from_map->Get(i + 1));
+				auto key = key_convert->convert(from_map->Get(i));
+				auto value = value_convert->convert(from_map->Get(i + 1));
 
 				(*map_value)[key] = value;
 			}
@@ -388,13 +386,13 @@ namespace overres {
 
 
 		virtual v8::Local<v8::Value> convert(std::shared_ptr<std::map<K,T>> from) {
-			auto value_converter = std::make_shared<value_converter<T>>();
-			auto key_converter = std::make_shared<value_converter<K>>();
+			auto value_convert = std::make_shared<value_converter<T>>();
+			auto key_convert = std::make_shared<value_converter<K>>();
 
 			auto map_value = v8::Map::New(v8::Isolate::GetCurrent()); //Nan::New<v8::Map>();
 
 			for (auto &&kv : *from) {
-				map_value->Set(Nan::GetCurrentContext(),key_converter->convert(kv.first), value_converter->convert(kv.second));
+				map_value->Set(Nan::GetCurrentContext(),key_convert->convert(kv.first), value_convert->convert(kv.second));
 			}
 
 			return map_value;
@@ -423,14 +421,14 @@ namespace overres {
 		virtual std::shared_ptr<std::set<T>> convert(v8::Local<v8::Value> from) {
 
 			if (!from->IsSet()) {
-				throw std::exception("converted v8 value does not contain a v8::Set");
+				throw std::runtime_error("converted v8 value does not contain a v8::Set");
 			}
 
 			auto converter = std::make_shared<value_converter<T>>();
 
 			auto set_value = std::make_shared<std::set<T>>();
 			auto from_set = from.As<v8::Set>()->AsArray();
-			for (auto i = 0; i < from_set->Length(); i ++) {
+			for (uint32_t i = 0; i < from_set->Length(); i ++) {
 				auto value = converter->convert(from_set->Get(i));
 
 				set_value->insert(value);
@@ -596,7 +594,7 @@ namespace overres {
 
 
 	//ushort
-	typedef unsigned short ushort;
+	
 
 	template<>
 	class value_converter<ushort> : public value_converter_base {

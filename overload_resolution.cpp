@@ -1,7 +1,9 @@
 #include "overload_resolution.h"
 
+#include <iterator>
 #include <algorithm>
 #include <numeric>
+#include <cmath>
 
 #include "async_worker.h"
 #include <tracer.h>
@@ -9,6 +11,26 @@
 #include "function_arguments.h"
 #include "overload_resolution_types.h"
 #include "function_rank_cache.h"
+
+
+
+#ifdef __GNUC__
+#if (__cplusplus <= 201402L)
+namespace std {
+	template <class C>
+	constexpr auto size(const C& c) -> decltype(c.size())
+	{
+		return c.size();
+	}
+
+	template <class T, std::size_t N>
+	constexpr std::size_t size(const T(&array)[N]) noexcept
+	{
+		return N;
+	}
+}
+#endif
+#endif
 
 
 static void Log(LogLevel level, std::string &&message) {
@@ -148,8 +170,8 @@ int overload_resolution::MatchOverload(std::vector<std::string> &classNames, std
 
 	//check conversion of prototype types, give higher score to closer conversions, don't check if only one className exists
 	if (!func->className.empty() && (std::size(classNames) > 1)) {
-		auto classNameIndex = std::find(std::begin(classNames), std::end(classNames), func->className) - std::begin(classNames);
-		if (classNameIndex < std::size(classNames)) {
+		long classNameIndex = std::find(std::begin(classNames), std::end(classNames), func->className) - std::begin(classNames);
+		if (classNameIndex < (long)std::size(classNames)) {
 			rank += std::size(classNames) - classNameIndex;
 		}
 	}
@@ -158,7 +180,7 @@ int overload_resolution::MatchOverload(std::vector<std::string> &classNames, std
 		int local_rank = 0;
 		//auto iparam = (fargs.length() > i) ? fargs info[i] : Nan::Undefined();
 		auto iparam_type = fargs.get_type(i);// determineType(iparam);
-		auto fparam = (func->parameters.size() > i) ? func->parameters.at(i) : nullptr;
+		auto fparam = (func->parameters.size() > (size_t)i) ? func->parameters.at(i) : nullptr;
 
 		//if a function parameer is not present, this is an extra parameter which should be ignored. a function is considered valid but on a lower rank
 		if (fparam == nullptr) {
@@ -199,7 +221,7 @@ int overload_resolution::MatchOverload(std::vector<std::string> &classNames, std
 			local_rank = 3;
 		}
 		//if this is the last parameter AND its a function, this is valid but no score
-		else if (iparam_type == "Function" && (i == (func->parameters.size() - 1)) && fparam_normalized_type == "Function") {
+		else if (iparam_type == "Function" && ((size_t)i == (func->parameters.size() - 1)) && fparam_normalized_type == "Function") {
 			Log(LogLevel::TRACE, [&i]() {return "a function is available in the last position, which could mean its an async call, ignore it"; });
 			local_rank = 1;
 		}
@@ -236,7 +258,7 @@ void overload_resolution::execute_overload(const std::string &ns, std::vector<st
 		if (info.Length() > i && !info[i]->IsUndefined()) {
 			info_params.push_back(info[i]);
 		}
-		else if (function->parameters.size() > i) {
+		else if (function->parameters.size() > (size_t)i) {
 			info_params.push_back(Nan::New(function->parameters[i]->defaultValue));
 		}
 		else {
@@ -271,7 +293,7 @@ void overload_resolution::execute_overload(const std::string &ns, std::vector<st
 
 	//check if the call is async by checking if there is additional parameter which is a function
 	//if so, execute it as an async call
-	if (!function->is_constructor &&  info.Length() > function->parameters.size()
+	if (!function->is_constructor &&  (size_t)info.Length() > function->parameters.size()
 		&& info[function->parameters.size()]->IsFunction()) {
 		Log(LogLevel::DEBUG, [&ns, &classNames, &name]() {return "function " + ns + "::(" + tracer::join(classNames, "/") + ")::" + name + " was requested async execution"; });
 
@@ -370,7 +392,7 @@ void overload_resolution::executeBestOverload(const std::string &ns, std::vector
 	//auto func_args_key = func_args.get_type_key();
 
 
-	for (auto i = 0; i < implementations.size(); i++) {
+	for (size_t i = 0; i < implementations.size(); i++) {
 		auto check = implementations[i];
 		assert(( check->functionName == name ) && "function name must match");
 		if (check->functionName != name) {

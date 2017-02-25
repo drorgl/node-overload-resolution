@@ -10,8 +10,9 @@
 namespace overres {
 	class function_arguments {
 	protected:
-		Nan::NAN_METHOD_ARGS_TYPE _info;
 		type_system &_typesys;
+
+		Nan::NAN_METHOD_ARGS_TYPE _info;
 
 		std::vector<std::string> _types;
 		std::vector<bool> _is_array;
@@ -26,13 +27,13 @@ namespace overres {
 
 		int& length();
 
-		std::string get_type(int index) const;
+		std::string get_type(size_t index) const;
 
 		std::string get_type_key() const;
 
-		bool is_array(int index);
+		bool is_array(size_t index);
 
-		bool is_convertible_to(int index, std::string &alias) const;
+		bool is_convertible_to(size_t index, std::string &alias) const;
 
 
 	};

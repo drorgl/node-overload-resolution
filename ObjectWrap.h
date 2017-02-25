@@ -22,6 +22,6 @@ namespace overres {
 
 		virtual v8::Local<v8::Function> get_constructor() = 0;
 	};
-}
+};
 
 #endif

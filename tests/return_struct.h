@@ -14,6 +14,8 @@
 #include <string>
 //#include "../IStructuredObject.h"
 
+#include <exception>
+
 #include "../type_system.h"
 
 
@@ -26,7 +28,7 @@ private:
 
 public:
 	return_struct() {
-		throw std::exception("invalid use for return_struct");
+		throw std::runtime_error("invalid use for return_struct");
 	}
 
 	return_struct(std::string v8_value_type) {

@@ -1,5 +1,7 @@
 #include "function_rank_cache.h"
 
+#include <iostream>
+
 namespace overres {
 
 	std::string function_rank_cache::get_function_arguments_key(const function_arguments &fargs)const  {
@@ -8,7 +10,7 @@ namespace overres {
 
 	std::string function_rank_cache::get_overload_key(const std::string &ns, std::vector<std::string> &classNames, const std::string &name) const {
 		std::string ret = ns + "::(";
-		for (auto i = 0; i < classNames.size(); i++) {
+		for (size_t i = 0; i < classNames.size(); i++) {
 			if (i != 0) {
 				ret += "|";
 			}

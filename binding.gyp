@@ -32,6 +32,11 @@
 			, "overload_resolution_types.h"
 			, "overload_resolution_types.cpp"
 			
+			, "object_type.h"
+			, "overload_info.h"
+			, "overload_info.cpp"
+			
+			
 			, "IStructuredObject.h"
 			
 			, "FunctionCallbackInfo.h"

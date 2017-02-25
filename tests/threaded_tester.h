@@ -27,7 +27,7 @@ private:
 
 	void process() {
 		if (_callbacks.size() > 0) {
-			for (auto i = 0; i < _callbacks.size(); i++) {
+			for (size_t i = 0; i < _callbacks.size(); i++) {
 				if (_callbacks[i]->times <= 0) {
 					_callbacks.erase(_callbacks.begin() + i);
 					return;

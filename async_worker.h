@@ -3,7 +3,7 @@
 
 #include <nan.h>
 #include <uv.h>
-#include "overload_resolution_types.h"
+#include "FunctionCallbackInfo.h"
 
 namespace overres {
 
@@ -11,7 +11,7 @@ namespace overres {
 	public:
 		uv_work_t request;
 
-		async_worker(PolyFunctionCallback &func, std::shared_ptr< overres::FunctionCallbackInfo<v8::Value>> params, std::shared_ptr< overres::Callback> async_cb) :_func(func), _async_cb(async_cb), _params(params) {
+		async_worker(PolyFunctionCallback &func, std::shared_ptr< overres::FunctionCallbackInfo<v8::Value>> params, std::shared_ptr< overres::Callback> async_cb) :_func(func), _params(params), _async_cb(async_cb) {
 			request.data = this;
 			_params->prefetch();
 		}
@@ -35,11 +35,7 @@ namespace overres {
 				_error = ex.what();
 			}
 
-
-			//TODO: !!!!!!!!!!! call ALL callbacks post process
-			
-
-			//TODO: call the async callback function
+			// call the async callback function
 			if (_error == "") {
 				v8::Local<v8::Value> argv[] = {
 					Nan::Null(),
@@ -57,9 +53,6 @@ namespace overres {
 				_async_cb->Call(2, argv);
 			}
 
-			/*if (_error != "") {
-				Nan::ThrowError(Nan::New(_error).ToLocalChecked());
-			}*/
 			_async_cb->post_process();
 		}
 

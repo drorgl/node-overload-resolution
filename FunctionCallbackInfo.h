@@ -2,14 +2,13 @@
 #define _O_R_FUNCTIONCALLBACKINFO_H_
 
 #include <nan.h>
+#include <memory>
 
 #include "value_holder.h"
 #include "value_converter.h"
 #include "generic_value_holder.h"
 
-#include <memory>
-
-struct overload_info;
+#include "overload_info.h"
 
 namespace overres {
 
@@ -19,9 +18,9 @@ namespace overres {
 		inline int Length() const {
 			return _params.size();
 		}
-		inline v8::Local<v8::Value> operator[](int i) const {
+		inline v8::Local<v8::Value> operator[](size_t i) const {
 			if (is_async) {
-				throw std::exception("info[] does not work in async, use at<T> instead");
+				throw std::runtime_error("info[] does not work in async, use at<T> instead");
 			}
 
 			if (i < _params.size()) {
@@ -33,7 +32,7 @@ namespace overres {
 		}
 
 		template<typename atT>
-		inline atT at(int i) const {
+		inline atT at(size_t i) const {
 			//attempt to get converted value first
 			if (_values.size() > i) {
 				return  std::dynamic_pointer_cast<overres::value_holder<atT>>(_values[i])->Value;
@@ -43,7 +42,7 @@ namespace overres {
 			auto argprefetcher = std::dynamic_pointer_cast<overres::value_converter<atT>>(_arguments[i]->value_converter);
 #ifdef DEBUG
 			if (argprefetcher == nullptr) {
-				throw std::exception("argument value_converter does not match registered type");
+				throw std::runtime_error("argument value_converter does not match registered type");
 			}
 #endif
 			return argprefetcher->convert(_params[i]);
@@ -62,20 +61,20 @@ namespace overres {
 				auto argprefetcher = std::dynamic_pointer_cast<overres::value_converter<TThis>>(_this->prefetcher);
 #ifdef DEBUG
 				if (argprefetcher == nullptr) {
-					throw std::exception("argument value_converter does not match registered type");
+					throw std::runtime_error("argument value_converter does not match registered type");
 				}
 #endif
 
 				return argprefetcher->convert(this->This());
 			}
 
-			throw std::exception("This is not convertible to TThis");
+			throw std::runtime_error("This is not convertible to TThis");
 
 		}
 
 		inline v8::Local<v8::Object> This() const {
 			if (is_async) {
-				throw std::exception("This does not work in async, use This<T> instead");
+				throw std::runtime_error("This does not work in async, use This<T> instead");
 			}
 
 			return _info.This();
@@ -99,23 +98,22 @@ namespace overres {
 
 		template<typename retT>
 		inline void SetReturnValue(retT returnValue) const {
-			_return = std::make_shared<generic_value_holder>();
-			_return->Set<retT>(returnValue);
+			_return = std::make_shared<generic_value_holder>(std::make_shared < overres::value_converter<retT>>(), std::make_shared < overres::value_holder<retT>>(returnValue));
 		}
 
 
 		inline Nan::ReturnValue<T> GetReturnValue() const {
 			if (is_async) {
-				throw std::exception("GetReturnValue() does not work in async, use SetReturnValue<T> instead");
+				throw std::runtime_error("GetReturnValue() does not work in async, use SetReturnValue<T> instead");
 			}
 			if (_return != nullptr) {
-				throw std::exception("a return value was already set by SetReturnValue, this is most likely a bug");
+				throw std::runtime_error("a return value was already set by SetReturnValue, this is most likely a bug");
 			}
 			return _info.GetReturnValue();
 		}
 
 		FunctionCallbackInfo(Nan::NAN_METHOD_ARGS_TYPE &info, std::vector<v8::Local<v8::Value>> &params, std::vector<std::shared_ptr<overload_info>> &arguments, std::shared_ptr< overres::value_converter_base> this_converter, bool async) :
-			_info(info), _params(params), _arguments(arguments), is_async(async) {
+			is_async(async), _info(info), _params(params), _arguments(arguments) {
 
 			if (this_converter != nullptr) {
 				_this = std::make_shared<generic_value_holder>();
@@ -135,7 +133,7 @@ namespace overres {
 
 			_values.resize(_arguments.size());
 
-			for (auto i = 0; i < _arguments.size(); i++) {
+			for (size_t i = 0; i < _arguments.size(); i++) {
 				if (_params.size() > i) {
 					auto converted_param = _arguments[i]->value_converter->read(_params[i]);
 
@@ -161,7 +159,7 @@ namespace overres {
 
 			//Call all callbacks post process
 			//if (is_async) {
-			for (auto i = 0; i < _arguments.size(); i++) {
+			for (size_t i = 0; i < _arguments.size(); i++) {
 				if ((_arguments[i]->type == "Function") && (_values.size() > i)) {
 					auto func = std::dynamic_pointer_cast<overres::value_holder< std::shared_ptr< overres::Callback>>>(_values[i]);
 					assert(func != nullptr && "Function is not overres::Callback");
