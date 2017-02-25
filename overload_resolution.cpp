@@ -66,7 +66,7 @@ bool overload_resolution::validate_type_registrations() {
 void overload_resolution::addOverload(const std::string ns, const std::string className, const std::string name, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
 	Log( LogLevel::DEBUG, [&ns, &className, &name, &arguments]() {
 		return "add overload " + ns + "::" + className + "::" + name + "(" + 
-			tracer::join<std::shared_ptr<overload_info>>(arguments, [](std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; },", ") 
+			tracer::join(arguments, [](const std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; },", ") 
 			+ ")"; 
 	});
 	std::string functionName = "+" + name;
@@ -87,7 +87,7 @@ void overload_resolution::addOverload(const std::string ns, const std::string cl
 void overload_resolution::addStaticOverload(const std::string ns, const std::string className, const std::string name, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
 	Log( LogLevel::DEBUG, [&ns, &className, &name, &arguments]() {
 		return "add static overload " + ns + "::" + className + "::" + name + "(" +
-			tracer::join<std::shared_ptr<overload_info>>(arguments, [](std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ")
+			tracer::join(arguments, [](const std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ")
 			+ ")";
 	});
 	std::string functionName = "-" + name;
@@ -107,7 +107,7 @@ void overload_resolution::addStaticOverload(const std::string ns, const std::str
 void overload_resolution::addOverloadConstructor(const std::string ns, const std::string className, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
 	Log( LogLevel::DEBUG, [&ns, &className, &arguments]() {
 		return "add constructor overload " + ns + "::" + className + "::" + "(" +
-			tracer::join<std::shared_ptr<overload_info>>(arguments, [](std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ")
+			tracer::join(arguments, [](const std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ")
 			+ ")";
 	});
 	//add ::constructor to function name, to avoid confusion if the class has classname as a function
@@ -392,7 +392,7 @@ void overload_resolution::executeBestOverload(const std::string &ns, std::vector
 	if (candidates.size() > 0) {
 		auto bestOverload = std::max_element(candidates.begin(), candidates.end(), [](std::pair<int,std::weak_ptr< o_r_function>> a, std::pair<int,std::weak_ptr< o_r_function>> b) {return a.first < b.first; });
 		if (auto bestOverloadFunction = bestOverload->second.lock()) { // Has to be copied into a shared_ptr before usage
-			Log( LogLevel::DEBUG, [&bestOverloadFunction,&ns, &classNames, &name]() {return "best candidate is " + ns + "::(" + tracer::join(classNames, "/") + ")::" + name + "(" + tracer::join<std::shared_ptr<overload_info>>(bestOverloadFunction->parameters, [](std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ") + ")";});
+			Log( LogLevel::DEBUG, [&bestOverloadFunction,&ns, &classNames, &name]() {return "best candidate is " + ns + "::(" + tracer::join(classNames, "/") + ")::" + name + "(" + tracer::join(bestOverloadFunction->parameters, [](const std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ") + ")";});
 
 			//cache the best candidate
 			_function_cache.cache_function(ns, classNames, name, func_args, bestOverloadFunction);
