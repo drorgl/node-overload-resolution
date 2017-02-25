@@ -354,7 +354,7 @@ namespace or {
 
 	bool type_system::verifyObject(std::vector<std::shared_ptr<overload_info>> props, v8::Local<v8::Value> val) {
 		//TODO: add default values
-		Log(LogLevel::TRACE, [&props, &val]() {return "verifying object " + tracer::join<std::shared_ptr<overload_info>>(props, [](std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ") + std::string(*Nan::Utf8String(val->ToDetailString())); });
+		Log(LogLevel::TRACE, [&props, &val]() {return "verifying object " + tracer::join(props, [](const std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ") + std::string(*Nan::Utf8String(val->ToDetailString())); });
 
 		auto mctx = Nan::GetCurrentContext();
 
