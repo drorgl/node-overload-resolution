@@ -37,13 +37,13 @@ namespace overres {
 
 		virtual T convert(v8::Local<v8::Value> from) {
 //#pragma message "not implemented, need template specialization "
-			throw std::exception(("not implemented, need template specialization for "s + GetTypeName<T>()).c_str());
+			throw std::runtime_error(("not implemented, need template specialization for "s + GetTypeName<T>()).c_str());
 		}
 
 
 		virtual v8::Local<v8::Value> convert(T from) {
 //#pragma message "not implemented, need template specialization "
-			throw std::exception(("not implemented, need template specialization for "s + GetTypeName<T>()).c_str());
+			throw std::runtime_error(("not implemented, need template specialization for "s + GetTypeName<T>()).c_str());
 		}
 
 		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
