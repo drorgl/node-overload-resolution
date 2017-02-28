@@ -157,7 +157,7 @@ int overload_resolution::MatchOverload(std::vector<std::string> &classNames, std
 	//in case there are no parameters to this function, its always a possible candidate, though low priority
 	if ((func->parameters.size() == 0) && (fargs.length() == 0)) {
 		Log(LogLevel::TRACE, [&func]() {return "function has no parameters, no parameters supplied"; });
-		return std::pow(2, 10);
+		return int(std::pow(2, 10));
 	}
 	else if ((func->parameters.size() == 0)) {
 		Log( LogLevel::TRACE, [&func]() {return "function has no parameters, low priority candidate"; });
@@ -170,8 +170,8 @@ int overload_resolution::MatchOverload(std::vector<std::string> &classNames, std
 
 	//check conversion of prototype types, give higher score to closer conversions, don't check if only one className exists
 	if (!func->className.empty() && (std::size(classNames) > 1)) {
-		long classNameIndex = std::find(std::begin(classNames), std::end(classNames), func->className) - std::begin(classNames);
-		if (classNameIndex < (long)std::size(classNames)) {
+		auto classNameIndex = std::find(std::begin(classNames), std::end(classNames), func->className) - std::begin(classNames);
+		if (classNameIndex < std::size(classNames)) {
 			rank += std::size(classNames) - classNameIndex;
 		}
 	}

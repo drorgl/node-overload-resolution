@@ -57,10 +57,9 @@ v8::Local<v8::Function> derived_class::get_constructor() {
 	return Nan::New(constructor)->GetFunction();
 }
 
-v8::Local<v8::Object> derived_class::New() {
-	auto retval = Nan::NewInstance(Nan::GetFunction(Nan::New<v8::FunctionTemplate>(derived_class::constructor)).ToLocalChecked()).ToLocalChecked();
-
-	return retval;
+std::shared_ptr<derived_class> derived_class::New() {
+	auto ret = std::make_shared<derived_class>();
+	return ret;
 }
 
 NAN_METHOD(derived_class::New) {

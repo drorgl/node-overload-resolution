@@ -11,6 +11,7 @@ struct overload_info {
 	std::string parameterName;
 	std::string type;
 	Nan::Persistent<v8::Value, Nan::CopyablePersistentTraits<v8::Value>> defaultValue;
+	std::shared_ptr<void> defaultSharedValue;
 	std::shared_ptr< overres::value_converter_base> value_converter;
 	overload_info(const std::string parameterName, const std::string type);
 	overload_info(const std::string parameterName, const std::string type, v8::Local<v8::Value> defaultValue);
@@ -77,8 +78,7 @@ inline std::shared_ptr<overload_info> make_param(const std::string parameterName
 	auto oi = std::make_shared<overload_info>(parameterName, type, value_converter->convert(defaultValue));
 	oi->value_converter = value_converter;
 	
-	//a workaround for locker for defaultValue, should be stored in overload_info and released on removal
-	auto lockptr = new std::shared_ptr<TREF>(defaultValue);
+	oi->defaultSharedValue = defaultValue;
 
 	return oi;
 }

@@ -25,7 +25,7 @@ namespace overres {
 		}
 
 		DateTime(std::tm &t) {
-			_datetime = (double)std::mktime(&t);
+			_datetime = (std::time_t)std::mktime(&t);
 		}
 
 		tm to_tm() {
@@ -45,7 +45,7 @@ namespace overres {
 		}
 
 		v8::Local<v8::Date> to_v8_Date() {
-			return Nan::New<v8::Date>(_datetime * 1000).ToLocalChecked();
+			return Nan::New<v8::Date>(double(_datetime * 1000)).ToLocalChecked();
 		}
 	};
 }
