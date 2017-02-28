@@ -22,7 +22,7 @@
 		virtual v8::Local<v8::Function> get_constructor();
 
 
-		static v8::Local<v8::Object> New();
+		static std::shared_ptr<base_class> New();
 
 		static NAN_METHOD(New);
 

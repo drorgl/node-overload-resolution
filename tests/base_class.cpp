@@ -50,10 +50,9 @@ namespace base_class_general_callback {
 		return Nan::New(constructor)->GetFunction();
 	}
 
-	v8::Local<v8::Object> base_class::New() {
-		auto retval = Nan::NewInstance(Nan::GetFunction(Nan::New<v8::FunctionTemplate>(base_class::constructor)).ToLocalChecked()).ToLocalChecked();
-
-		return retval;
+	 std::shared_ptr<base_class> base_class::New() {
+		auto ret = std::make_shared<base_class>();
+		return ret;
 	}
 
 	NAN_METHOD(base_class::New) {

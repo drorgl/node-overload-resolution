@@ -54,7 +54,7 @@ namespace overres {
 		}
 		
 	private:
-		v8::Local<v8::Value> Call(int argc, v8::Local<v8::Value> argv[]) {
+		v8::Local<v8::Value> Call(size_t argc, v8::Local<v8::Value> argv[]) {
 			Nan::TryCatch tc;
 			auto returnValue = _callback->Call(argc, argv);
 			if (tc.HasCaught()) {
