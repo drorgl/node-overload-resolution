@@ -1,5 +1,8 @@
 # node overload resolution
 
+
+Linux (multiple node versions, 6,7,latest): [![Travis CI Build Status](https://api.travis-ci.org/drorgl/node-overload-resolution.svg)](https://travis-ci.org/drorgl/node-overload-resolution)
+
 node function call overload resolution module, in essence registering multiple function overloads and determining which overload to call based on function parameters.
 
 # Objective
