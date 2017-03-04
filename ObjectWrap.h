@@ -18,7 +18,7 @@ namespace overres {
 			return Nan::ObjectWrap::Unwrap<T>(handle);
 		}
 
-		virtual ~ObjectWrap() {}
+		virtual ~ObjectWrap();
 
 		virtual v8::Local<v8::Function> get_constructor() = 0;
 	};

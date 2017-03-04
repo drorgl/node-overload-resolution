@@ -1375,43 +1375,43 @@ namespace overres_default_parameters_tester {
 
 
 
-		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","Number",Nan::Undefined()),make_param("a","base_class",base_class::New()) }, number_testers_number_base_class);
-		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","String",Nan::Undefined()),make_param("a","base_class",base_class::New()) }, number_testers_string_base_class);
-		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","Boolean",Nan::Undefined()), make_param("a","base_class",base_class::New()) }, number_testers_bool_base_class);
-		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","Date",Nan::Undefined()),make_param("a","base_class",base_class::New()) }, number_testers_date_base_class);
-		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","Function",Nan::Undefined()) , make_param("a","base_class",base_class::New()) }, number_testers_function_base_class);
-		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","Buffer",Nan::Undefined()), make_param("a","base_class",base_class::New()) }, number_testers_buffer_base_class);
-		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","Map",Nan::Undefined()), make_param("a","base_class",base_class::New()) }, number_testers_map_base_class);
-		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","Set",Nan::Undefined()), make_param("a","base_class",base_class::New()) }, number_testers_set_base_class);
-		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","Promise",Nan::Undefined()), make_param("a","base_class",base_class::New()) }, number_testers_promise_base_class);
-		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","Proxy",Nan::Undefined()), make_param("a","base_class",base_class::New()) }, number_testers_proxy_base_class);
-		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","RegExp",Nan::Undefined()), make_param("a","base_class",base_class::New()) }, number_testers_regexp_base_class);
-		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","base_class",Nan::Undefined()), make_param("a","base_class",base_class::New()) }, number_testers_base_class_base_class);
-		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","derived_class",Nan::Undefined()), make_param("a","base_class",base_class::New()) }, number_testers_derived_class_base_class);
-		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","struct_A",Nan::Undefined()), make_param("a","base_class",base_class::New()) }, number_testers_struct_A_base_class);
-		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","Array",Nan::Undefined()), make_param("a","base_class",base_class::New()) }, number_testers_array_base_class);
-		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","struct_B",Nan::Undefined()), make_param("a","base_class",base_class::New()) }, number_testers_struct_B_base_class);
+		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","Number",Nan::Undefined()),make_param<base_class*>("a","base_class",base_class::New()) }, number_testers_number_base_class);
+		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","String",Nan::Undefined()),make_param<base_class*>("a","base_class",base_class::New()) }, number_testers_string_base_class);
+		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","Boolean",Nan::Undefined()), make_param<base_class*>("a","base_class",base_class::New()) }, number_testers_bool_base_class);
+		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","Date",Nan::Undefined()),make_param<base_class*>("a","base_class",base_class::New()) }, number_testers_date_base_class);
+		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","Function",Nan::Undefined()) , make_param<base_class*>("a","base_class",base_class::New()) }, number_testers_function_base_class);
+		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","Buffer",Nan::Undefined()), make_param<base_class*>("a","base_class",base_class::New()) }, number_testers_buffer_base_class);
+		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","Map",Nan::Undefined()), make_param<base_class*>("a","base_class",base_class::New()) }, number_testers_map_base_class);
+		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","Set",Nan::Undefined()), make_param<base_class*>("a","base_class",base_class::New()) }, number_testers_set_base_class);
+		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","Promise",Nan::Undefined()), make_param<base_class*>("a","base_class",base_class::New()) }, number_testers_promise_base_class);
+		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","Proxy",Nan::Undefined()), make_param<base_class*>("a","base_class",base_class::New()) }, number_testers_proxy_base_class);
+		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","RegExp",Nan::Undefined()), make_param<base_class*>("a","base_class",base_class::New()) }, number_testers_regexp_base_class);
+		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","base_class",Nan::Undefined()), make_param<base_class*>("a","base_class",base_class::New()) }, number_testers_base_class_base_class);
+		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","derived_class",Nan::Undefined()), make_param<base_class*>("a","base_class",base_class::New()) }, number_testers_derived_class_base_class);
+		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","struct_A",Nan::Undefined()), make_param<base_class*>("a","base_class",base_class::New()) }, number_testers_struct_A_base_class);
+		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","Array",Nan::Undefined()), make_param<base_class*>("a","base_class",base_class::New()) }, number_testers_array_base_class);
+		overload->addOverload("or_default_tester", "", "default_testers_base_class", { make_param("a","struct_B",Nan::Undefined()), make_param<base_class*>("a","base_class",base_class::New()) }, number_testers_struct_B_base_class);
 		overload->addOverload("or_default_tester", "", "default_testers_base_class", {}, number_testers);
 
 
 
 
-		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","Number",Nan::Undefined()),make_param("a","derived_class",derived_class::New()) }, number_testers_number_derived_class);
-		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","String",Nan::Undefined()),make_param("a","derived_class",derived_class::New()) }, number_testers_string_derived_class);
-		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","Boolean",Nan::Undefined()), make_param("a","derived_class",derived_class::New()) }, number_testers_bool_derived_class);
-		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","Date",Nan::Undefined()),make_param("a","derived_class",derived_class::New()) }, number_testers_date_derived_class);
-		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","Function",Nan::Undefined()) , make_param("a","derived_class",derived_class::New()) }, number_testers_function_derived_class);
-		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","Buffer",Nan::Undefined()), make_param("a","derived_class",derived_class::New()) }, number_testers_buffer_derived_class);
-		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","Map",Nan::Undefined()), make_param("a","derived_class",derived_class::New()) }, number_testers_map_derived_class);
-		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","Set",Nan::Undefined()), make_param("a","derived_class",derived_class::New()) }, number_testers_set_derived_class);
-		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","Promise",Nan::Undefined()), make_param("a","derived_class",derived_class::New()) }, number_testers_promise_derived_class);
-		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","Proxy",Nan::Undefined()), make_param("a","derived_class",derived_class::New()) }, number_testers_proxy_derived_class);
-		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","RegExp",Nan::Undefined()), make_param("a","derived_class",derived_class::New()) }, number_testers_regexp_derived_class);
-		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","base_class",Nan::Undefined()), make_param("a","derived_class",derived_class::New()) }, number_testers_base_class_derived_class);
-		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","derived_class",Nan::Undefined()), make_param("a","derived_class",derived_class::New()) }, number_testers_derived_class_derived_class);
-		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","struct_A",Nan::Undefined()), make_param("a","derived_class",derived_class::New()) }, number_testers_struct_A_derived_class);
-		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","struct_B",Nan::Undefined()), make_param("a","derived_class",derived_class::New()) }, number_testers_struct_B_derived_class);
-		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","Array",Nan::Undefined()), make_param("a","derived_class",derived_class::New()) }, number_testers_array_derived_class);
+		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","Number",Nan::Undefined()),make_param<derived_class*>("a","derived_class",derived_class::New()) }, number_testers_number_derived_class);
+		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","String",Nan::Undefined()),make_param<derived_class*>("a","derived_class",derived_class::New()) }, number_testers_string_derived_class);
+		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","Boolean",Nan::Undefined()), make_param<derived_class*>("a","derived_class",derived_class::New()) }, number_testers_bool_derived_class);
+		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","Date",Nan::Undefined()),make_param<derived_class*>("a","derived_class",derived_class::New()) }, number_testers_date_derived_class);
+		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","Function",Nan::Undefined()) , make_param<derived_class*>("a","derived_class",derived_class::New()) }, number_testers_function_derived_class);
+		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","Buffer",Nan::Undefined()), make_param<derived_class*>("a","derived_class",derived_class::New()) }, number_testers_buffer_derived_class);
+		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","Map",Nan::Undefined()), make_param<derived_class*>("a","derived_class",derived_class::New()) }, number_testers_map_derived_class);
+		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","Set",Nan::Undefined()), make_param<derived_class*>("a","derived_class",derived_class::New()) }, number_testers_set_derived_class);
+		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","Promise",Nan::Undefined()), make_param<derived_class*>("a","derived_class",derived_class::New()) }, number_testers_promise_derived_class);
+		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","Proxy",Nan::Undefined()), make_param<derived_class*>("a","derived_class",derived_class::New()) }, number_testers_proxy_derived_class);
+		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","RegExp",Nan::Undefined()), make_param<derived_class*>("a","derived_class",derived_class::New()) }, number_testers_regexp_derived_class);
+		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","base_class",Nan::Undefined()), make_param<derived_class*>("a","derived_class",derived_class::New()) }, number_testers_base_class_derived_class);
+		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","derived_class",Nan::Undefined()), make_param<derived_class*>("a","derived_class",derived_class::New()) }, number_testers_derived_class_derived_class);
+		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","struct_A",Nan::Undefined()), make_param<derived_class*>("a","derived_class",derived_class::New()) }, number_testers_struct_A_derived_class);
+		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","struct_B",Nan::Undefined()), make_param<derived_class*>("a","derived_class",derived_class::New()) }, number_testers_struct_B_derived_class);
+		overload->addOverload("or_default_tester", "", "default_testers_derived_class", { make_param("a","Array",Nan::Undefined()), make_param<derived_class*>("a","derived_class",derived_class::New()) }, number_testers_array_derived_class);
 		overload->addOverload("or_default_tester", "", "default_testers_derived_class", {}, number_testers);
 
 
