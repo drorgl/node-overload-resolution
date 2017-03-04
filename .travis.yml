@@ -1,8 +1,9 @@
 sudo: false
 language: node_js
 node_js:
-  - "6.5"
+  - "6"
   - "7.0.0"
+  - "node"
 before_install:
   - pwd
   - git clone --depth=1 --branch=master https://github.com/drorgl/node-addon-tracer.git ../../drorgl/node-addon-tracer
