@@ -529,6 +529,38 @@ namespace overres {
 	};
 
 	template<>
+	class value_converter<unsigned int> : public value_converter_base {
+	public:
+
+		virtual unsigned int convert(v8::Local<v8::Value> from) {
+			//TODO: decide if value should be checked against std::numeric_limits<T>::max() and std::numeric_limits<T>::min() 
+			return from->IntegerValue();
+		}
+
+		virtual v8::Local<v8::Value> convert(unsigned int from) {
+			return Nan::New(from);
+		}
+
+
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<unsigned int> from) {
+			return Nan::New(*from);
+		}
+
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+			auto from_value = std::dynamic_pointer_cast<value_holder<unsigned int>>(from);
+			return Nan::New(from_value->Value);
+		}
+
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+			auto parsed_value = std::make_shared<value_holder<unsigned int>>();
+			parsed_value->Value = convert(val);
+			return parsed_value;
+		}
+
+	};
+
+
+	template<>
 	class value_converter<uint64_t> : public value_converter_base {
 	public:
 
@@ -763,7 +795,7 @@ namespace overres {
 	class value_converter<bool> : public value_converter_base {
 	public:
 
-		virtual int convert(v8::Local<v8::Value> from) {
+		virtual bool convert(v8::Local<v8::Value> from) {
 			return from->BooleanValue();
 		}
 
