@@ -4,7 +4,8 @@ node_js:
   - "6.5"
   - "7.0.0"
 before_install:
-  - git clone --depth=1 --branch=master https://github.com/drorgl/node-addon-tracer.git drorgl/node-addon-tracer
+  - pwd
+  - git clone --depth=1 --branch=master https://github.com/drorgl/node-addon-tracer.git ../../drorgl/node-addon-tracer
 install:
   - npm install
 script:
