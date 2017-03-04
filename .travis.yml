@@ -6,6 +6,10 @@ node_js:
 before_install:
   - pwd
   - git clone --depth=1 --branch=master https://github.com/drorgl/node-addon-tracer.git ../../drorgl/node-addon-tracer
+  - pushd .
+  - cd ../../drorgl/node-addon-tracer
+  - npm install --ignore-scripts
+  - popd
 install:
   - npm install
 script:
