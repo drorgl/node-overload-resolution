@@ -332,6 +332,11 @@ namespace overres {
 			return true;
 		}
 
+		//functions can always be assigned a null, we just ignore the callback
+		if (type == "Function" && (param_type == "Null" || param_type == "Undefined")) {
+			return true;
+		}
+
 		return false;
 	}
 

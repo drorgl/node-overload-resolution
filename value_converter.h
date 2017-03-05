@@ -67,6 +67,10 @@ namespace overres {
 	public:
 
 		virtual std::shared_ptr<T> convert(v8::Local<v8::Value> from) {
+			if (from->IsNull() || from->IsUndefined()) {
+				return nullptr;
+			}
+
 			if (!from->IsFunction()) {
 				throw std::runtime_error("attempting to convert a non-function to Callback");
 			}
@@ -103,6 +107,10 @@ namespace overres {
 	public:
 
 		virtual std::shared_ptr<T> convert(v8::Local<v8::Value> from) {
+			if (from->IsNull() || from->IsUndefined()) {
+				return nullptr;
+			}
+
 			if (!from->IsFunction()) {
 				throw std::runtime_error("attempting to convert a non-function to Callback");
 			}
