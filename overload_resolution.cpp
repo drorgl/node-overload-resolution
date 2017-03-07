@@ -220,6 +220,11 @@ int overload_resolution::MatchOverload(std::vector<std::string> &classNames, std
 			Log(LogLevel::TRACE, [&i]() {return "no parameter is available but a default value is supplied at index " + i; });
 			local_rank = 3;
 		}
+		//if the function parameter is an Object, that means almost anything can match, give it the lowest rank
+		else if (fparam_normalized_type == "Object") {
+			Log(LogLevel::TRACE, [&i]() {return "function parameter is an Object, that means almost anything can match, give it the lowest rank"; });
+			local_rank = 1;
+		}
 		//if this is the last parameter AND its a function, this is valid but no score
 		else if (iparam_type == "Function" && ((size_t)i == (func->parameters.size() - 1)) && fparam_normalized_type == "Function") {
 			Log(LogLevel::TRACE, [&i]() {return "a function is available in the last position, which could mean its an async call, ignore it"; });
