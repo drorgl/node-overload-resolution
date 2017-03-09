@@ -36,10 +36,14 @@ void constructor_class_tester::Init(v8::Handle<v8::Object> target, std::shared_p
 	overload->addOverloadConstructor("", "constructor_class_tester", { make_param("a","Date",Nan::Undefined()) },		    New_date);
 	overload->addOverloadConstructor("", "constructor_class_tester", { make_param("a","Function",Nan::Undefined()) },	    New_function);
 	overload->addOverloadConstructor("", "constructor_class_tester", { make_param("a","Buffer",Nan::Undefined()) },	    New_buffer);
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 	overload->addOverloadConstructor("", "constructor_class_tester", { make_param("a","Map",Nan::Undefined()) },		    New_map);
 	overload->addOverloadConstructor("", "constructor_class_tester", { make_param("a","Set",Nan::Undefined()) },		    New_set);
+#endif
 	overload->addOverloadConstructor("", "constructor_class_tester", { make_param("a","Promise",Nan::Undefined()) },	    New_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 	overload->addOverloadConstructor("", "constructor_class_tester", { make_param("a","Proxy",Nan::Undefined()) },		    New_proxy);
+#endif
 	overload->addOverloadConstructor("", "constructor_class_tester", { make_param("a","RegExp",Nan::Undefined()) },	    New_regexp);
 	overload->addOverloadConstructor("", "constructor_class_tester", { make_param("a","base_class",Nan::Undefined()) },    New_base_class);
 	overload->addOverloadConstructor("", "constructor_class_tester", { make_param("a","derived_class",Nan::Undefined()) }, New_derived_class);
@@ -58,10 +62,14 @@ void constructor_class_tester::Init(v8::Handle<v8::Object> target, std::shared_p
 	overload->addOverload("", "constructor_class_tester", "static_function", { make_param("a","Date",Nan::Undefined()) },	        static_function_instance_date);
 	overload->addOverload("", "constructor_class_tester", "static_function", { make_param("a","Function",Nan::Undefined()) },      static_function_instance_function);
 	overload->addOverload("", "constructor_class_tester", "static_function", { make_param("a","Buffer",Nan::Undefined()) },        static_function_instance_buffer);
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 	overload->addOverload("", "constructor_class_tester", "static_function", { make_param("a","Map",Nan::Undefined()) },           static_function_instance_map);
 	overload->addOverload("", "constructor_class_tester", "static_function", { make_param("a","Set",Nan::Undefined()) },           static_function_instance_set);
+#endif
 	overload->addOverload("", "constructor_class_tester", "static_function", { make_param("a","Promise",Nan::Undefined()) },       static_function_instance_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 	overload->addOverload("", "constructor_class_tester", "static_function", { make_param("a","Proxy",Nan::Undefined()) },         static_function_instance_proxy);
+#endif
 	overload->addOverload("", "constructor_class_tester", "static_function", { make_param("a","RegExp",Nan::Undefined()) },        static_function_instance_regexp);
 	overload->addOverload("", "constructor_class_tester", "static_function", { make_param("a","base_class",Nan::Undefined()) },    static_function_instance_base_class);
 	overload->addOverload("", "constructor_class_tester", "static_function", { make_param("a","derived_class",Nan::Undefined()) }, static_function_instance_derived_class);
@@ -80,10 +88,14 @@ void constructor_class_tester::Init(v8::Handle<v8::Object> target, std::shared_p
 	overload->addStaticOverload("", "constructor_class_tester", "static_function", { make_param("a","Date",Nan::Undefined()) },		  static_function_static_date);
 	overload->addStaticOverload("", "constructor_class_tester", "static_function", { make_param("a","Function",Nan::Undefined()) },	  static_function_static_function);
 	overload->addStaticOverload("", "constructor_class_tester", "static_function", { make_param("a","Buffer",Nan::Undefined()) },		  static_function_static_buffer);
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 	overload->addStaticOverload("", "constructor_class_tester", "static_function", { make_param("a","Map",Nan::Undefined()) },			  static_function_static_map);
 	overload->addStaticOverload("", "constructor_class_tester", "static_function", { make_param("a","Set",Nan::Undefined()) },			  static_function_static_set);
+#endif
 	overload->addStaticOverload("", "constructor_class_tester", "static_function", { make_param("a","Promise",Nan::Undefined()) },		  static_function_static_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 	overload->addStaticOverload("", "constructor_class_tester", "static_function", { make_param("a","Proxy",Nan::Undefined()) },		  static_function_static_proxy);
+#endif
 	overload->addStaticOverload("", "constructor_class_tester", "static_function", { make_param("a","RegExp",Nan::Undefined()) },		  static_function_static_regexp);
 	overload->addStaticOverload("", "constructor_class_tester", "static_function", { make_param("a","base_class",Nan::Undefined()) },	  static_function_static_base_class);
 	overload->addStaticOverload("", "constructor_class_tester", "static_function", { make_param("a","derived_class",Nan::Undefined()) }, static_function_static_derived_class);

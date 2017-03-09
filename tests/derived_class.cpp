@@ -32,10 +32,14 @@ void derived_class::Init(v8::Handle<v8::Object> target, std::shared_ptr<overload
 	overload->addOverload("", "derived_class", "base_function", { make_param("a","Date") }, base_function_date);
 	overload->addOverload("", "derived_class", "base_function", { make_param("a","Function") }, base_function_function);
 	overload->addOverload("", "derived_class", "base_function", { make_param("a","Buffer") }, base_function_buffer);
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 	overload->addOverload("", "derived_class", "base_function", { make_param("a","Map") }, base_function_map);
 	overload->addOverload("", "derived_class", "base_function", { make_param("a","Set") }, base_function_set);
+#endif
 	overload->addOverload("", "derived_class", "base_function", { make_param("a","Promise") }, base_function_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 	overload->addOverload("", "derived_class", "base_function", { make_param("a","Proxy") }, base_function_proxy);
+#endif
 	overload->addOverload("", "derived_class", "base_function", { make_param("a","RegExp") }, base_function_regexp);
 	overload->addOverload("", "derived_class", "base_function", { make_param("a","base_class") }, base_function_base_class);
 	overload->addOverload("", "derived_class", "base_function", { make_param("a","derived_class") }, base_function_derived_class);

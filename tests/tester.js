@@ -1,10 +1,19 @@
+var SegfaultHandler = require('segfault-handler');
+SegfaultHandler.registerHandler("crash.log");
+
 console.log("starting");
 var tape = require("tape");
 var chalk = require("chalk");
 
+var nodeVersion = Number(process.version.match(/^v(\d+\.)/)[1]);
+var proxy = global.Proxy || null;
+if (nodeVersion < 6) {
+    proxy = function () { };
+}
+Proxy = proxy;
 
-let errorColor = chalk.red.bold;
-let okColor = chalk.green.bold;
+var errorColor = chalk.red.bold;
+var okColor = chalk.green.bold;
 var level = 0;
 
 function logger(module, level, message) {
@@ -13,8 +22,8 @@ function logger(module, level, message) {
     //}
 }
 function tablevel() {
-    let retval = "";
-    for (let i = 0; i < level; i++) {
+    var retval = "";
+    for (var i = 0; i < level; i++) {
         retval += "\t";
     }
     return retval;
@@ -27,7 +36,7 @@ var results = {
 
 var tapestream = tape.createStream({ objectMode: true });
 
-tapestream.on('data', (row) => {
+tapestream.on('data', function(row){
     if (typeof row == typeof "") {
         console.log(tablevel() + row);
     }
@@ -57,7 +66,7 @@ tapestream.on('data', (row) => {
     //console.log(JSON.stringify(row))
 });
 
-tapestream.on('end', (r) => {
+tapestream.on('end', function(r) {
     console.log("passed:", results.passed);
     console.log("failed:", results.failed);
 });
@@ -65,8 +74,8 @@ tapestream.on('end', (r) => {
 
 
 function showObject(tobj) {
-    let objstr = JSON.stringify(tobj, null, '\t');
-    let showObjectContents = false;
+    var objstr = JSON.stringify(tobj, null, '\t');
+    var showObjectContents = false;
     if (showObjectContents) {
         console.log(objstr);
     }
@@ -166,6 +175,7 @@ for (var i = 0; i < 1; i++) {
 
     var dataTypes = [
         {
+            minNodeVersion : 0,
             value_converter_exists : true,
             value: 1,
             defaultValue: 1,
@@ -173,108 +183,126 @@ for (var i = 0; i < 1; i++) {
 
         }
         , {
+            minNodeVersion: 0,
             value_converter_exists: true,
             value: 2 ^ 33,
             defaultValue: 1,
             name: "number"
         }
         , {
+            minNodeVersion: 0,
             value_converter_exists: true,
             value: true,
             defaultValue: true,
             name: "bool"
         }
         , {
+            minNodeVersion: 0,
             value_converter_exists: true,
             value: false,
             defaultValue: true,
             name: "bool"
         }
         , {
+            minNodeVersion: 0,
             value_converter_exists: true,
             value: "1",
             defaultValue: "1",
             name: "string"
         }
         , {
+            minNodeVersion: 0,
             value_converter_exists: true,
             value: "str",
             defaultValue: "1",
             name: "string"
         }
         , {
+            minNodeVersion: 0,
             value_converter_exists: true,
             value: new Date(1234 * 1000),
             defaultValue: new Date(0),
             name: "date"
         }
         , {
+            minNodeVersion: 0,
             value_converter_exists: true,
             value: function () { console.log("value function was called", arguments); },
             defaultValue: function () { console.log("defaultValue function was called", arguments); },
             name: "function"
         }
         , {
+            minNodeVersion: 4,
             value_converter_exists: true,
             value: new Map([["s1", 1], ["s2", 2]]),
             defaultValue: new Map([["s1", 1], ["s2", 2]]),
             name: "map"
         }
         , {
+            minNodeVersion: 4,
             value_converter_exists: true,
             value: new Set(["k1", "k2"]),
             defaultValue: new Set(["k1", "k2"]),
             name: "set"
         }
         , {
+            minNodeVersion: 0,
             value_converter_exists: true,
             value: new Buffer([1, 2, 3]),
             defaultValue: new Buffer([]),
             name: "buffer"
         }
         , {
+            minNodeVersion: 0,
             value_converter_exists: false,
             value: Promise.resolve(0),
             defaultValue: Promise.resolve(0),
             name: "promise"
         }
         , {
+            minNodeVersion: 6,
             value_converter_exists: false,
             value: new Proxy({}, {}),
             defaultValue: new Proxy({}, {}),
             name: "proxy"
         }
         , {
+            minNodeVersion: 0,
             value_converter_exists: false,
             value: new RegExp("[a-z]"),
             defaultValue: new RegExp("[a-z]"),
             name: "regexp"
         }
         , {
+            minNodeVersion: 0,
             value_converter_exists: true,
             value: new addon.base_class(),
             defaultValue: new addon.base_class(),
             name: "base_class"
         }
         , {
+            minNodeVersion: 0,
             value_converter_exists: true,
             value: new addon.derived_class(),
             defaultValue: new addon.base_class(),
             name: "derived_class"
         }
         , {
+            minNodeVersion: 0,
             value_converter_exists: true,
             value: { "prop1": "val1", "prop2": "val2" },
             defaultValue: { "prop1": "val1", "prop2": "val2" },
             name: "struct_A"
         }
         , {
+            minNodeVersion: 0,
             value_converter_exists: true,
             value: { "prop1": "val1", "prop2": 2 },
             defaultValue: { "prop1": "val1", "prop2": 2 },
             name: "struct_B"
         }
         , {
+            minNodeVersion: 0,
             value_converter_exists: true,
             value: [],
             defaultValue: [],
@@ -297,11 +325,14 @@ for (var i = 0; i < 1; i++) {
     //test constructor overloads
     tape('constructor overload 1 parameter, no defaults', function (t) {
         t.doesNotThrow(function () {
-            let ct = new addon.constructor_class_tester();
+            var ct = new addon.constructor_class_tester();
             t.equal(ct.ctype(), ".no_parameters", "constructor_tester no_params");
 
             for (var dt of dataTypes) {
-                let ct = new addon.constructor_class_tester(dt.value);
+                if (dt.minNodeVersion > nodeVersion) {
+                    continue;
+                }
+                var ct = new addon.constructor_class_tester(dt.value);
                 t.equal(ct.ctype(), "." + dt.name, "constructor_testers " + dt.name);
                 addon.Flush();
             }
@@ -315,12 +346,15 @@ for (var i = 0; i < 1; i++) {
     //test static functions (non-instance)
     tape('static vs instance function overload 1 parameter, no defaults', function (t) {
         t.doesNotThrow(function () {
-            let cs = new addon.constructor_class_tester();
+            var cs = new addon.constructor_class_tester();
 
             t.equal(addon.constructor_class_tester.static_function(), ".static.no_params", "constructor_class_tester.static_function no_params");
             t.equal(cs.static_function(), ".instance.no_params", "instance constructor_class_tester.static_function no_params");
 
             for (var dt of dataTypes) {
+                if (dt.minNodeVersion > nodeVersion) {
+                    continue;
+                }
                 t.equal(addon.constructor_class_tester.static_function(dt.value), ".static." + dt.name, "base_class.static_function " + dt.name);
                 t.equal(cs.static_function(dt.value), ".instance." + dt.name, "instance constructor_class_tester.static_function " + dt.name);
                 addon.Flush();
@@ -339,6 +373,9 @@ for (var i = 0; i < 1; i++) {
             t.equal(addon.number_testers(), ".no_parameters", "number_testers no_params");
 
             for (var dt of dataTypes) {
+                if (dt.minNodeVersion > nodeVersion) {
+                    continue;
+                }
                 t.equal(addon.number_testers(dt.value), "." + dt.name, "number_testers " + dt.name);
                 addon.Flush();
             }
@@ -354,11 +391,14 @@ for (var i = 0; i < 1; i++) {
 
     tape('member function overload 1 parameter, no defaults', function (t) {
         t.doesNotThrow(function () {
-            let bc = new addon.base_class();
+            var bc = new addon.base_class();
 
             t.equal(bc.base_function(), "base_class.base_function.no_parameters_testers", "no_params");
 
             for (var dt of dataTypes) {
+                if (dt.minNodeVersion > nodeVersion) {
+                    continue;
+                }
                 t.equal(bc.base_function(dt.value), "base_class.base_function." + dt.name, "number_testers " + dt.name);
                 addon.Flush();
             }
@@ -375,11 +415,14 @@ for (var i = 0; i < 1; i++) {
 
     tape('derived member function overload 1 parameter, no defaults', function (t) {
         t.doesNotThrow(function () {
-            let bc = new addon.derived_class();
+            var bc = new addon.derived_class();
 
             t.equal(bc.base_function(), "derived_class.base_function.no_parameters_testers", "no_params");
 
             for (var dt of dataTypes) {
+                if (dt.minNodeVersion > nodeVersion) {
+                    continue;
+                }
                 t.equal(bc.base_function(dt.value), "derived_class.base_function." + dt.name, "derived_class.base_function " + dt.name);
                 addon.Flush();
             }
@@ -416,7 +459,13 @@ for (var i = 0; i < 1; i++) {
         t.doesNotThrow(function () {
 
             for (var dt1 of dataTypes) {
+                if (dt1.minNodeVersion > nodeVersion) {
+                    continue;
+                }
                 for (var dt2 of dataTypes) {
+                    if (dt2.minNodeVersion > nodeVersion) {
+                        continue;
+                    }
                     t.equal(addon.two_testers(dt1.value, dt2.value), "." + dt1.name + "." + dt2.name, "two_testers " + dt1.name + " " + dt2.name);
                     addon.Flush();
                 }
@@ -445,11 +494,17 @@ for (var i = 0; i < 1; i++) {
             t.equal(addon.array_testers(), ".no_parameters_testers", "array_testers()");
 
             for (var dt of dataTypes) {
+                if (dt.minNodeVersion > nodeVersion) {
+                    continue;
+                }
                 t.equal(addon.array_testers([dt.value]), ".array<" + dt.name + ">", "array_testers array<" + dt.name + ">");
                 addon.Flush();
             }
 
             for (var dt of dataTypes) {
+                if (dt.minNodeVersion > nodeVersion) {
+                    continue;
+                }
                 t.equal(addon.array_testers([[dt.value]]), ".array<array<" + dt.name + ">>", "array_testers array<array<" + dt.name + ">>");
                 addon.Flush();
             }
@@ -457,7 +512,13 @@ for (var i = 0; i < 1; i++) {
             //test array with multiple types
 
             for (var dt1 of dataTypes) {
+                if (dt1.minNodeVersion > nodeVersion) {
+                    continue;
+                }
                 for (var dt2 of dataTypes) {
+                    if (dt2.minNodeVersion > nodeVersion) {
+                        continue;
+                    }
                     if (dt1.name != dt2.name) {
                         t.equal(addon.array_testers([dt1.value, dt2.value]), ".array", "array_testers array (multiple types - " + dt1.name + "," + dt2.name + ")");
                         addon.Flush();
@@ -466,7 +527,13 @@ for (var i = 0; i < 1; i++) {
             }
 
             for (var dt1 of dataTypes) {
+                if (dt1.minNodeVersion > nodeVersion) {
+                    continue;
+                }
                 for (var dt2 of dataTypes) {
+                    if (dt2.minNodeVersion > nodeVersion) {
+                        continue;
+                    }
                     if (dt1.name != dt2.name) {
                         t.equal(addon.array_testers([[dt1.value, dt2.value]]), ".array<array>", "array_testers array<array> (multiple types - " + dt1.name + "," + dt2.name + ")");
                         addon.Flush();
@@ -475,7 +542,13 @@ for (var i = 0; i < 1; i++) {
             }
 
             for (var dt1 of dataTypes) {
+                if (dt1.minNodeVersion > nodeVersion) {
+                    continue;
+                }
                 for (var dt2 of dataTypes) {
+                    if (dt2.minNodeVersion > nodeVersion) {
+                        continue;
+                    }
                     if (dt1 != dt2) {
                         t.equal(addon.array_testers([[dt1.value], dt2.value]), ".array", "array_testers array<array> (multiple types - " + dt1.name + "," + dt2.name + ")");
                         addon.Flush();
@@ -486,11 +559,17 @@ for (var i = 0; i < 1; i++) {
             //test array with multiple values of the same type
 
             for (var dt of dataTypes) {
+                if (dt.minNodeVersion > nodeVersion) {
+                    continue;
+                }
                 t.equal(addon.array_testers([dt.value, dt.value]), ".array<" + dt.name + ">", "array_testers array<" + dt.name + ">");
                 addon.Flush();
             }
 
             for (var dt of dataTypes) {
+                if (dt.minNodeVersion > nodeVersion) {
+                    continue;
+                }
                 t.equal(addon.array_testers([[dt.value, dt.value]]), ".array<array<" + dt.name + ">>", "array_testers array<array<" + dt.name + ">>");
                 addon.Flush();
             }
@@ -504,11 +583,17 @@ for (var i = 0; i < 1; i++) {
     tape('function overload 1 parameter, 2nd parameter default', function (t) {
         t.doesNotThrow(function () {
             for (var dt1 of dataTypes) {
+                if (dt1.minNodeVersion > nodeVersion) {
+                    continue;
+                }
                 var default_func_no_params = new Function("addon", "return addon.default_testers_" + dt1.name + "()");
                 var default_func = new Function("addon, val", "return addon.default_testers_" + dt1.name + "(val)");
                 var default_func_2params = new Function("addon, val1,val2", "return addon.default_testers_" + dt1.name + "(val1,val2)");
                 t.equal(default_func_no_params(addon), ".no_params", "default testers " + dt1.name + ", no parameters");
                 for (var dt2 of dataTypes) {
+                    if (dt2.minNodeVersion > nodeVersion) {
+                        continue;
+                    }
                     t.equal(default_func(addon, dt2.value), "." + dt2.name + "(" + JSON.stringify(dt2.value) + ")." + dt1.name + "(" + JSON.stringify(dt1.defaultValue) + ")", "default testers " + dt2.name + ", default (2nd parameter):" + dt1.name);
                     t.equal(default_func_2params(addon, dt2.value, dt1.value), "." + dt2.name + "(" + JSON.stringify(dt2.value) + ")." + dt1.name + "(" + JSON.stringify(dt1.value) + ")", "default testers " + dt2.name + ", passed 2nd parameter (instead of default):" + dt1.name);
                     addon.Flush();
@@ -526,6 +611,9 @@ for (var i = 0; i < 1; i++) {
             t.equal(addon.value_converter(), ".no_parameters", "value_converter no_params");
 
             for (var dt of dataTypes) {
+                if (dt.minNodeVersion > nodeVersion) {
+                    continue;
+                }
                 if (!dt.value_converter_exists) {
                     t.comment("value converter doesn't exist for " + dt.name + ", skipping");
                     continue;
@@ -566,6 +654,9 @@ for (var i = 0; i < 1; i++) {
             t.equal(addon.value_converter(), ".no_parameters", "value_converter no_params");
 
             for (var dt of dataTypes) {
+                if (dt.minNodeVersion > nodeVersion) {
+                    continue;
+                }
                 if (!dt.value_converter_exists) {
                     t.comment("value converter doesn't exist for " + dt.name + ", skipping");
                     continue;
@@ -573,7 +664,7 @@ for (var i = 0; i < 1; i++) {
 
                 t.doesNotThrow(function () {
                     executions++;
-                    (() => {
+                    (function() {
                         var dtlocal = dt;
                         var tlocal = t;
                         addon.value_converter(dt.value, function (err, c_result) {
@@ -607,7 +698,7 @@ for (var i = 0; i < 1; i++) {
             }
 
         });
-        var shouldEnd = () => {
+        var shouldEnd = function() {
             if (executions == 0) {
                 addon.Flush();
                 t.end();
@@ -631,7 +722,7 @@ tape('async function callback from stand alone thread', function (t) {
         });
     });
 
-    var shouldEnd = () => {
+    var shouldEnd = function() {
         if (counter == 0) {
             t.pass("async called 5 times");
             t.end();

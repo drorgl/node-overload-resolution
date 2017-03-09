@@ -25,10 +25,14 @@ namespace base_class_general_callback {
 		overload->addOverload("", "base_class","base_function", { make_param("a","Date",Nan::Undefined()) }, base_function_date);
 		overload->addOverload("", "base_class","base_function", { make_param("a","Function",Nan::Undefined()) }, base_function_function);
 		overload->addOverload("", "base_class","base_function", { make_param("a","Buffer",Nan::Undefined()) }, base_function_buffer);
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		overload->addOverload("", "base_class","base_function", { make_param("a","Map",Nan::Undefined()) }, base_function_map);
 		overload->addOverload("", "base_class","base_function", { make_param("a","Set",Nan::Undefined()) }, base_function_set);
+#endif
 		overload->addOverload("", "base_class","base_function", { make_param("a","Promise",Nan::Undefined()) }, base_function_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 		overload->addOverload("", "base_class","base_function", { make_param("a","Proxy",Nan::Undefined()) }, base_function_proxy);
+#endif
 		overload->addOverload("", "base_class","base_function", { make_param("a","RegExp",Nan::Undefined()) }, base_function_regexp);
 		overload->addOverload("", "base_class","base_function", { make_param("a","base_class",Nan::Undefined()) }, base_function_base_class);
 		overload->addOverload("", "base_class","base_function", { make_param("a","derived_class",Nan::Undefined()) }, base_function_derived_class);

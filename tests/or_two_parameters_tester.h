@@ -865,10 +865,14 @@ namespace overres_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Number",Nan::Undefined()),make_param("a","Date",Nan::Undefined()) }, number_testers_number_date);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Number",Nan::Undefined()),make_param("a","Function",Nan::Undefined()) }, number_testers_number_function);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Number",Nan::Undefined()),make_param("a","Buffer",Nan::Undefined()) }, number_testers_number_buffer);
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Number",Nan::Undefined()),make_param("a","Map",Nan::Undefined()) }, number_testers_number_map);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Number",Nan::Undefined()),make_param("a","Set",Nan::Undefined()) }, number_testers_number_set);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Number",Nan::Undefined()),make_param("a","Promise",Nan::Undefined()) }, number_testers_number_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Number",Nan::Undefined()),make_param("a","Proxy",Nan::Undefined()) }, number_testers_number_proxy);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Number",Nan::Undefined()),make_param("a","RegExp",Nan::Undefined()) }, number_testers_number_regexp);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Number",Nan::Undefined()),make_param("a","base_class",Nan::Undefined()) }, number_testers_number_base_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Number",Nan::Undefined()),make_param("a","derived_class",Nan::Undefined()) }, number_testers_number_derived_class);
@@ -882,10 +886,14 @@ namespace overres_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","String",Nan::Undefined()),make_param("a","Date",Nan::Undefined()) }, number_testers_string_date);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","String",Nan::Undefined()),make_param("a","Function",Nan::Undefined()) }, number_testers_string_function);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","String",Nan::Undefined()),make_param("a","Buffer",Nan::Undefined()) }, number_testers_string_buffer);
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","String",Nan::Undefined()),make_param("a","Map",Nan::Undefined()) }, number_testers_string_map);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","String",Nan::Undefined()),make_param("a","Set",Nan::Undefined()) }, number_testers_string_set);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","String",Nan::Undefined()),make_param("a","Promise",Nan::Undefined()) }, number_testers_string_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","String",Nan::Undefined()),make_param("a","Proxy",Nan::Undefined()) }, number_testers_string_proxy);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","String",Nan::Undefined()),make_param("a","RegExp",Nan::Undefined()) }, number_testers_string_regexp);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","String",Nan::Undefined()),make_param("a","base_class",Nan::Undefined()) }, number_testers_string_base_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","String",Nan::Undefined()),make_param("a","derived_class",Nan::Undefined()) }, number_testers_string_derived_class);
@@ -899,10 +907,14 @@ namespace overres_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Boolean",Nan::Undefined()), make_param("a","Date",Nan::Undefined()) }, number_testers_bool_date);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Boolean",Nan::Undefined()), make_param("a","Function",Nan::Undefined()) }, number_testers_bool_function);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Boolean",Nan::Undefined()), make_param("a","Buffer",Nan::Undefined()) }, number_testers_bool_buffer);
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Boolean",Nan::Undefined()), make_param("a","Map",Nan::Undefined()) }, number_testers_bool_map);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Boolean",Nan::Undefined()), make_param("a","Set",Nan::Undefined()) }, number_testers_bool_set);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Boolean",Nan::Undefined()), make_param("a","Promise",Nan::Undefined()) }, number_testers_bool_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Boolean",Nan::Undefined()), make_param("a","Proxy",Nan::Undefined()) }, number_testers_bool_proxy);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Boolean",Nan::Undefined()), make_param("a","RegExp",Nan::Undefined()) }, number_testers_bool_regexp);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Boolean",Nan::Undefined()), make_param("a","base_class",Nan::Undefined()) }, number_testers_bool_base_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Boolean",Nan::Undefined()), make_param("a","derived_class",Nan::Undefined()) }, number_testers_bool_derived_class);
@@ -916,10 +928,14 @@ namespace overres_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Date",Nan::Undefined()),make_param("a","Date",Nan::Undefined()) }, number_testers_date_date);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Date",Nan::Undefined()),make_param("a","Function",Nan::Undefined()) }, number_testers_date_function);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Date",Nan::Undefined()),make_param("a","Buffer",Nan::Undefined()) }, number_testers_date_buffer);
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Date",Nan::Undefined()),make_param("a","Map",Nan::Undefined()) }, number_testers_date_map);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Date",Nan::Undefined()),make_param("a","Set",Nan::Undefined()) }, number_testers_date_set);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Date",Nan::Undefined()),make_param("a","Promise",Nan::Undefined()) }, number_testers_date_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Date",Nan::Undefined()),make_param("a","Proxy",Nan::Undefined()) }, number_testers_date_proxy);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Date",Nan::Undefined()),make_param("a","RegExp",Nan::Undefined()) }, number_testers_date_regexp);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Date",Nan::Undefined()),make_param("a","base_class",Nan::Undefined()) }, number_testers_date_base_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Date",Nan::Undefined()),make_param("a","derived_class",Nan::Undefined()) }, number_testers_date_derived_class);
@@ -933,10 +949,14 @@ namespace overres_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Function",Nan::Undefined()) , make_param("a","Date",Nan::Undefined()) }, number_testers_function_date);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Function",Nan::Undefined()) , make_param("a","Function",Nan::Undefined()) }, number_testers_function_function);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Function",Nan::Undefined()) , make_param("a","Buffer",Nan::Undefined()) }, number_testers_function_buffer);
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Function",Nan::Undefined()) , make_param("a","Map",Nan::Undefined()) }, number_testers_function_map);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Function",Nan::Undefined()) , make_param("a","Set",Nan::Undefined()) }, number_testers_function_set);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Function",Nan::Undefined()) , make_param("a","Promise",Nan::Undefined()) }, number_testers_function_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Function",Nan::Undefined()) , make_param("a","Proxy",Nan::Undefined()) }, number_testers_function_proxy);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Function",Nan::Undefined()) , make_param("a","RegExp",Nan::Undefined()) }, number_testers_function_regexp);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Function",Nan::Undefined()) , make_param("a","base_class",Nan::Undefined()) }, number_testers_function_base_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Function",Nan::Undefined()) , make_param("a","derived_class",Nan::Undefined()) }, number_testers_function_derived_class);
@@ -950,10 +970,14 @@ namespace overres_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Buffer",Nan::Undefined()), make_param("a","Date",Nan::Undefined()) }, number_testers_buffer_date);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Buffer",Nan::Undefined()), make_param("a","Function",Nan::Undefined()) }, number_testers_buffer_function);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Buffer",Nan::Undefined()), make_param("a","Buffer",Nan::Undefined()) }, number_testers_buffer_buffer);
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Buffer",Nan::Undefined()), make_param("a","Map",Nan::Undefined()) }, number_testers_buffer_map);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Buffer",Nan::Undefined()), make_param("a","Set",Nan::Undefined()) }, number_testers_buffer_set);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Buffer",Nan::Undefined()), make_param("a","Promise",Nan::Undefined()) }, number_testers_buffer_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Buffer",Nan::Undefined()), make_param("a","Proxy",Nan::Undefined()) }, number_testers_buffer_proxy);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Buffer",Nan::Undefined()), make_param("a","RegExp",Nan::Undefined()) }, number_testers_buffer_regexp);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Buffer",Nan::Undefined()), make_param("a","base_class",Nan::Undefined()) }, number_testers_buffer_base_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Buffer",Nan::Undefined()), make_param("a","derived_class",Nan::Undefined()) }, number_testers_buffer_derived_class);
@@ -961,6 +985,7 @@ namespace overres_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Buffer",Nan::Undefined()), make_param("a","struct_B",Nan::Undefined()) }, number_testers_buffer_struct_B);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Buffer",Nan::Undefined()),make_param("a","Array",Nan::Undefined()) }, number_testers_buffer_array);
 
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Map",Nan::Undefined()), make_param("a","Number",Nan::Undefined()) }, number_testers_map_number);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Map",Nan::Undefined()), make_param("a","String",Nan::Undefined()) }, number_testers_map_string);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Map",Nan::Undefined()), make_param("a","Boolean",Nan::Undefined()) }, number_testers_map_bool);
@@ -970,14 +995,18 @@ namespace overres_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Map",Nan::Undefined()), make_param("a","Map",Nan::Undefined()) }, number_testers_map_map);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Map",Nan::Undefined()), make_param("a","Set",Nan::Undefined()) }, number_testers_map_set);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Map",Nan::Undefined()), make_param("a","Promise",Nan::Undefined()) }, number_testers_map_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Map",Nan::Undefined()), make_param("a","Proxy",Nan::Undefined()) }, number_testers_map_proxy);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Map",Nan::Undefined()), make_param("a","RegExp",Nan::Undefined()) }, number_testers_map_regexp);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Map",Nan::Undefined()), make_param("a","base_class",Nan::Undefined()) }, number_testers_map_base_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Map",Nan::Undefined()), make_param("a","derived_class",Nan::Undefined()) }, number_testers_map_derived_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Map",Nan::Undefined()), make_param("a","struct_A",Nan::Undefined()) }, number_testers_map_struct_A);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Map",Nan::Undefined()), make_param("a","struct_B",Nan::Undefined()) }, number_testers_map_struct_B);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Map",Nan::Undefined()),make_param("a","Array",Nan::Undefined()) }, number_testers_map_array);
+#endif
 
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Set",Nan::Undefined()), make_param("a","Number",Nan::Undefined()) }, number_testers_set_number);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Set",Nan::Undefined()), make_param("a","String",Nan::Undefined()) }, number_testers_set_string);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Set",Nan::Undefined()), make_param("a","Boolean",Nan::Undefined()) }, number_testers_set_bool);
@@ -987,13 +1016,16 @@ namespace overres_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Set",Nan::Undefined()), make_param("a","Map",Nan::Undefined()) }, number_testers_set_map);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Set",Nan::Undefined()), make_param("a","Set",Nan::Undefined()) }, number_testers_set_set);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Set",Nan::Undefined()), make_param("a","Promise",Nan::Undefined()) }, number_testers_set_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Set",Nan::Undefined()), make_param("a","Proxy",Nan::Undefined()) }, number_testers_set_proxy);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Set",Nan::Undefined()), make_param("a","RegExp",Nan::Undefined()) }, number_testers_set_regexp);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Set",Nan::Undefined()), make_param("a","base_class",Nan::Undefined()) }, number_testers_set_base_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Set",Nan::Undefined()), make_param("a","derived_class",Nan::Undefined()) }, number_testers_set_derived_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Set",Nan::Undefined()), make_param("a","struct_A",Nan::Undefined()) }, number_testers_set_struct_A);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Set",Nan::Undefined()), make_param("a","struct_B",Nan::Undefined()) }, number_testers_set_struct_B);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Set",Nan::Undefined()),make_param("a","Array",Nan::Undefined()) }, number_testers_set_array);
+#endif
 
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Promise",Nan::Undefined()), make_param("a","Number",Nan::Undefined()) }, number_testers_promise_number);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Promise",Nan::Undefined()), make_param("a","String",Nan::Undefined()) }, number_testers_promise_string);
@@ -1001,10 +1033,14 @@ namespace overres_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Promise",Nan::Undefined()), make_param("a","Date",Nan::Undefined()) }, number_testers_promise_date);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Promise",Nan::Undefined()), make_param("a","Function",Nan::Undefined()) }, number_testers_promise_function);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Promise",Nan::Undefined()), make_param("a","Buffer",Nan::Undefined()) }, number_testers_promise_buffer);
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Promise",Nan::Undefined()), make_param("a","Map",Nan::Undefined()) }, number_testers_promise_map);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Promise",Nan::Undefined()), make_param("a","Set",Nan::Undefined()) }, number_testers_promise_set);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Promise",Nan::Undefined()), make_param("a","Promise",Nan::Undefined()) }, number_testers_promise_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Promise",Nan::Undefined()), make_param("a","Proxy",Nan::Undefined()) }, number_testers_promise_proxy);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Promise",Nan::Undefined()), make_param("a","RegExp",Nan::Undefined()) }, number_testers_promise_regexp);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Promise",Nan::Undefined()), make_param("a","base_class",Nan::Undefined()) }, number_testers_promise_base_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Promise",Nan::Undefined()), make_param("a","derived_class",Nan::Undefined()) }, number_testers_promise_derived_class);
@@ -1012,14 +1048,17 @@ namespace overres_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Promise",Nan::Undefined()), make_param("a","struct_B",Nan::Undefined()) }, number_testers_promise_struct_B);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Promise",Nan::Undefined()),make_param("a","Array",Nan::Undefined()) }, number_testers_promise_array);
 
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Proxy",Nan::Undefined()), make_param("a","Number",Nan::Undefined()) }, number_testers_proxy_number);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Proxy",Nan::Undefined()), make_param("a","String",Nan::Undefined()) }, number_testers_proxy_string);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Proxy",Nan::Undefined()), make_param("a","Boolean",Nan::Undefined()) }, number_testers_proxy_bool);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Proxy",Nan::Undefined()), make_param("a","Date",Nan::Undefined()) }, number_testers_proxy_date);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Proxy",Nan::Undefined()), make_param("a","Function",Nan::Undefined()) }, number_testers_proxy_function);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Proxy",Nan::Undefined()), make_param("a","Buffer",Nan::Undefined()) }, number_testers_proxy_buffer);
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Proxy",Nan::Undefined()), make_param("a","Map",Nan::Undefined()) }, number_testers_proxy_map);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Proxy",Nan::Undefined()), make_param("a","Set",Nan::Undefined()) }, number_testers_proxy_set);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Proxy",Nan::Undefined()), make_param("a","Promise",Nan::Undefined()) }, number_testers_proxy_promise);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Proxy",Nan::Undefined()), make_param("a","Proxy",Nan::Undefined()) }, number_testers_proxy_proxy);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Proxy",Nan::Undefined()), make_param("a","RegExp",Nan::Undefined()) }, number_testers_proxy_regexp);
@@ -1028,17 +1067,21 @@ namespace overres_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Proxy",Nan::Undefined()), make_param("a","struct_A",Nan::Undefined()) }, number_testers_proxy_struct_A);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Proxy",Nan::Undefined()), make_param("a","struct_B",Nan::Undefined()) }, number_testers_proxy_struct_B);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Proxy",Nan::Undefined()),make_param("a","Array",Nan::Undefined()) }, number_testers_proxy_array);
-
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","RegExp",Nan::Undefined()), make_param("a","Number",Nan::Undefined()) }, number_testers_regexp_number);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","RegExp",Nan::Undefined()), make_param("a","String",Nan::Undefined()) }, number_testers_regexp_string);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","RegExp",Nan::Undefined()), make_param("a","Boolean",Nan::Undefined()) }, number_testers_regexp_bool);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","RegExp",Nan::Undefined()), make_param("a","Date",Nan::Undefined()) }, number_testers_regexp_date);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","RegExp",Nan::Undefined()), make_param("a","Function",Nan::Undefined()) }, number_testers_regexp_function);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","RegExp",Nan::Undefined()), make_param("a","Buffer",Nan::Undefined()) }, number_testers_regexp_buffer);
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","RegExp",Nan::Undefined()), make_param("a","Map",Nan::Undefined()) }, number_testers_regexp_map);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","RegExp",Nan::Undefined()), make_param("a","Set",Nan::Undefined()) }, number_testers_regexp_set);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","RegExp",Nan::Undefined()), make_param("a","Promise",Nan::Undefined()) }, number_testers_regexp_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","RegExp",Nan::Undefined()), make_param("a","Proxy",Nan::Undefined()) }, number_testers_regexp_proxy);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","RegExp",Nan::Undefined()), make_param("a","RegExp",Nan::Undefined()) }, number_testers_regexp_regexp);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","RegExp",Nan::Undefined()), make_param("a","base_class",Nan::Undefined()) }, number_testers_regexp_base_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","RegExp",Nan::Undefined()), make_param("a","derived_class",Nan::Undefined()) }, number_testers_regexp_derived_class);
@@ -1052,10 +1095,14 @@ namespace overres_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","base_class",Nan::Undefined()), make_param("a","Date",Nan::Undefined()) }, number_testers_base_class_date);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","base_class",Nan::Undefined()), make_param("a","Function",Nan::Undefined()) }, number_testers_base_class_function);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","base_class",Nan::Undefined()), make_param("a","Buffer",Nan::Undefined()) }, number_testers_base_class_buffer);
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","base_class",Nan::Undefined()), make_param("a","Map",Nan::Undefined()) }, number_testers_base_class_map);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","base_class",Nan::Undefined()), make_param("a","Set",Nan::Undefined()) }, number_testers_base_class_set);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","base_class",Nan::Undefined()), make_param("a","Promise",Nan::Undefined()) }, number_testers_base_class_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","base_class",Nan::Undefined()), make_param("a","Proxy",Nan::Undefined()) }, number_testers_base_class_proxy);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","base_class",Nan::Undefined()), make_param("a","RegExp",Nan::Undefined()) }, number_testers_base_class_regexp);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","base_class",Nan::Undefined()), make_param("a","base_class",Nan::Undefined()) }, number_testers_base_class_base_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","base_class",Nan::Undefined()), make_param("a","derived_class",Nan::Undefined()) }, number_testers_base_class_derived_class);
@@ -1069,10 +1116,14 @@ namespace overres_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","derived_class",Nan::Undefined()), make_param("a","Date",Nan::Undefined()) }, number_testers_derived_class_date);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","derived_class",Nan::Undefined()), make_param("a","Function",Nan::Undefined()) }, number_testers_derived_class_function);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","derived_class",Nan::Undefined()), make_param("a","Buffer",Nan::Undefined()) }, number_testers_derived_class_buffer);
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","derived_class",Nan::Undefined()), make_param("a","Map",Nan::Undefined()) }, number_testers_derived_class_map);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","derived_class",Nan::Undefined()), make_param("a","Set",Nan::Undefined()) }, number_testers_derived_class_set);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","derived_class",Nan::Undefined()), make_param("a","Promise",Nan::Undefined()) }, number_testers_derived_class_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","derived_class",Nan::Undefined()), make_param("a","Proxy",Nan::Undefined()) }, number_testers_derived_class_proxy);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","derived_class",Nan::Undefined()), make_param("a","RegExp",Nan::Undefined()) }, number_testers_derived_class_regexp);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","derived_class",Nan::Undefined()), make_param("a","base_class",Nan::Undefined()) }, number_testers_derived_class_base_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","derived_class",Nan::Undefined()), make_param("a","derived_class",Nan::Undefined()) }, number_testers_derived_class_derived_class);
@@ -1086,10 +1137,14 @@ namespace overres_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","struct_A",Nan::Undefined()), make_param("a","Date",Nan::Undefined()) }, number_testers_struct_A_date);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","struct_A",Nan::Undefined()), make_param("a","Function",Nan::Undefined()) }, number_testers_struct_A_function);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","struct_A",Nan::Undefined()), make_param("a","Buffer",Nan::Undefined()) }, number_testers_struct_A_buffer);
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","struct_A",Nan::Undefined()), make_param("a","Map",Nan::Undefined()) }, number_testers_struct_A_map);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","struct_A",Nan::Undefined()), make_param("a","Set",Nan::Undefined()) }, number_testers_struct_A_set);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","struct_A",Nan::Undefined()), make_param("a","Promise",Nan::Undefined()) }, number_testers_struct_A_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","struct_A",Nan::Undefined()), make_param("a","Proxy",Nan::Undefined()) }, number_testers_struct_A_proxy);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","struct_A",Nan::Undefined()), make_param("a","RegExp",Nan::Undefined()) }, number_testers_struct_A_regexp);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","struct_A",Nan::Undefined()), make_param("a","base_class",Nan::Undefined()) }, number_testers_struct_A_base_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","struct_A",Nan::Undefined()), make_param("a","derived_class",Nan::Undefined()) }, number_testers_struct_A_derived_class);
@@ -1103,10 +1158,14 @@ namespace overres_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","struct_B",Nan::Undefined()), make_param("a","Date",Nan::Undefined()) }, number_testers_struct_B_date);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","struct_B",Nan::Undefined()), make_param("a","Function",Nan::Undefined()) }, number_testers_struct_B_function);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","struct_B",Nan::Undefined()), make_param("a","Buffer",Nan::Undefined()) }, number_testers_struct_B_buffer);
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","struct_B",Nan::Undefined()), make_param("a","Map",Nan::Undefined()) }, number_testers_struct_B_map);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","struct_B",Nan::Undefined()), make_param("a","Set",Nan::Undefined()) }, number_testers_struct_B_set);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","struct_B",Nan::Undefined()), make_param("a","Promise",Nan::Undefined()) }, number_testers_struct_B_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","struct_B",Nan::Undefined()), make_param("a","Proxy",Nan::Undefined()) }, number_testers_struct_B_proxy);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","struct_B",Nan::Undefined()), make_param("a","RegExp",Nan::Undefined()) }, number_testers_struct_B_regexp);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","struct_B",Nan::Undefined()), make_param("a","base_class",Nan::Undefined()) }, number_testers_struct_B_base_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","struct_B",Nan::Undefined()), make_param("a","derived_class",Nan::Undefined()) }, number_testers_struct_B_derived_class);
@@ -1120,10 +1179,14 @@ namespace overres_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Array",Nan::Undefined()), make_param("a","Date",Nan::Undefined()) }, number_testers_array_date);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Array",Nan::Undefined()), make_param("a","Function",Nan::Undefined()) }, number_testers_array_function);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Array",Nan::Undefined()), make_param("a","Buffer",Nan::Undefined()) }, number_testers_array_buffer);
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Array",Nan::Undefined()), make_param("a","Map",Nan::Undefined()) }, number_testers_array_map);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Array",Nan::Undefined()), make_param("a","Set",Nan::Undefined()) }, number_testers_array_set);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Array",Nan::Undefined()), make_param("a","Promise",Nan::Undefined()) }, number_testers_array_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Array",Nan::Undefined()), make_param("a","Proxy",Nan::Undefined()) }, number_testers_array_proxy);
+#endif
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Array",Nan::Undefined()), make_param("a","RegExp",Nan::Undefined()) }, number_testers_array_regexp);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Array",Nan::Undefined()), make_param("a","base_class",Nan::Undefined()) }, number_testers_array_base_class);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Array",Nan::Undefined()), make_param("a","derived_class",Nan::Undefined()) }, number_testers_array_derived_class);
