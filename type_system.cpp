@@ -161,7 +161,7 @@ namespace overres {
 
 		}
 
-		if (param->IsArrayBuffer()){// || param->IsArrayBufferView() || param->IsTypedArray()) {
+		if (param->IsArrayBuffer() || param->IsArrayBufferView() || param->IsTypedArray() || node::Buffer::HasInstance(param)) {
 			return "Buffer";
 		}
 
