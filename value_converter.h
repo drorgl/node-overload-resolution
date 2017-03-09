@@ -255,7 +255,7 @@ namespace overres {
 				return arr;
 			}
 
-			if (from->IsArrayBuffer() || from->IsArrayBufferView() || from->IsTypedArray()) {
+			if (from->IsArrayBuffer() || from->IsArrayBufferView() || from->IsTypedArray() || node::Buffer::HasInstance(from)) {
 				auto v8buffer = (T*)node::Buffer::Data(from);
 				auto v8bufferlength = node::Buffer::Length(from);
 
