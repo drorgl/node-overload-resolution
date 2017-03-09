@@ -341,7 +341,7 @@ void overload_resolution::executeBestOverload(const std::string &ns, std::vector
 			if (i > 0) {
 				arguments += ", ";
 			}
-			arguments += *Nan::Utf8String(info[i]->ToDetailString());
+			arguments += overres::Utf8String(info[i]->ToDetailString());
 		}
 		return "executing best overload for " + ns + "::(" + tracer::join(classNames, "/" ) + ")::" + name + "(" + arguments +  ")"; 
 	});
@@ -447,18 +447,19 @@ Nan::NAN_METHOD_RETURN_TYPE overload_resolution::execute(const std::string name_
 
 	bool isConstructorCall = info.IsConstructCall();
 
-	std::string functionName = *Nan::Utf8String(info.Callee()->GetName());
+	std::string functionName = overres::Utf8String(info.Callee()->GetName());
+
 	std::string className = "";
 	bool isStatic = false;
 
 	if (info.This()->IsFunction()) {
 		//static
-		className = *Nan::Utf8String(info.This().As<v8::Function>()->GetName());
+		className = overres::Utf8String(info.This().As<v8::Function>()->GetName());
 		isStatic = true;
 	}
 	else {
 		//member
-		className = *Nan::Utf8String(info.This()->GetConstructorName());
+		className = overres::Utf8String(info.This()->GetConstructorName());
 	}
 
 	//if the className is Object, it means its not a member

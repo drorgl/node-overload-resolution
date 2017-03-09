@@ -1,13 +1,56 @@
-var SegfaultHandler = require('segfault-handler');
-SegfaultHandler.registerHandler("crash.log");
+//var SegfaultHandler = require('segfault-handler');
+//SegfaultHandler.registerHandler("crash.log");
 
 console.log("starting");
 var tape = require("tape");
 var chalk = require("chalk");
 
-var nodeVersion = Number(process.version.match(/^v(\d+\.)/)[1]);
+var versionGroup = process.version.match(/^v(\d+\.)?(\d+\.)?(\*|\d+)$/);
+var nodeVersion =  [Number(versionGroup[1]), Number(versionGroup)[2], Number(versionGroup)[3]].join(".");
+
+//http://stackoverflow.com/questions/6832596/how-to-compare-software-version-number-using-js-only-number
+function isVersionValid(b) {
+    var a = nodeVersion;
+    if (a === b) {
+        return true;
+    }
+
+    var a_components = a.split(".");
+    var b_components = b.split(".");
+
+    var len = Math.min(a_components.length, b_components.length);
+
+    // loop while the components are equal
+    for (var i = 0; i < len; i++) {
+        // A bigger than B
+        if (parseInt(a_components[i]) > parseInt(b_components[i])) {
+            return true;
+        }
+
+        // B bigger than A
+        if (parseInt(a_components[i]) < parseInt(b_components[i])) {
+            console.log("not valid", a, b);
+            return false;
+        }
+    }
+
+    // If one's a prefix of the other, the longer one is greater.
+    if (a_components.length > b_components.length) {
+        return true;
+    }
+
+    if (a_components.length < b_components.length) {
+        console.log("not valid", a, b);
+        return false;
+    }
+
+    // Otherwise they are the same.
+    return true;
+}
+
+
 var proxy = global.Proxy || null;
-if (nodeVersion < 6) {
+if (!isVersionValid('6')) {
     proxy = function () { };
 }
 Proxy = proxy;
@@ -175,7 +218,7 @@ for (var i = 0; i < 1; i++) {
 
     var dataTypes = [
         {
-            minNodeVersion : 0,
+            minNodeVersion : '0',
             value_converter_exists : true,
             value: 1,
             defaultValue: 1,
@@ -183,126 +226,126 @@ for (var i = 0; i < 1; i++) {
 
         }
         , {
-            minNodeVersion: 0,
+            minNodeVersion: '0',
             value_converter_exists: true,
             value: 2 ^ 33,
             defaultValue: 1,
             name: "number"
         }
         , {
-            minNodeVersion: 0,
+            minNodeVersion: '0',
             value_converter_exists: true,
             value: true,
             defaultValue: true,
             name: "bool"
         }
         , {
-            minNodeVersion: 0,
+            minNodeVersion: '0',
             value_converter_exists: true,
             value: false,
             defaultValue: true,
             name: "bool"
         }
         , {
-            minNodeVersion: 0,
+            minNodeVersion: '0',
             value_converter_exists: true,
             value: "1",
             defaultValue: "1",
             name: "string"
         }
         , {
-            minNodeVersion: 0,
+            minNodeVersion: '0',
             value_converter_exists: true,
             value: "str",
             defaultValue: "1",
             name: "string"
         }
         , {
-            minNodeVersion: 0,
+            minNodeVersion: '0',
             value_converter_exists: true,
             value: new Date(1234 * 1000),
             defaultValue: new Date(0),
             name: "date"
         }
         , {
-            minNodeVersion: 0,
+            minNodeVersion: '0',
             value_converter_exists: true,
             value: function () { console.log("value function was called", arguments); },
             defaultValue: function () { console.log("defaultValue function was called", arguments); },
             name: "function"
         }
         , {
-            minNodeVersion: 4,
+            minNodeVersion: '4',
             value_converter_exists: true,
             value: new Map([["s1", 1], ["s2", 2]]),
             defaultValue: new Map([["s1", 1], ["s2", 2]]),
             name: "map"
         }
         , {
-            minNodeVersion: 4,
+            minNodeVersion: '4',
             value_converter_exists: true,
             value: new Set(["k1", "k2"]),
             defaultValue: new Set(["k1", "k2"]),
             name: "set"
         }
         , {
-            minNodeVersion: 0,
+            minNodeVersion: '0',
             value_converter_exists: true,
             value: new Buffer([1, 2, 3]),
             defaultValue: new Buffer([]),
             name: "buffer"
         }
         , {
-            minNodeVersion: 0,
+            minNodeVersion: '0.11',
             value_converter_exists: false,
             value: Promise.resolve(0),
             defaultValue: Promise.resolve(0),
             name: "promise"
         }
         , {
-            minNodeVersion: 6,
+            minNodeVersion: '6',
             value_converter_exists: false,
             value: new Proxy({}, {}),
             defaultValue: new Proxy({}, {}),
             name: "proxy"
         }
         , {
-            minNodeVersion: 0,
+            minNodeVersion: '0',
             value_converter_exists: false,
             value: new RegExp("[a-z]"),
             defaultValue: new RegExp("[a-z]"),
             name: "regexp"
         }
         , {
-            minNodeVersion: 0,
+            minNodeVersion: '0',
             value_converter_exists: true,
             value: new addon.base_class(),
             defaultValue: new addon.base_class(),
             name: "base_class"
         }
         , {
-            minNodeVersion: 0,
+            minNodeVersion: '0',
             value_converter_exists: true,
             value: new addon.derived_class(),
             defaultValue: new addon.base_class(),
             name: "derived_class"
         }
         , {
-            minNodeVersion: 0,
+            minNodeVersion: '0',
             value_converter_exists: true,
             value: { "prop1": "val1", "prop2": "val2" },
             defaultValue: { "prop1": "val1", "prop2": "val2" },
             name: "struct_A"
         }
         , {
-            minNodeVersion: 0,
+            minNodeVersion: '0',
             value_converter_exists: true,
             value: { "prop1": "val1", "prop2": 2 },
             defaultValue: { "prop1": "val1", "prop2": 2 },
             name: "struct_B"
         }
         , {
-            minNodeVersion: 0,
+            minNodeVersion: '0',
             value_converter_exists: true,
             value: [],
             defaultValue: [],
@@ -328,14 +371,14 @@ for (var i = 0; i < 1; i++) {
             var ct = new addon.constructor_class_tester();
             t.equal(ct.ctype(), ".no_parameters", "constructor_tester no_params");
 
-            for (var dt of dataTypes) {
-                if (dt.minNodeVersion > nodeVersion) {
-                    continue;
-                }
+            dataTypes.forEach(function(dt) {
+                if (!isVersionValid(dt.minNodeVersion)) {
+                    return;
+            }
                 var ct = new addon.constructor_class_tester(dt.value);
                 t.equal(ct.ctype(), "." + dt.name, "constructor_testers " + dt.name);
                 addon.Flush();
-            }
+            });
 
         }, "executing all new addon.constructor_class_tester(...)");
         addon.Flush();
@@ -351,14 +394,14 @@ for (var i = 0; i < 1; i++) {
             t.equal(addon.constructor_class_tester.static_function(), ".static.no_params", "constructor_class_tester.static_function no_params");
             t.equal(cs.static_function(), ".instance.no_params", "instance constructor_class_tester.static_function no_params");
 
-            for (var dt of dataTypes) {
-                if (dt.minNodeVersion > nodeVersion) {
-                    continue;
+            dataTypes.forEach(function(dt) {
+                if (!isVersionValid(dt.minNodeVersion)) {
+                    return;
                 }
                 t.equal(addon.constructor_class_tester.static_function(dt.value), ".static." + dt.name, "base_class.static_function " + dt.name);
                 t.equal(cs.static_function(dt.value), ".instance." + dt.name, "instance constructor_class_tester.static_function " + dt.name);
                 addon.Flush();
-            }
+            });
 
         }, "executing all constructor_class_tester.static_function(...) instance and static");
         addon.Flush();
@@ -372,13 +415,13 @@ for (var i = 0; i < 1; i++) {
         t.doesNotThrow(function () {
             t.equal(addon.number_testers(), ".no_parameters", "number_testers no_params");
 
-            for (var dt of dataTypes) {
-                if (dt.minNodeVersion > nodeVersion) {
-                    continue;
+            dataTypes.forEach(function(dt) {
+                if (!isVersionValid(dt.minNodeVersion)) {
+                    return
                 }
                 t.equal(addon.number_testers(dt.value), "." + dt.name, "number_testers " + dt.name);
                 addon.Flush();
-            }
+            });
 
         });
         addon.Flush();
@@ -395,13 +438,13 @@ for (var i = 0; i < 1; i++) {
 
             t.equal(bc.base_function(), "base_class.base_function.no_parameters_testers", "no_params");
 
-            for (var dt of dataTypes) {
-                if (dt.minNodeVersion > nodeVersion) {
-                    continue;
+            dataTypes.forEach(function (dt) {
+                if (!isVersionValid(dt.minNodeVersion)) {
+                    return;
                 }
                 t.equal(bc.base_function(dt.value), "base_class.base_function." + dt.name, "number_testers " + dt.name);
                 addon.Flush();
-            }
+            });
 
         });
         addon.Flush();
@@ -419,13 +462,13 @@ for (var i = 0; i < 1; i++) {
 
             t.equal(bc.base_function(), "derived_class.base_function.no_parameters_testers", "no_params");
 
-            for (var dt of dataTypes) {
-                if (dt.minNodeVersion > nodeVersion) {
-                    continue;
+            dataTypes.forEach(function (dt) {
+                if (!isVersionValid(dt.minNodeVersion)) {
+                    return;
                 }
                 t.equal(bc.base_function(dt.value), "derived_class.base_function." + dt.name, "derived_class.base_function " + dt.name);
                 addon.Flush();
-            }
+            });
 
         });
         addon.Flush();
@@ -458,18 +501,18 @@ for (var i = 0; i < 1; i++) {
     tape('function overload 2 parameter, no defaults', function (t) {
         t.doesNotThrow(function () {
 
-            for (var dt1 of dataTypes) {
-                if (dt1.minNodeVersion > nodeVersion) {
-                    continue;
+            dataTypes.forEach(function (dt1) {
+                if (!isVersionValid(dt1.minNodeVersion)) {
+                    return;
                 }
-                for (var dt2 of dataTypes) {
-                    if (dt2.minNodeVersion > nodeVersion) {
-                        continue;
+                dataTypes.forEach(function (dt2) {
+                    if (!isVersionValid(dt2.minNodeVersion)) {
+                        return;
                     }
                     t.equal(addon.two_testers(dt1.value, dt2.value), "." + dt1.name + "." + dt2.name, "two_testers " + dt1.name + " " + dt2.name);
                     addon.Flush();
-                }
-            }
+                });
+            });
 
         });
         addon.Flush();
@@ -493,86 +536,86 @@ for (var i = 0; i < 1; i++) {
         t.doesNotThrow(function () {
             t.equal(addon.array_testers(), ".no_parameters_testers", "array_testers()");
 
-            for (var dt of dataTypes) {
-                if (dt.minNodeVersion > nodeVersion) {
-                    continue;
+            dataTypes.forEach(function (dt) {
+                if (!isVersionValid(dt.minNodeVersion)) {
+                    return;
                 }
                 t.equal(addon.array_testers([dt.value]), ".array<" + dt.name + ">", "array_testers array<" + dt.name + ">");
                 addon.Flush();
-            }
+            });
 
-            for (var dt of dataTypes) {
-                if (dt.minNodeVersion > nodeVersion) {
-                    continue;
+            dataTypes.forEach(function (dt) {
+                if (!isVersionValid(dt.minNodeVersion)) {
+                    return;
                 }
                 t.equal(addon.array_testers([[dt.value]]), ".array<array<" + dt.name + ">>", "array_testers array<array<" + dt.name + ">>");
                 addon.Flush();
-            }
+            });
 
             //test array with multiple types
 
-            for (var dt1 of dataTypes) {
-                if (dt1.minNodeVersion > nodeVersion) {
-                    continue;
+            dataTypes.forEach(function (dt1) {
+                if (!isVersionValid(dt1.minNodeVersion)) {
+                    return;
                 }
-                for (var dt2 of dataTypes) {
-                    if (dt2.minNodeVersion > nodeVersion) {
-                        continue;
+                dataTypes.forEach(function (dt2) {
+                    if (!isVersionValid(dt2.minNodeVersion)) {
+                        return;
                     }
                     if (dt1.name != dt2.name) {
                         t.equal(addon.array_testers([dt1.value, dt2.value]), ".array", "array_testers array (multiple types - " + dt1.name + "," + dt2.name + ")");
                         addon.Flush();
                     }
-                }
-            }
+                });
+            });
 
-            for (var dt1 of dataTypes) {
-                if (dt1.minNodeVersion > nodeVersion) {
-                    continue;
+            dataTypes.forEach(function (dt1) {
+                if (!isVersionValid(dt1.minNodeVersion)) {
+                    return;
                 }
-                for (var dt2 of dataTypes) {
-                    if (dt2.minNodeVersion > nodeVersion) {
-                        continue;
+                dataTypes.forEach(function (dt2) {
+                    if (!isVersionValid(dt2.minNodeVersion)) {
+                        return;
                     }
                     if (dt1.name != dt2.name) {
                         t.equal(addon.array_testers([[dt1.value, dt2.value]]), ".array<array>", "array_testers array<array> (multiple types - " + dt1.name + "," + dt2.name + ")");
                         addon.Flush();
                     }
-                }
-            }
+                });
+            });
 
-            for (var dt1 of dataTypes) {
-                if (dt1.minNodeVersion > nodeVersion) {
-                    continue;
+            dataTypes.forEach(function (dt1) {
+                if (!isVersionValid(dt1.minNodeVersion)) {
+                    return;
                 }
-                for (var dt2 of dataTypes) {
-                    if (dt2.minNodeVersion > nodeVersion) {
-                        continue;
+                dataTypes.forEach(function (dt2) {
+                    if (!isVersionValid(dt2.minNodeVersion)) {
+                        return;
                     }
                     if (dt1 != dt2) {
                         t.equal(addon.array_testers([[dt1.value], dt2.value]), ".array", "array_testers array<array> (multiple types - " + dt1.name + "," + dt2.name + ")");
                         addon.Flush();
                     }
-                }
-            }
+                });
+            });
 
             //test array with multiple values of the same type
 
-            for (var dt of dataTypes) {
-                if (dt.minNodeVersion > nodeVersion) {
-                    continue;
+            dataTypes.forEach(function (dt) {
+                if (!isVersionValid(dt.minNodeVersion)) {
+                    return;
                 }
                 t.equal(addon.array_testers([dt.value, dt.value]), ".array<" + dt.name + ">", "array_testers array<" + dt.name + ">");
                 addon.Flush();
-            }
+            });
 
-            for (var dt of dataTypes) {
-                if (dt.minNodeVersion > nodeVersion) {
-                    continue;
+            dataTypes.forEach(function (dt) {
+                if (!isVersionValid(dt.minNodeVersion)) {
+                    return;
                 }
                 t.equal(addon.array_testers([[dt.value, dt.value]]), ".array<array<" + dt.name + ">>", "array_testers array<array<" + dt.name + ">>");
                 addon.Flush();
-            }
+            });
 
         });
         addon.Flush();
@@ -582,23 +625,23 @@ for (var i = 0; i < 1; i++) {
     //test parameter defaults, test the default value is passed to function, test that passed parameter is overwriting the default value
     tape('function overload 1 parameter, 2nd parameter default', function (t) {
         t.doesNotThrow(function () {
-            for (var dt1 of dataTypes) {
-                if (dt1.minNodeVersion > nodeVersion) {
-                    continue;
+            dataTypes.forEach(function (dt1) {
+                if (!isVersionValid(dt1.minNodeVersion)) {
+                    return;
                 }
                 var default_func_no_params = new Function("addon", "return addon.default_testers_" + dt1.name + "()");
                 var default_func = new Function("addon, val", "return addon.default_testers_" + dt1.name + "(val)");
                 var default_func_2params = new Function("addon, val1,val2", "return addon.default_testers_" + dt1.name + "(val1,val2)");
                 t.equal(default_func_no_params(addon), ".no_params", "default testers " + dt1.name + ", no parameters");
-                for (var dt2 of dataTypes) {
-                    if (dt2.minNodeVersion > nodeVersion) {
-                        continue;
+                dataTypes.forEach(function (dt2) {
+                    if (!isVersionValid(dt2.minNodeVersion)) {
+                        return;
                     }
                     t.equal(default_func(addon, dt2.value), "." + dt2.name + "(" + JSON.stringify(dt2.value) + ")." + dt1.name + "(" + JSON.stringify(dt1.defaultValue) + ")", "default testers " + dt2.name + ", default (2nd parameter):" + dt1.name);
                     t.equal(default_func_2params(addon, dt2.value, dt1.value), "." + dt2.name + "(" + JSON.stringify(dt2.value) + ")." + dt1.name + "(" + JSON.stringify(dt1.value) + ")", "default testers " + dt2.name + ", passed 2nd parameter (instead of default):" + dt1.name);
                     addon.Flush();
-                }
-            }
+                });
+            });
 
         });
         addon.Flush();
@@ -610,13 +653,13 @@ for (var i = 0; i < 1; i++) {
         t.doesNotThrow(function () {
             t.equal(addon.value_converter(), ".no_parameters", "value_converter no_params");
 
-            for (var dt of dataTypes) {
-                if (dt.minNodeVersion > nodeVersion) {
-                    continue;
+            dataTypes.forEach(function (dt) {
+                if (!isVersionValid(dt.minNodeVersion)) {
+                    return;
                 }
                 if (!dt.value_converter_exists) {
                     t.comment("value converter doesn't exist for " + dt.name + ", skipping");
-                    continue;
+                    return;
                 }
                 t.doesNotThrow(function () {
                     var c_result = addon.value_converter(dt.value);
@@ -638,7 +681,7 @@ for (var i = 0; i < 1; i++) {
                     t.equal(c_result, "." + dt.name + "(" + JSON.stringify(dt.value) + ")", "value_converter " + dt.name);
                     addon.Flush();
                 }, "value converter executed successfully for " + dt.name);
-            }
+            });
 
         });
         addon.Flush();
@@ -653,18 +696,18 @@ for (var i = 0; i < 1; i++) {
         t.doesNotThrow(function () {
             t.equal(addon.value_converter(), ".no_parameters", "value_converter no_params");
 
-            for (var dt of dataTypes) {
-                if (dt.minNodeVersion > nodeVersion) {
-                    continue;
+            dataTypes.forEach(function (dt) {
+                if (!isVersionValid(dt.minNodeVersion)) {
+                    return;
                 }
                 if (!dt.value_converter_exists) {
                     t.comment("value converter doesn't exist for " + dt.name + ", skipping");
-                    continue;
+                    return;
                 }
 
                 t.doesNotThrow(function () {
                     executions++;
-                    (function() {
+                    (function () {
                         var dtlocal = dt;
                         var tlocal = t;
                         addon.value_converter(dt.value, function (err, c_result) {
@@ -695,7 +738,7 @@ for (var i = 0; i < 1; i++) {
                     })();
 
                 }, "value converter executed successfully for " + dt.name);
-            }
+            });
 
         });
         var shouldEnd = function() {

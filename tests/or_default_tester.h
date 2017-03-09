@@ -1340,7 +1340,7 @@ namespace overres_default_parameters_tester {
 
 
 
-
+#if NODE_MODULE_VERSION >= NODE_0_12_MODULE_VERSION
 		overload->addOverload("or_default_tester", "", "default_testers_promise", { make_param("a","Number",Nan::Undefined()),make_param("a","Promise",v8::Promise::New(v8::Isolate::GetCurrent())) }, number_testers_number_promise);
 		overload->addOverload("or_default_tester", "", "default_testers_promise", { make_param("a","String",Nan::Undefined()),make_param("a","Promise",v8::Promise::New(v8::Isolate::GetCurrent())) }, number_testers_string_promise);
 		overload->addOverload("or_default_tester", "", "default_testers_promise", { make_param("a","Boolean",Nan::Undefined()), make_param("a","Promise",v8::Promise::New(v8::Isolate::GetCurrent())) }, number_testers_bool_promise);
@@ -1360,7 +1360,7 @@ namespace overres_default_parameters_tester {
 		overload->addOverload("or_default_tester", "", "default_testers_promise", { make_param("a","struct_B",Nan::Undefined()), make_param("a","Promise",v8::Promise::New(v8::Isolate::GetCurrent())) }, number_testers_struct_B_promise);
 		overload->addOverload("or_default_tester", "", "default_testers_promise", { make_param("a","Array",Nan::Undefined()), make_param("a","Promise",v8::Promise::New(v8::Isolate::GetCurrent())) }, number_testers_array_promise);
 		overload->addOverload("or_default_tester", "", "default_testers_promise", {}, number_testers);
-
+#endif
 
 
 #if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION

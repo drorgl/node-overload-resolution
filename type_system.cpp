@@ -141,7 +141,7 @@ namespace overres {
 
 	std::string type_system::determineType(v8::Local<v8::Value> param) {
 		//TODO: serialize param
-		Log(LogLevel::TRACE, [&param]() {return "determine type " + std::string(*Nan::Utf8String(param->ToDetailString())); });
+		Log(LogLevel::TRACE, [&param]() {return "determine type " + std::string(overres::Utf8String(param->ToDetailString())); });
 		if (param->IsArray()) {
 			std::set <std::string> arrtypes;
 			get_array_types(param, arrtypes);
@@ -161,7 +161,11 @@ namespace overres {
 
 		}
 
+#if NODE_MODULE_VERSION >= NODE_0_12_MODULE_VERSION
 		if (param->IsArrayBuffer() || param->IsArrayBufferView() || param->IsTypedArray() || node::Buffer::HasInstance(param)) {
+#else
+		if (node::Buffer::HasInstance(param)) {
+#endif
 			return "Buffer";
 		}
 
@@ -199,9 +203,12 @@ namespace overres {
 			return "Number";
 		}
 
+#if NODE_MODULE_VERSION >= NODE_0_12_MODULE_VERSION
 		if (param->IsPromise()) {
 			return "Promise";
 		}
+#endif
+
 #if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 		if (param->IsProxy()) {
 			return "Proxy";
@@ -212,9 +219,11 @@ namespace overres {
 			return "RegExp";
 		}
 
+#if NODE_MODULE_VERSION >= NODE_0_12_MODULE_VERSION
 		if (param->IsSymbol()) {
 			return "String";
 		}
+#endif
 
 		if (param->IsString()) {
 			return "String";
@@ -227,14 +236,14 @@ namespace overres {
 		std::vector<std::shared_ptr<object_type>> alternatives;
 
 		//might be able to optimize with FindInstanceInPrototypeChain
-		auto param_name = *Nan::Utf8String(param.As<v8::Object>()->GetConstructorName());
+		auto param_name = overres::Utf8String(param.As<v8::Object>()->GetConstructorName());
 
 		std::vector<std::string> chain;
 		getPrototypeChain(param, chain);
 		for (auto &&chain_link : chain) {
 			auto registered_type = _types[chain_link];
 			if (Nan::New<v8::FunctionTemplate>(registered_type->function_template)->HasInstance(param)) {
-				if (strcmp(param_name, registered_type->name.c_str()) == 0) {
+				if (strcmp(param_name.c_str(), registered_type->name.c_str()) == 0) {
 					return drill_type_aliases(registered_type->name);
 				}
 				else {
@@ -305,7 +314,7 @@ namespace overres {
 	}
 
 	bool type_system::isConvertibleTo(v8::Local<v8::Value> param, std::string &param_type, const std::string type) {
-		Log(LogLevel::TRACE, [&param, &type]() {return "checking if object " + std::string(*Nan::Utf8String(param->ToDetailString())) + " is convertible to " + type; });
+		Log(LogLevel::TRACE, [&param, &type]() {return "checking if object " + std::string(overres::Utf8String(param->ToDetailString())) + " is convertible to " + type; });
 		//if converting to number, check that the numbervalue is not nan
 		if (type == "Number") {
 			if (std::isnan(param->NumberValue())) {
@@ -351,20 +360,20 @@ namespace overres {
 
 		auto pobject = param.As<v8::Object>();
 
-		std::string constructorName = *Nan::Utf8String(pobject->GetConstructorName());
+		std::string constructorName = overres::Utf8String(pobject->GetConstructorName());
 		if (constructorName == "Object") {
 			return;
 		}
 
 		chain.push_back(constructorName);
 		getPrototypeChain(pobject->GetPrototype(), chain);
-		Log(LogLevel::TRACE, [&param, &chain]() {return "checking prototype chain for " + std::string(*Nan::Utf8String(param->ToDetailString())) + ": " + tracer::join(chain, ", "); });
+		Log(LogLevel::TRACE, [&param, &chain]() {return "checking prototype chain for " + std::string(overres::Utf8String(param->ToDetailString())) + ": " + tracer::join(chain, ", "); });
 	}
 
 
 	bool type_system::verifyObject(std::vector<std::shared_ptr<overload_info>> props, v8::Local<v8::Value> val) {
 		//TODO: add default values
-		Log(LogLevel::TRACE, [&props, &val]() {return "verifying object " + tracer::join(props, [](const std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ") + std::string(*Nan::Utf8String(val->ToDetailString())); });
+		Log(LogLevel::TRACE, [&props, &val]() {return "verifying object " + tracer::join(props, [](const std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ") + std::string(overres::Utf8String(val->ToDetailString())); });
 
 		auto mctx = Nan::GetCurrentContext();
 #if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
@@ -446,7 +455,7 @@ namespace overres {
 			ret = Nan::Undefined();
 		}
 
-		Log(LogLevel::TRACE, [&obj, &key, &ret]() {return "retrieving " + key + " = " + ((!ret.IsEmpty()) ? std::string(*Nan::Utf8String(ret.ToLocalChecked()->ToDetailString())) : "unknown") + " from " + std::string(*Nan::Utf8String(obj->ToDetailString())); });
+		Log(LogLevel::TRACE, [&obj, &key, &ret]() {return "retrieving " + key + " = " + ((!ret.IsEmpty()) ? std::string(overres::Utf8String(ret.ToLocalChecked()->ToDetailString())) : "unknown") + " from " + std::string(overres::Utf8String(obj->ToDetailString())); });
 
 		return ret;
 	}
