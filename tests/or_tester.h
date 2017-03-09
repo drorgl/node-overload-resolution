@@ -118,10 +118,14 @@ namespace overres_tester {
 		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Date") }, number_testers_date);
 		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Function") }, number_testers_function);
 		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Buffer") }, number_testers_buffer);
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Map") }, number_testers_map);
 		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Set") }, number_testers_set);
+#endif
 		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Promise") }, number_testers_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Proxy") }, number_testers_proxy);
+#endif
 		overload->addOverload("or_tester", "", "number_testers", { make_param("a","RegExp") }, number_testers_regexp);
 		overload->addOverload("or_tester", "", "number_testers", { make_param("a","base_class") }, number_testers_base_class);
 		overload->addOverload("or_tester", "", "number_testers", { make_param("a","derived_class") }, number_testers_derived_class);

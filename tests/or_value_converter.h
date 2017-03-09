@@ -67,6 +67,7 @@ namespace overres_value_converter {
 	}
 
 	POLY_METHOD(value_converter_map) {
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		auto rt = std::make_shared<return_struct<std::shared_ptr<std::map<std::string,int>>>>("Map");
 		rt->type = "map";
 		rt->value = info.at<std::shared_ptr<std::map<std::string, int>>>(0);
@@ -75,9 +76,11 @@ namespace overres_value_converter {
 
 
 		//info.GetReturnValue().Set(Nan::New(".map(" + info.at<std::map<std::string,int>>(0) + ")").ToLocalChecked());
+#endif
 	}
 
 	POLY_METHOD(value_converter_set) {
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION		
 		auto rt = std::make_shared<return_struct<std::shared_ptr<std::set<std::string>>>>("Set");
 		rt->type = "set";
 		rt->value = info.at<std::shared_ptr<std::set<std::string>>>(0);
@@ -86,6 +89,7 @@ namespace overres_value_converter {
 
 
 		//info.GetReturnValue().Set(Nan::New(".set(" + info.at<std::set<int>>(0) + ")").ToLocalChecked());
+#endif
 	}
 
 	POLY_METHOD(value_converter_promise) {
@@ -184,11 +188,15 @@ namespace overres_value_converter {
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<overres::DateTime>("a","Date") }, value_converter_date);
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<std::shared_ptr<overres::Callback>>("a","Function") }, value_converter_function);
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<std::shared_ptr<std::vector<uint8_t>>>("a","Buffer") }, value_converter_buffer);
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<std::shared_ptr<std::map<std::string,int>>>("a","Map") }, value_converter_map);
 		//overload->addOverload("or_value_converter", "", "value_converter", { make_param<std::shared_ptr<std::map<int,int>>>("a","Map") }, value_converter_map);
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<std::shared_ptr<std::set<std::string>>>("a","Set") }, value_converter_set);
+#endif
 		//overload->addOverload("or_value_converter", "", "value_converter", { make_param<>("a","Promise") }, value_converter_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 		//overload->addOverload("or_value_converter", "", "value_converter", { make_param<>("a","Proxy") }, value_converter_proxy);
+#endif
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<std::string>("a","RegExp") }, value_converter_regexp);
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<base_class*>("a","base_class") }, value_converter_base_class);
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<derived_class*>("a","derived_class") }, value_converter_derived_class);

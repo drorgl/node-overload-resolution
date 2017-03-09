@@ -139,10 +139,14 @@ POLY_METHOD(array_fallback_testers_array) {
 		overload->addOverload("or_array_tester", "", "array_testers", { make_param("a","Array<Date>",Nan::Undefined()) }, array_testers_array_date);
 		overload->addOverload("or_array_tester", "", "array_testers", { make_param("a","Array<Function>",Nan::Undefined()) }, array_testers_array_function);
 		overload->addOverload("or_array_tester", "", "array_testers", { make_param("a","Array<Buffer>",Nan::Undefined()) }, array_testers_array_buffer);
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		overload->addOverload("or_array_tester", "", "array_testers", { make_param("a","Array<Map>",Nan::Undefined()) }, array_testers_array_map);
 		overload->addOverload("or_array_tester", "", "array_testers", { make_param("a","Array<Set>",Nan::Undefined()) }, array_testers_array_set);
+#endif
 		overload->addOverload("or_array_tester", "", "array_testers", { make_param("a","Array<Promise>",Nan::Undefined()) }, array_testers_array_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 		overload->addOverload("or_array_tester", "", "array_testers", { make_param("a","Array<Proxy>",Nan::Undefined()) }, array_testers_array_proxy);
+#endif
 		overload->addOverload("or_array_tester", "", "array_testers", { make_param("a","Array<RegExp>",Nan::Undefined()) }, array_testers_array_regexp);
 		overload->addOverload("or_array_tester", "", "array_testers", { make_param("a","Array<base_class>",Nan::Undefined()) }, array_testers_array_base_class);
 		overload->addOverload("or_array_tester", "", "array_testers", { make_param("a","Array<derived_class>",Nan::Undefined()) }, array_testers_array_derived_class);
@@ -156,10 +160,14 @@ POLY_METHOD(array_fallback_testers_array) {
 		overload->addOverload("or_array_tester", "", "array_testers", { make_param("a","Array<Array<Date>>",Nan::Undefined()) }, array_testers_array_array_date);
 		overload->addOverload("or_array_tester", "", "array_testers", { make_param("a","Array<Array<Function>>",Nan::Undefined()) }, array_testers_array_array_function);
 		overload->addOverload("or_array_tester", "", "array_testers", { make_param("a","Array<Array<Buffer>>",Nan::Undefined()) }, array_testers_array_array_buffer);
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		overload->addOverload("or_array_tester", "", "array_testers", { make_param("a","Array<Array<Map>>",Nan::Undefined()) }, array_testers_array_array_map);
 		overload->addOverload("or_array_tester", "", "array_testers", { make_param("a","Array<Array<Set>>",Nan::Undefined()) }, array_testers_array_array_set);
+#endif
 		overload->addOverload("or_array_tester", "", "array_testers", { make_param("a","Array<Array<Promise>>",Nan::Undefined()) }, array_testers_array_array_promise);
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 		overload->addOverload("or_array_tester", "", "array_testers", { make_param("a","Array<Array<Proxy>>",Nan::Undefined()) }, array_testers_array_array_proxy);
+#endif
 		overload->addOverload("or_array_tester", "", "array_testers", { make_param("a","Array<Array<RegExp>>",Nan::Undefined()) }, array_testers_array_array_regexp);
 		overload->addOverload("or_array_tester", "", "array_testers", { make_param("a","Array<Array<base_class>>",Nan::Undefined()) }, array_testers_array_array_base_class);
 		overload->addOverload("or_array_tester", "", "array_testers", { make_param("a","Array<Array<derived_class>>",Nan::Undefined()) }, array_testers_array_array_derived_class);

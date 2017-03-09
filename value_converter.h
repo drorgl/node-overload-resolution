@@ -313,7 +313,7 @@ namespace overres {
 
 
 	//map <K, V>
-
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 	template<typename T>
 	class value_converter<std::shared_ptr<std::map<std::string, T>>> : public value_converter_base {
 	public:
@@ -363,9 +363,10 @@ namespace overres {
 		}
 
 	};
+#endif
 
 	//map <K, V>
-
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 	template<typename K, typename T>
 	class value_converter<std::shared_ptr<std::map<K, T>>> : public value_converter_base {
 	public:
@@ -418,10 +419,10 @@ namespace overres {
 		}
 
 	};
-
+#endif
 
 	//set <T>
-
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 	template<typename T>
 	class value_converter<std::shared_ptr<std::set<T>>> : public value_converter_base {
 	public:
@@ -470,7 +471,7 @@ namespace overres {
 		}
 
 	};
-
+#endif
 
 	//string
 

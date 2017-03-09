@@ -161,7 +161,7 @@ namespace overres {
 
 		}
 
-		if (param->IsArrayBuffer() || param->IsArrayBufferView() || param->IsTypedArray()) {
+		if (param->IsArrayBuffer()){// || param->IsArrayBufferView() || param->IsTypedArray()) {
 			return "Buffer";
 		}
 
@@ -177,6 +177,7 @@ namespace overres {
 			return "Function";
 		}
 
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		if (param->IsGeneratorFunction()) {
 			return "ConstructorFunction";
 		}
@@ -188,6 +189,7 @@ namespace overres {
 		if (param->IsSet()) {
 			return "Set";
 		}
+#endif
 
 		if (param->IsNull() || param->IsUndefined()) {
 			return "Null";
@@ -200,10 +202,11 @@ namespace overres {
 		if (param->IsPromise()) {
 			return "Promise";
 		}
-
+#if NODE_MODULE_VERSION >= NODE_6_0_MODULE_VERSION
 		if (param->IsProxy()) {
 			return "Proxy";
 		}
+#endif
 
 		if (param->IsRegExp()) {
 			return "RegExp";
@@ -364,7 +367,7 @@ namespace overres {
 		Log(LogLevel::TRACE, [&props, &val]() {return "verifying object " + tracer::join(props, [](const std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ") + std::string(*Nan::Utf8String(val->ToDetailString())); });
 
 		auto mctx = Nan::GetCurrentContext();
-
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		if (val->IsMap()) {
 
 			auto omap = val.As<v8::Map>();
@@ -394,7 +397,9 @@ namespace overres {
 			return true;
 
 		}
-		else if (val->IsObject()) {
+		else 
+#endif
+			if (val->IsObject()) {
 			auto obj = val.As<v8::Object>();
 			for (auto &&pit : props) {
 				auto oi = pit;
@@ -403,7 +408,7 @@ namespace overres {
 					return false;
 				}
 
-				auto oval = obj->Get(mctx, Nan::New<v8::String>(oi->parameterName).ToLocalChecked());
+				auto oval = Nan::Get(obj, Nan::New<v8::String>(oi->parameterName).ToLocalChecked());
 
 				//check there is a value
 				if (!oi->defaultValue.IsEmpty() && !Nan::New(oi->defaultValue)->IsUndefined() && oval.IsEmpty()) {
@@ -423,16 +428,19 @@ namespace overres {
 	}
 
 
-	v8::MaybeLocal<v8::Value>  type_system::GetFromObject(v8::Local<v8::Value> obj, const std::string key) {
+	Nan::MaybeLocal<v8::Value>  type_system::GetFromObject(v8::Local<v8::Value> obj, const std::string key) {
 		auto mctx = Nan::GetCurrentContext();
+		
+		Nan::MaybeLocal<v8::Value> ret;
 
-		v8::MaybeLocal<v8::Value> ret;
-
+#if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 		if (obj->IsMap()) {
-			ret = obj.As<v8::Map>()->Get(mctx, Nan::New<v8::String>(key).ToLocalChecked());
+			ret = Nan::Get(obj.As<v8::Map>(), Nan::New<v8::String>(key).ToLocalChecked());// obj.As<v8::Map>()->Get(mctx, Nan::New<v8::String>(key).ToLocalChecked());
 		}
-		else if (obj->IsObject()) {
-			ret = obj.As<v8::Object>()->Get(mctx, Nan::New<v8::String>(key).ToLocalChecked());
+		else 
+#endif
+			if (obj->IsObject()) {
+			ret = Nan::Get(obj.As<v8::Object>(), Nan::New<v8::String>(key).ToLocalChecked());// obj.As<v8::Object>()->Get(mctx, Nan::New<v8::String>(key).ToLocalChecked());
 		}
 		else {
 			ret = Nan::Undefined();

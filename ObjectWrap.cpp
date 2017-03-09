@@ -17,7 +17,7 @@ namespace overres {
 	}
 
 	ObjectWrap::~ObjectWrap() {
-		persistent().Empty();
+		persistent().Reset();
 	}
 
 };
