@@ -83,7 +83,11 @@ namespace overres {
 
 		std::shared_ptr<Nan::Callback> _callback;
 
-		static void async_uv_callback(uv_async_t* req) {
+#if NODE_MODULE_VERSION >= NODE_0_12_MODULE_VERSION
+		static void async_uv_callback(uv_async_t* req/*, int status UNUSED*/) {
+#else
+		static void async_uv_callback(uv_async_t* req,int status /*UNUSED*/) {
+#endif
 			AsyncCallback* this_ = static_cast<AsyncCallback*>(req->data);
 
 			Nan::HandleScope scope;

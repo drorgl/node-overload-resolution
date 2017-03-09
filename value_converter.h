@@ -29,6 +29,22 @@ using namespace std::literals::string_literals;
 namespace overres {
 	typedef unsigned short ushort;
 
+	inline std::string Utf8String(v8::Handle<v8::Value> from) {
+#if NODE_MODULE_VERSION >= NODE_0_12_MODULE_VERSION
+		return *Nan::Utf8String(from);
+#else
+		return *v8::String::Utf8Value(from);
+#endif
+	}
+/*
+	inline std::string Utf8String(v8::Local<v8::Value> from) {
+#if NODE_MODULE_VERSION >= NODE_0_12_MODULE_VERSION
+		return overres::Utf8String(from);
+#else
+		return *v8::String::Utf8Value(from);
+#endif
+	}*/
+
 	//default value
 
 	template<typename T, class = void>
@@ -255,7 +271,11 @@ namespace overres {
 				return arr;
 			}
 
+#if NODE_MODULE_VERSION >= NODE_0_12_MODULE_VERSION
 			if (from->IsArrayBuffer() || from->IsArrayBufferView() || from->IsTypedArray() || node::Buffer::HasInstance(from)) {
+#else
+			if (node::Buffer::HasInstance(from)) {
+#endif
 				auto v8buffer = (T*)node::Buffer::Data(from);
 				auto v8bufferlength = node::Buffer::Length(from);
 
@@ -329,7 +349,7 @@ namespace overres {
 			auto from_map = from.As<v8::Map>()->AsArray();
 			assert((from_map->Length() % 2) == 0 && "v8::Map::AsArray returned length other than % 2");
 			for (uint32_t i = 0; i < from_map->Length(); i+=2) {
-				auto key = *Nan::Utf8String(from_map->Get(i));
+				auto key = overres::Utf8String(from_map->Get(i));
 				auto value = converter->convert(from_map->Get(i + 1));
 
 				(*map_value)[key] = value;
@@ -480,7 +500,7 @@ namespace overres {
 	public:
 
 		virtual std::string convert(v8::Local<v8::Value> from) {
-			return *Nan::Utf8String(from->ToString());
+			return overres::Utf8String(from->ToString());
 		}
 
 		virtual v8::Local<v8::Value> convert(std::string from) {
