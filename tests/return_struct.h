@@ -7,7 +7,7 @@
 #include <node_version.h>
 #include <node_buffer.h>
 #include <string.h>
-//#include "node_modules/nan/nan.h"
+//#include <nan.h>
 
 
 #include <memory>
