@@ -3,7 +3,7 @@
 
 #include "v8.h"
 
-#include "node_modules/nan/nan.h"
+#include <nan.h>
 
 namespace overres {
 

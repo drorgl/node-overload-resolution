@@ -8,7 +8,7 @@
 #include <node_buffer.h>
 #include <string.h>
 #include <nan.h>
-//#include "node_modules/nan/nan.h"
+//#include <nan.h>
 
 #include <memory>
 #include <string>
