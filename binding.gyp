@@ -19,6 +19,18 @@
 		"sources":[			
 			  "overload_resolution.h"
 			, "overload_resolution.cpp"
+			
+			, "overload_executor.cpp"
+			, "overload_executor.h"
+			
+			, "callable_alias.cpp"
+			, "callable_alias.h"
+			
+			, "class_alias.cpp"
+			, "class_alias.h"
+			
+			, "namespace_alias.cpp"
+			, "namespace_alias.h"
 						
 			, "function_arguments.h"
 			, "function_arguments.cpp"
@@ -101,6 +113,9 @@
 		, "tests/or_array_tester.h"
 		, "tests/or_default_tester.h"
 		, "tests/or_value_converter.h"
+		
+		, "tests/class_constructs.h"
+		, "tests/class_constructs.cpp
 		
 		, "tests/threaded_tester.h"
 	  ]
