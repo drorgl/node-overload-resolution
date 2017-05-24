@@ -131,6 +131,16 @@ namespace overres {
 
 		void get_classes(const std::string &ns, const std::vector<std::string> &classNames, std::vector < std::shared_ptr< o_r_class>> &classes);
 		void get_functions(const std::string &ns, const std::vector<std::string> &classNames, const std::string &functionName, std::vector<std::shared_ptr< o_r_function>> &implementations);
+
+
+		//adds an overload function
+		void addOverload(const std::string ns, const std::string className, const std::string functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
+
+		//adds an overload for a static function
+		void addStaticOverload(const std::string ns, const std::string className, const std::string functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
+
+		//adds an overload constructor
+		void addOverloadConstructor(const std::string ns, const std::string className, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
 	};
 
 };

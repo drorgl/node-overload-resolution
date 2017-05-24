@@ -115,7 +115,7 @@
 		, "tests/or_value_converter.h"
 		
 		, "tests/class_constructs.h"
-		, "tests/class_constructs.cpp
+		, "tests/class_constructs.cpp"
 		
 		, "tests/threaded_tester.h"
 	  ]

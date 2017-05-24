@@ -559,4 +559,66 @@ namespace overres {
 		Log(LogLevel::WARN, message);
 	}
 
+
+	void type_system::addOverload(const std::string ns, const std::string className, const std::string name, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
+		Log(LogLevel::DEBUG, [&ns, &className, &name, &arguments]() {
+			return "add overload " + ns + "::" + className + "::" + name + "(" +
+				tracer::join(arguments, [](const std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ")
+				+ ")";
+		});
+		std::string functionName = "+" + name;
+
+		create_function_store(ns, className, functionName);
+
+		//add function to functions collection
+		auto f = std::make_shared<o_r_function>();
+		f->function = callback;
+		f->functionName = functionName;
+		f->className = className;
+		f->parameters = arguments;
+		f->is_constructor = false;
+		f->is_static = false;
+		add_overload(ns, className, functionName, f);
+	}
+
+	void type_system::addStaticOverload(const std::string ns, const std::string className, const std::string name, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
+		Log(LogLevel::DEBUG, [&ns, &className, &name, &arguments]() {
+			return "add static overload " + ns + "::" + className + "::" + name + "(" +
+				tracer::join(arguments, [](const std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ")
+				+ ")";
+		});
+		std::string functionName = "-" + name;
+		create_function_store(ns, className, functionName);
+
+		//add function to functions collection
+		auto f = std::make_shared<o_r_function>();
+		f->function = callback;
+		f->functionName = functionName;
+		f->className = className;
+		f->parameters = arguments;
+		f->is_constructor = false;
+		f->is_static = true;
+		add_overload(ns, className, functionName, f);
+	}
+
+	void type_system::addOverloadConstructor(const std::string ns, const std::string className, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
+		Log(LogLevel::DEBUG, [&ns, &className, &arguments]() {
+			return "add constructor overload " + ns + "::" + className + "::" + "(" +
+				tracer::join(arguments, [](const std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ")
+				+ ")";
+		});
+		//add ::constructor to function name, to avoid confusion if the class has classname as a function
+		std::string functionName = "%" + className;
+		create_function_store(ns, className, functionName);
+
+		//add function to functions collection
+		auto f = std::make_shared<o_r_function>();
+		f->function = callback;
+		f->functionName = functionName;
+		f->className = className;
+		f->parameters = arguments;
+		f->is_constructor = true;
+		f->is_static = false;
+		add_overload(ns, className, functionName, f);
+	}
 };

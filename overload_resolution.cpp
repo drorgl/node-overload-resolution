@@ -69,7 +69,7 @@ void overload_resolution::LogWarn(std::function<std::string()> message) {
 
 
 std::shared_ptr<namespace_alias> overload_resolution::register_module(v8::Handle<v8::Object> target) {
-	//return std::make_shared<namespace_alias>(target,)
+	return std::make_shared<namespace_alias>(target, &_executor,"");
 }
 
 
@@ -89,64 +89,17 @@ bool overload_resolution::validate_type_registrations() {
 
 
 void overload_resolution::addOverload(const std::string ns, const std::string className, const std::string name, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
-	Log( LogLevel::DEBUG, [&ns, &className, &name, &arguments]() {
-		return "add overload " + ns + "::" + className + "::" + name + "(" + 
-			tracer::join(arguments, [](const std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; },", ") 
-			+ ")"; 
-	});
-	std::string functionName = "+" + name;
-
-	_executor.type_system.create_function_store(ns, className, functionName);
-	
-	//add function to functions collection
-	auto f = std::make_shared<o_r_function>();
-	f->function = callback;
-	f->functionName = functionName;
-	f->className = className;
-	f->parameters = arguments;
-	f->is_constructor = false;
-	f->is_static = false;
-	_executor.type_system.add_overload(ns, className, functionName, f);
+	_executor.type_system.addOverload(ns, className, name, arguments, callback);
 }
 
 void overload_resolution::addStaticOverload(const std::string ns, const std::string className, const std::string name, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
-	Log( LogLevel::DEBUG, [&ns, &className, &name, &arguments]() {
-		return "add static overload " + ns + "::" + className + "::" + name + "(" +
-			tracer::join(arguments, [](const std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ")
-			+ ")";
-	});
-	std::string functionName = "-" + name;
-	_executor.type_system.create_function_store(ns, className, functionName);
-
-	//add function to functions collection
-	auto f = std::make_shared<o_r_function>();
-	f->function = callback;
-	f->functionName = functionName;
-	f->className = className;
-	f->parameters = arguments;
-	f->is_constructor = false;
-	f->is_static = true;
-	_executor.type_system.add_overload(ns, className, functionName, f);
+	_executor.type_system.addStaticOverload(ns, className, name, arguments, callback);
 }
 
 void overload_resolution::addOverloadConstructor(const std::string ns, const std::string className, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
-	Log( LogLevel::DEBUG, [&ns, &className, &arguments]() {
-		return "add constructor overload " + ns + "::" + className + "::" + "(" +
-			tracer::join(arguments, [](const std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ")
-			+ ")";
-	});
-	//add ::constructor to function name, to avoid confusion if the class has classname as a function
-	std::string functionName = "%" + className;
-	_executor.type_system.create_function_store(ns, className, functionName);
-
-	//add function to functions collection
-	auto f = std::make_shared<o_r_function>();
-	f->function = callback;
-	f->functionName = functionName;
-	f->className = className;
-	f->parameters = arguments;
-	f->is_constructor = true;
-	f->is_static = false;
-	_executor.type_system.add_overload(ns, className, functionName, f);
+	_executor.type_system.addOverloadConstructor(ns, className, arguments, callback);
 }
 
+Nan::NAN_METHOD_RETURN_TYPE overload_resolution::execute(const std::string name_space, Nan::NAN_METHOD_ARGS_TYPE info) {
+	return _executor.execute(name_space, info);
+}
