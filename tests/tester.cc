@@ -30,7 +30,7 @@ POLY_METHOD(standalone_function_construct) {
 
 
 void init(v8::Handle<v8::Object> target) {
-	//assert(false);
+	assert(false);
 	tracer::Init(target);
 	
 	auto overload = std::make_shared<overload_resolution>();

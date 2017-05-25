@@ -57,7 +57,7 @@ private:
 	static void LogDebug(std::function<std::string()> message);
 	static void LogWarn(std::function<std::string()> message);
 
-	overload_executor _executor;
+	std::shared_ptr<overload_executor> _executor;
 public:
 	overload_resolution();
 
@@ -68,13 +68,13 @@ public:
 	//in case of array, which type is inside it, what to do if multiple types are in the array?
 	template <typename TObjectWrap>
 	void register_type(v8::Local<v8::FunctionTemplate> functionTemplate, const std::string ns, const std::string name) {
-		_executor.type_system.register_type<TObjectWrap>(functionTemplate, ns, name);
+		_executor->type_system.register_type<TObjectWrap>(functionTemplate, ns, name);
 	}
 
 	//register struct
 	template <typename TDerived>
 	void register_type(const std::string ns, const std::string name) {	
-		_executor.type_system.register_type<TDerived>(ns, name);
+		_executor->type_system.register_type<TDerived>(ns, name);
 	}
 
 	//add type alias
@@ -96,7 +96,7 @@ public:
 
 
 	inline std::string get_type(v8::Local<v8::Value> param) {
-		return _executor.type_system.determineType(param);
+		return _executor->type_system.determineType(param);
 	}
 
 

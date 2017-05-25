@@ -7,6 +7,8 @@ void class_constructs::Init(std::shared_ptr<namespace_alias> overload) {
 	class_def->add_overload_constructor({}, New);
 	class_def->add_static_overload("test_static", {}, test_static);
 	class_def->add_overload("test_member", {}, test_member);
+
+	constructor.Reset(class_def->done<class_constructs>());
 }
 
 
@@ -23,7 +25,7 @@ POLY_METHOD(class_constructs::New) {
 	pt = new class_constructs();
 
 	pt->Wrap(info.This());
-	//info.GetReturnValue().Set(info.This());
+	info.GetReturnValue().Set(info.This());
 }
 
 POLY_METHOD(class_constructs::test_static) {

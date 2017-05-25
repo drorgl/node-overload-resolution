@@ -9,14 +9,10 @@
 class namespace_alias {
 private:
 	v8::Handle<v8::Object> _target;
-	overload_executor * _executor;
+	std::shared_ptr<overload_executor> _executor;
 	std::string _namespace;
-
-	Nan::FunctionCallback * _ns_callback;
-
-	//void _ns_callback(const Nan::FunctionCallbackInfo<v8::Value>& val);
 public:
-	namespace_alias(v8::Handle<v8::Object> target, overload_executor * executor, const std::string ns);
+	namespace_alias(v8::Handle<v8::Object> target, std::shared_ptr<overload_executor> executor, const std::string ns);
 
 	std::shared_ptr<namespace_alias> add_namespace(const std::string namespace_name);
 
