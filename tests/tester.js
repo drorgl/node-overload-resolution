@@ -782,14 +782,15 @@ for (var i = 0; i < 1; i++) {
 
 tape("aliases", function (t) {
     //t.class_constructs
-    t.equals(addon.standalone_function_construct(), "standalone_function_construct", "standalone function construct");
+    for (let i = 0; i < 1000; i++) {
+        t.equals(addon.standalone_function_construct(), "standalone_function_construct", "standalone function construct");
 
-    t.equals(addon.class_constructs.test_static(),"test_static", "test static");
+        t.equals(addon.class_constructs.test_static(), "test_static", "test static");
 
-    let cc = new addon.class_constructs();
-    console.log(cc, Object.getOwnPropertyNames(cc));
-    t.equals(cc.test_member(), "test_member", "test member");
-    
+        let cc = new addon.class_constructs();
+        console.log(cc, Object.getOwnPropertyNames(cc));
+        t.equals(cc.test_member(), "test_member", "test member");
+    }
 
     t.end();
 });
