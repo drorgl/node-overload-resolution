@@ -1,4 +1,4 @@
-#include "class_alias.h"
+#include "class_wrap.h"
 
 static void class_callback_function(const Nan::FunctionCallbackInfo<v8::Value>& info) {
 	auto this_ = info.This();
@@ -42,7 +42,7 @@ static void class_callback_function(const Nan::FunctionCallbackInfo<v8::Value>& 
 	executor->get()->execute(*Nan::Utf8String(ns.ToLocalChecked()), info);
 }
 
-class_alias::class_alias(v8::Handle<v8::Object> target, std::shared_ptr<overload_executor> executor, const std::string class_name) {
+class_wrap::class_wrap(v8::Handle<v8::Object> target, std::shared_ptr<overload_executor> executor, const std::string class_name) {
 	_target = target;
 	_executor = executor;
 	_class = class_name;
@@ -55,18 +55,18 @@ class_alias::class_alias(v8::Handle<v8::Object> target, std::shared_ptr<overload
 	
 }
 
-void class_alias::add_overload_constructor(std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
+void class_wrap::add_overload_constructor(std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
 	_executor->type_system.addOverloadConstructor(_class, _class, arguments, callback);
 }
 
 //adds an overload function
-void class_alias::add_overload(const std::string functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
+void class_wrap::add_overload(const std::string functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
 	_executor->type_system.addOverload(_class, _class, functionName, arguments, callback);
 	Nan::SetPrototypeMethod(_ctor, functionName.c_str(), class_callback_function);
 }
 
 //adds an overload for a static function
-void class_alias::add_static_overload(const std::string functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
+void class_wrap::add_static_overload(const std::string functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
 	_executor->type_system.addStaticOverload(_class, _class, functionName, arguments, callback);
 	Nan::SetMethod(_ctor, functionName.c_str(), class_callback_function);
 }

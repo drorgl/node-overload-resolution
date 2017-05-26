@@ -22,15 +22,12 @@
 			
 			, "overload_executor.cpp"
 			, "overload_executor.h"
+						
+			, "class_wrap.cpp"
+			, "class_wrap.h"
 			
-			, "callable_alias.cpp"
-			, "callable_alias.h"
-			
-			, "class_alias.cpp"
-			, "class_alias.h"
-			
-			, "namespace_alias.cpp"
-			, "namespace_alias.h"
+			, "namespace_wrap.cpp"
+			, "namespace_wrap.h"
 						
 			, "function_arguments.h"
 			, "function_arguments.cpp"
@@ -42,7 +39,6 @@
 			, "type_system.cpp"
 			
 			, "overload_resolution_types.h"
-			, "overload_resolution_types.cpp"
 			
 			, "object_type.h"
 			, "overload_info.h"

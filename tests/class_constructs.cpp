@@ -2,7 +2,7 @@
 
 Nan::Persistent<v8::FunctionTemplate> class_constructs::constructor;
 
-void class_constructs::Init(std::shared_ptr<namespace_alias> overload) {
+void class_constructs::Init(std::shared_ptr<namespace_wrap> overload) {
 	auto class_def = overload->add_class("class_constructs");
 	class_def->add_overload_constructor({}, New);
 	class_def->add_static_overload("test_static", {}, test_static);

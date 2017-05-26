@@ -1,10 +1,10 @@
-#ifndef _O_R_OVERLOAD_RESOLUTION_CLASS_ALIAS_H_
-#define _O_R_OVERLOAD_RESOLUTION_CLASS_ALIAS_H_
+#ifndef _O_R_OVERLOAD_RESOLUTION_CLASS_WRAP_H_
+#define _O_R_OVERLOAD_RESOLUTION_CLASS_WRAP_H_
 
 #include "overload_executor.h"
 #include "value_converter_base.h"
 
-class class_alias {
+class class_wrap {
 private:
 	v8::Handle<v8::Object> _target;
 	std::shared_ptr<overload_executor> _executor;
@@ -12,7 +12,7 @@ private:
 	v8::Local<v8::FunctionTemplate> _ctor;
 
 public:
-	class_alias(v8::Handle<v8::Object> target, std::shared_ptr<overload_executor> executor, const std::string class_name);
+	class_wrap(v8::Handle<v8::Object> target, std::shared_ptr<overload_executor> executor, const std::string class_name);
 
 	template<typename T>
 	Nan::Persistent<v8::FunctionTemplate> done() {
