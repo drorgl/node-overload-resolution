@@ -12,14 +12,14 @@ static void class_callback_function(const Nan::FunctionCallbackInfo<v8::Value>& 
 		return;
 	}
 
-	auto executor = (std::shared_ptr<overload_executor>*)executor_object.ToLocalChecked().As<v8::External>()->Value();
+	auto executor = (overload_executor * )executor_object.ToLocalChecked().As<v8::External>()->Value();
 
 	//if executor is empty then its a static member callback
 	if (executor == NULL) {
 
 		auto static_holder = info.Holder();
 		holder = static_holder.As<v8::Function>();
-		executor = (std::shared_ptr<overload_executor>*)Nan::GetPrivate(holder, Nan::New("executor").ToLocalChecked()).ToLocalChecked().As<v8::External>()->Value();
+		executor = (overload_executor *)Nan::GetPrivate(holder, Nan::New("executor").ToLocalChecked()).ToLocalChecked().As<v8::External>()->Value();
 
 		if (executor == NULL) {
 			Nan::ThrowError("executor holder is not set, this object is not part of overload resolution");
@@ -29,10 +29,10 @@ static void class_callback_function(const Nan::FunctionCallbackInfo<v8::Value>& 
 
 
 	auto ns = Nan::GetPrivate(holder, Nan::New("namespace").ToLocalChecked());
-	executor->get()->execute(*Nan::Utf8String(ns.ToLocalChecked()), info);
+	executor->execute(*Nan::Utf8String(ns.ToLocalChecked()), info);
 }
 
-class_wrap::class_wrap(v8::Handle<v8::Object> target, std::shared_ptr<overload_executor> executor, const std::string class_name) {
+class_wrap::class_wrap(v8::Handle<v8::Object> target, overload_executor * executor, const std::string class_name) {
 	_target = target;
 	_executor = executor;
 	_class = class_name;

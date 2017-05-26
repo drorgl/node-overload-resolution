@@ -5,7 +5,7 @@
 
 static void ns_callback_function(const Nan::FunctionCallbackInfo<v8::Value>& info) {
 	auto holder = info.Holder();
-	auto executor = (std::shared_ptr<overload_executor>*)Nan::GetPrivate(holder, Nan::New("executor").ToLocalChecked()).ToLocalChecked().As<v8::External>()->Value();
+	auto executor = (overload_executor *)Nan::GetPrivate(holder, Nan::New("executor").ToLocalChecked()).ToLocalChecked().As<v8::External>()->Value();
 	
 	if (executor == NULL) {
 		Nan::ThrowError("executor is not set, holder object is not part of overload resolution");
@@ -13,10 +13,10 @@ static void ns_callback_function(const Nan::FunctionCallbackInfo<v8::Value>& inf
 	}
 
 	auto ns = Nan::GetPrivate(holder, Nan::New("namespace").ToLocalChecked());
-	executor->get()->execute(*Nan::Utf8String(ns.ToLocalChecked()) , info);
+	executor->execute(*Nan::Utf8String(ns.ToLocalChecked()) , info);
 }
 
-namespace_wrap::namespace_wrap(v8::Handle<v8::Object> target, std::shared_ptr<overload_executor> executor, const std::string ns) {
+namespace_wrap::namespace_wrap(v8::Handle<v8::Object> target, overload_executor * executor, const std::string ns) {
 	if (ns != "") {
 		_target = Nan::New<v8::Object>();
 		target->Set(Nan::New(ns).ToLocalChecked(), _target);
@@ -27,7 +27,7 @@ namespace_wrap::namespace_wrap(v8::Handle<v8::Object> target, std::shared_ptr<ov
 
 	_namespace = ns;
 
-	Nan::SetPrivate(_target, Nan::New("executor").ToLocalChecked(), Nan::New<v8::External>(new std::shared_ptr<overload_executor>(executor)));
+	Nan::SetPrivate(_target, Nan::New("executor").ToLocalChecked(), Nan::New<v8::External>(executor));
 	Nan::SetPrivate(_target, Nan::New("namespace").ToLocalChecked(), Nan::New(_namespace).ToLocalChecked());
 
 	_executor = executor;

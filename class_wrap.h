@@ -7,12 +7,12 @@
 class class_wrap {
 private:
 	v8::Handle<v8::Object> _target;
-	std::shared_ptr<overload_executor> _executor;
+	overload_executor * _executor;
 	std::string _class;
 	v8::Local<v8::FunctionTemplate> _ctor;
 
 public:
-	class_wrap(v8::Handle<v8::Object> target, std::shared_ptr<overload_executor> executor, const std::string class_name);
+	class_wrap(v8::Handle<v8::Object> target, overload_executor * executor, const std::string class_name);
 
 	//when class definitions is done, this must be executed to hook the executor, namespace and register the class in the type system
 	template<typename T>
@@ -20,7 +20,7 @@ public:
 		auto ctor_func = _ctor->GetFunction();
 
 		Nan::SetPrivate(ctor_func, Nan::New("namespace").ToLocalChecked(), Nan::New(_class).ToLocalChecked());
-		Nan::SetPrivate(ctor_func, Nan::New("executor").ToLocalChecked(), Nan::New<v8::External>(new std::shared_ptr<overload_executor>(_executor)));
+		Nan::SetPrivate(ctor_func, Nan::New("executor").ToLocalChecked(), Nan::New<v8::External>(_executor));
 
 		_target->Set(Nan::New(_class).ToLocalChecked(), ctor_func);
 		_executor->type_system.register_type<T>(_ctor,_class,_class);

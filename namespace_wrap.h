@@ -9,10 +9,10 @@
 class namespace_wrap {
 private:
 	v8::Handle<v8::Object> _target;
-	std::shared_ptr<overload_executor> _executor;
+	overload_executor * _executor;
 	std::string _namespace;
 public:
-	namespace_wrap(v8::Handle<v8::Object> target, std::shared_ptr<overload_executor> executor, const std::string ns);
+	namespace_wrap(v8::Handle<v8::Object> target, overload_executor * executor, const std::string ns);
 
 	std::shared_ptr<namespace_wrap> add_namespace(const std::string namespace_name);
 
