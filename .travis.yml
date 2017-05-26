@@ -7,25 +7,22 @@ node_js:
   - "5"
   - "6"
   - "7"
-  - "node"
-before_install:
-  - pwd
-  - git clone --depth=1 --branch=master https://github.com/drorgl/node-addon-tracer.git ../../drorgl/node-addon-tracer
-  - pushd .
-  - cd ../../drorgl/node-addon-tracer
-  - npm install --ignore-scripts
-  - npm run configure
-  - popd
+  - "node" 
 install:
+  - sudo rm /usr/bin/cpp /usr/bin/gcc /usr/bin/g++
+  - sudo ln -s /usr/bin/gcc-4.9 /usr/bin/gcc
+  - sudo ln -s /usr/bin/g++-4.9 /usr/bin/g++
+  - sudo ln -s /usr/bin/cpp-4.9 /usr/bin/cpp
+  - cc --version
   - npm install
   - npm run configure
 script:
   - npm test
-env:
-  - CXX=g++-4.9
 addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.9
+      - gcc-4.9
+      - cpp-4.9
