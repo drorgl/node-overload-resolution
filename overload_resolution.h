@@ -15,14 +15,17 @@
 #include <string.h>
 #include <nan.h>
 
+#include "overload_executor.h"
+
+#include "namespace_wrap.h"
+//#include "class_alias.h"
 
 
 //#include <memory>
 //#include <string>
 //#include <vector>
 //#include <functional>
-#include "type_system.h"
-#include "function_rank_cache.h"
+
 
 #define	POLY_METHOD(name)                                                       \
 		Nan::NAN_METHOD_RETURN_TYPE name(POLY_METHOD_ARGS_TYPE info)
@@ -51,22 +54,10 @@ namespace overres {
 
 class overload_resolution {
 private:
-	overres::type_system _type_system;
-	overres::function_rank_cache _function_cache;
-	
-
-	//parse the registered functions, find possible matches:
-	//1. by name
-	//2. by passed parameters, give higher weight to passed parameters, lower weight to default parameters, even lower weight to convertible parameters
-	//3. discard non-matching options
-	int MatchOverload(std::vector<std::string> &classNames, std::shared_ptr<o_r_function> func, overres::function_arguments &fargs);
-
 	static void LogDebug(std::function<std::string()> message);
 	static void LogWarn(std::function<std::string()> message);
 
-
-	void execute_overload(const std::string &ns, std::vector<std::string> &classNames, const std::string &name, std::shared_ptr<o_r_function> function, Nan::NAN_METHOD_ARGS_TYPE info);
-
+	std::shared_ptr<overload_executor> _executor;
 public:
 	overload_resolution();
 
@@ -77,13 +68,13 @@ public:
 	//in case of array, which type is inside it, what to do if multiple types are in the array?
 	template <typename TObjectWrap>
 	void register_type(v8::Local<v8::FunctionTemplate> functionTemplate, const std::string ns, const std::string name) {
-		_type_system.register_type<TObjectWrap>(functionTemplate, ns, name);
+		_executor->type_system.register_type<TObjectWrap>(functionTemplate, ns, name);
 	}
 
 	//register struct
 	template <typename TDerived>
 	void register_type(const std::string ns, const std::string name) {	
-		_type_system.register_type<TDerived>(ns, name);
+		_executor->type_system.register_type<TDerived>(ns, name);
 	}
 
 	//add type alias
@@ -100,20 +91,17 @@ public:
 	//adds an overload constructor
 	void addOverloadConstructor(const std::string ns, const std::string className, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
 
+	std::shared_ptr<namespace_wrap> register_module(v8::Handle<v8::Object> target);
 
 
-	
-
-	
-
-	void executeBestOverload(const std::string &ns, std::vector<std::string> & className, const std::string &name, Nan::NAN_METHOD_ARGS_TYPE info);
-	
-	//catch-all function, looks up the function in the overloads collections and executing the right one
-	Nan::NAN_METHOD_RETURN_TYPE execute(const std::string name_space, Nan::NAN_METHOD_ARGS_TYPE info);
 
 	inline std::string get_type(v8::Local<v8::Value> param) {
-		return _type_system.determineType(param);
+		return _executor->type_system.determineType(param);
 	}
+
+
+	//catch-all function, looks up the function in the overloads collections and executing the right one
+	Nan::NAN_METHOD_RETURN_TYPE execute(const std::string name_space, Nan::NAN_METHOD_ARGS_TYPE info);
 };
 
 #endif

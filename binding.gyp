@@ -19,6 +19,15 @@
 		"sources":[			
 			  "overload_resolution.h"
 			, "overload_resolution.cpp"
+			
+			, "overload_executor.cpp"
+			, "overload_executor.h"
+						
+			, "class_wrap.cpp"
+			, "class_wrap.h"
+			
+			, "namespace_wrap.cpp"
+			, "namespace_wrap.h"
 						
 			, "function_arguments.h"
 			, "function_arguments.cpp"
@@ -30,7 +39,6 @@
 			, "type_system.cpp"
 			
 			, "overload_resolution_types.h"
-			, "overload_resolution_types.cpp"
 			
 			, "object_type.h"
 			, "overload_info.h"
@@ -101,6 +109,11 @@
 		, "tests/or_array_tester.h"
 		, "tests/or_default_tester.h"
 		, "tests/or_value_converter.h"
+		
+		, "tests/namespace_constructs.h"
+		
+		, "tests/class_constructs.h"
+		, "tests/class_constructs.cpp"
 		
 		, "tests/threaded_tester.h"
 	  ]

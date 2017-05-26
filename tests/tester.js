@@ -6,7 +6,7 @@ var tape = require("tape");
 var chalk = require("chalk");
 
 var versionGroup = process.version.match(/^v(\d+\.)?(\d+\.)?(\*|\d+)$/);
-var nodeVersion =  [Number(versionGroup[1]), Number(versionGroup)[2], Number(versionGroup)[3]].join(".");
+var nodeVersion = [Number(versionGroup[1]), Number(versionGroup)[2], Number(versionGroup)[3]].join(".");
 
 //http://stackoverflow.com/questions/6832596/how-to-compare-software-version-number-using-js-only-number
 function isVersionValid(b) {
@@ -79,7 +79,7 @@ var results = {
 
 var tapestream = tape.createStream({ objectMode: true });
 
-tapestream.on('data', function(row){
+tapestream.on('data', function (row) {
     if (typeof row == typeof "") {
         console.log(tablevel() + row);
     }
@@ -93,7 +93,7 @@ tapestream.on('data', function(row){
         console.log(tablevel() + "%d. Testing %s", row.id, row.name);
     }
     else {
-       if (row.ok) {
+        if (row.ok) {
             results.passed++;
             console.log(tablevel() + okColor("%d. \t %s \t %s"), row.id, row.ok, row.name);
             if (row.operator == "throws" && row.actual != undefined) {
@@ -109,7 +109,7 @@ tapestream.on('data', function(row){
     //console.log(JSON.stringify(row))
 });
 
-tapestream.on('end', function(r) {
+tapestream.on('end', function (r) {
     console.log("passed:", results.passed);
     console.log("failed:", results.failed);
 });
@@ -155,7 +155,7 @@ if (addon == null) {
     console.log("debug:", aoDebug);
 }
 
-function getLogLevel(logLevel){
+function getLogLevel(logLevel) {
     switch (logLevel) {
         case 0: return "TRACE";
         case 1: return "DEBUG";
@@ -203,7 +203,7 @@ for (var i = 0; i < 1; i++) {
     //        t.ok(res, "async function got This()");
     //        t.end();
     //    });
-        
+
     //});
     //addon.Flush();
 
@@ -218,8 +218,8 @@ for (var i = 0; i < 1; i++) {
 
     var dataTypes = [
         {
-            minNodeVersion : '0',
-            value_converter_exists : true,
+            minNodeVersion: '0',
+            value_converter_exists: true,
             value: 1,
             defaultValue: 1,
             name: "number"
@@ -371,10 +371,10 @@ for (var i = 0; i < 1; i++) {
             var ct = new addon.constructor_class_tester();
             t.equal(ct.ctype(), ".no_parameters", "constructor_tester no_params");
 
-            dataTypes.forEach(function(dt) {
+            dataTypes.forEach(function (dt) {
                 if (!isVersionValid(dt.minNodeVersion)) {
                     return;
-            }
+                }
                 var ct = new addon.constructor_class_tester(dt.value);
                 t.equal(ct.ctype(), "." + dt.name, "constructor_testers " + dt.name);
                 addon.Flush();
@@ -394,7 +394,7 @@ for (var i = 0; i < 1; i++) {
             t.equal(addon.constructor_class_tester.static_function(), ".static.no_params", "constructor_class_tester.static_function no_params");
             t.equal(cs.static_function(), ".instance.no_params", "instance constructor_class_tester.static_function no_params");
 
-            dataTypes.forEach(function(dt) {
+            dataTypes.forEach(function (dt) {
                 if (!isVersionValid(dt.minNodeVersion)) {
                     return;
                 }
@@ -415,7 +415,7 @@ for (var i = 0; i < 1; i++) {
         t.doesNotThrow(function () {
             t.equal(addon.number_testers(), ".no_parameters", "number_testers no_params");
 
-            dataTypes.forEach(function(dt) {
+            dataTypes.forEach(function (dt) {
                 if (!isVersionValid(dt.minNodeVersion)) {
                     return
                 }
@@ -741,7 +741,7 @@ for (var i = 0; i < 1; i++) {
             });
 
         });
-        var shouldEnd = function() {
+        var shouldEnd = function () {
             if (executions == 0) {
                 addon.Flush();
                 t.end();
@@ -754,6 +754,21 @@ for (var i = 0; i < 1; i++) {
     });
 
 
+    tape("namespace and class wrappers", function (t) {
+        //t.class_constructs
+        t.equals(addon.standalone_function_construct(), "standalone_function_construct", "standalone function construct");
+
+        t.equals(addon.namespace_construct.nc_standalone_function_construct(), "nc_standalone_function_construct_nc", "nc standalone function construct 1");
+        t.equals(addon.namespace_construct.standalone_function_construct(), "standalone_function_construct_nc", "nc standalone function construct 2");
+
+        t.equals(addon.class_constructs.test_static(), "test_static", "test static");
+
+        var cc = new addon.class_constructs();
+        t.equals(cc.test_member(), "test_member", "test member");
+
+        t.end();
+    });
+
 }
 
 
@@ -765,7 +780,7 @@ tape('async function callback from stand alone thread', function (t) {
         });
     });
 
-    var shouldEnd = function() {
+    var shouldEnd = function () {
         if (counter == 0) {
             t.pass("async called 5 times");
             t.end();
@@ -779,3 +794,4 @@ tape('async function callback from stand alone thread', function (t) {
 //TODO: 
 //add make_param<T>("name","type",default T) test
 //add instantiate one type from another type test
+

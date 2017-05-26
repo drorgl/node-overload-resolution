@@ -3,16 +3,16 @@
   "url": "https://github.com/drorgl/node-overload-resolution",
   "author": "Dror Gluska",
   "license": "MIT",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "main": "include_dirs.js",
   "scripts": {
     "configure": "node-gyp configure && node-gyp build",
     "install": "echo call configure to build",
-    "test": "node tests/tester.js"
+    "test": "node --expose-gc tests/tester.js"
   },
   "dependencies": {
     "nan": "^2.4.0",
-    "node-addon-tracer":"drorgl/node-addon-tracer"
+    "node-addon-tracer": "drorgl/node-addon-tracer"
   },
   "devDependencies": {
     "chalk": "^1.1.3",

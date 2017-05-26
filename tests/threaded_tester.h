@@ -59,7 +59,9 @@ public:
 
 	~ThreadedTester() {
 		_execute = false;
-		_thread->join();
+		if (_thread != nullptr) {
+			_thread->join();
+		}
 	}
 
 	void Enqueue(int times, std::function<void(void)> callback) {
