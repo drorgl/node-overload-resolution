@@ -25,6 +25,8 @@ namespace_wrap::namespace_wrap(v8::Handle<v8::Object> target, std::shared_ptr<ov
 		_target = target;
 	}
 
+	_namespace = ns;
+
 	Nan::SetPrivate(_target, Nan::New("executor").ToLocalChecked(), Nan::New<v8::External>(new std::shared_ptr<overload_executor>(executor)));
 	Nan::SetPrivate(_target, Nan::New("namespace").ToLocalChecked(), Nan::New(_namespace).ToLocalChecked());
 

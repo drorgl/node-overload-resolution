@@ -110,6 +110,8 @@
 		, "tests/or_default_tester.h"
 		, "tests/or_value_converter.h"
 		
+		, "tests/namespace_constructs.h"
+		
 		, "tests/class_constructs.h"
 		, "tests/class_constructs.cpp"
 		

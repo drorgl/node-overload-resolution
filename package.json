@@ -8,7 +8,7 @@
   "scripts": {
     "configure": "node-gyp configure && node-gyp build",
     "install": "echo call configure to build",
-    "test": "node tests/tester.js"
+    "test": "node --expose-gc tests/tester.js"
   },
   "dependencies": {
     "nan": "^2.4.0",

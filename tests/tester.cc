@@ -14,7 +14,10 @@
 #include "or_default_tester.h"
 #include "or_value_converter.h"
 
+
+#include "namespace_constructs.h"
 #include "class_constructs.h"
+
 
 #include <tracer.h>
 
@@ -23,20 +26,14 @@ NAN_METHOD(testfunction_no_overload_resolution) {
 	info.GetReturnValue().Set(Nan::New<v8::String>("testfunction_no_overload_resolution").ToLocalChecked());
 }
 
-
-POLY_METHOD(standalone_function_construct) {
-	info.SetReturnValue("standalone_function_construct"s);
-}
-
-
 void init(v8::Handle<v8::Object> target) {
-	assert(false);
+	//assert(false);
 	tracer::Init(target);
 	
 	auto overload = std::make_shared<overload_resolution>();
 	auto base_overload = overload->register_module(target);
 
-	base_overload->add_overload("standalone_function_construct", {}, standalone_function_construct);
+	namespace_constructs::Init(base_overload);
 
 	class_constructs::Init(base_overload);
 

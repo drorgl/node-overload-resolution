@@ -58,6 +58,7 @@ overload_resolution::~overload_resolution() {
 	_executor->clear();
 #ifdef DEBUG
 	_CrtDumpMemoryLeaks();
+	_CrtMemDumpAllObjectsSince(NULL);
 #endif
 }
 
