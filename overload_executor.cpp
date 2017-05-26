@@ -5,6 +5,24 @@
 #include <tracer.h>
 #include "async_worker.h"
 
+#ifdef __GNUC__
+#if (__cplusplus <= 201402L)
+namespace std {
+	template <class C>
+	constexpr auto size(const C& c) -> decltype(c.size())
+	{
+		return c.size();
+	}
+
+	template <class T, std::size_t N>
+	constexpr std::size_t size(const T(&array)[N]) noexcept
+	{
+		return N;
+	}
+}
+#endif
+#endif
+
 
 static void Log(LogLevel level, std::string &&message) {
 	if (tracer::log_level <= level) {
