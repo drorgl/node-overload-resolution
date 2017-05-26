@@ -16,7 +16,7 @@ public:
 
 	//when class definitions is done, this must be executed to hook the executor, namespace and register the class in the type system
 	template<typename T>
-	Nan::Persistent<v8::FunctionTemplate> done() {
+	Nan::Local<v8::FunctionTemplate> done() {
 		auto ctor_func = _ctor->GetFunction();
 
 		Nan::SetPrivate(ctor_func, Nan::New("namespace").ToLocalChecked(), Nan::New(_class).ToLocalChecked());
