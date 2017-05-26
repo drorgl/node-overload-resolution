@@ -17,6 +17,7 @@ before_install:
   - popd
 install:
   - npm install
+  - npm run configure
 script:
   - npm test
 env:
