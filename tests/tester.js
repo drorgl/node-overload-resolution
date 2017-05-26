@@ -763,7 +763,7 @@ for (var i = 0; i < 1; i++) {
 
         t.equals(addon.class_constructs.test_static(), "test_static", "test static");
 
-        let cc = new addon.class_constructs();
+        var cc = new addon.class_constructs();
         t.equals(cc.test_member(), "test_member", "test member");
 
         t.end();
