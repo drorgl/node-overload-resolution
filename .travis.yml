@@ -14,6 +14,7 @@ before_install:
   - pushd .
   - cd ../../drorgl/node-addon-tracer
   - npm install --ignore-scripts
+  - npm run configure
   - popd
 install:
   - npm install
