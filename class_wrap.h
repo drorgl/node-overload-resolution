@@ -14,6 +14,7 @@ private:
 public:
 	class_wrap(v8::Handle<v8::Object> target, std::shared_ptr<overload_executor> executor, const std::string class_name);
 
+	//when class definitions is done, this must be executed to hook the executor, namespace and register the class in the type system
 	template<typename T>
 	Nan::Persistent<v8::FunctionTemplate> done() {
 		auto ctor_func = _ctor->GetFunction();

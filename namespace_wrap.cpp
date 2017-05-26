@@ -8,7 +8,7 @@ static void ns_callback_function(const Nan::FunctionCallbackInfo<v8::Value>& inf
 	auto executor = (std::shared_ptr<overload_executor>*)Nan::GetPrivate(holder, Nan::New("executor").ToLocalChecked()).ToLocalChecked().As<v8::External>()->Value();
 	
 	if (executor == NULL) {
-		Nan::ThrowError("executor is not set, this object is not part of overload resolution");
+		Nan::ThrowError("executor is not set, holder object is not part of overload resolution");
 		return;
 	}
 
