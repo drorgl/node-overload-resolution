@@ -28,7 +28,7 @@ NAN_METHOD(testfunction_no_overload_resolution) {
 
 void init(v8::Handle<v8::Object> target) {
 	//assert(false);
-	tracer::Init(target);
+	node_addon_tracer::tracer::Init(target);
 	
 	auto overload = std::make_shared<overload_resolution>();
 	auto base_overload = overload->register_module(target);

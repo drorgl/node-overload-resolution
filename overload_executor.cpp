@@ -5,6 +5,8 @@
 #include <tracer.h>
 #include "async_worker.h"
 
+using namespace node_addon_tracer;
+
 #ifdef __GNUC__
 #if (__cplusplus <= 201402L)
 namespace std {

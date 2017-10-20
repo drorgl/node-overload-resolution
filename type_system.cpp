@@ -3,6 +3,8 @@
 #include "overload_info.h"
 #include <cmath>
 
+using namespace node_addon_tracer;
+
 namespace overres {
 	static void Log(LogLevel level, std::string &&message) {
 		if (tracer::log_level <= level) {

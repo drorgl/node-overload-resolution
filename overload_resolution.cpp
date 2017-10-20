@@ -12,7 +12,7 @@
 #include "overload_resolution_types.h"
 #include "function_rank_cache.h"
 
-
+using namespace node_addon_tracer;
 
 #ifdef __GNUC__
 #if (__cplusplus <= 201402L)
