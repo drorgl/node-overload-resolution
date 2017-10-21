@@ -20,6 +20,9 @@ public:
 
 	//adds an overload function
 	void add_overload(const std::string functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
+
+	//adds an enum
+	void add_enum(const std::string enumName, std::vector<std::pair<std::string, double>> values);
 };
 
 #endif

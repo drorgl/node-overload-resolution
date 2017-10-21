@@ -766,6 +766,22 @@ for (var i = 0; i < 1; i++) {
         var cc = new addon.class_constructs();
         t.equals(cc.test_member(), "test_member", "test member");
 
+        t.equal(cc.test_property, "preset_value", "test member property preset value");
+        t.doesNotThrow(function () { cc.test_property = "new_value"; }, "set member property value");
+        t.equal(cc.test_property, "new_value", "test member property set value");
+
+        t.ok(cc[10] == null, "check numeric indexer position 10 is empty");
+        t.doesNotThrow(function () { cc[10] = "text_value"; }, "assign numeric indexer position 10 to 'text_value'");
+        t.equal(cc[10], "text_value", "check numeric indexer position 10 is 'text_value'");
+
+        t.ok(cc["string_key"] == null, "check numeric indexer name 'string_key' is empty");
+        t.doesNotThrow(function () { cc["string_key"] = "text_value"; }, "assign numeric indexer name 'string_key' to 'text_value'");
+        t.equal(cc[10], "text_value", "check numeric indexer name 'string_key' is 'text_value'");
+
+        t.ok(addon.test_enum, "test enum exists");
+        t.equal(addon.test_enum.e1, 1, "test_enum.e1 == 1");
+        t.equal(addon.test_enum.e2, 2, "test_enum.e2 == 2");
+
         t.end();
     });
 
