@@ -24,7 +24,7 @@ public:
 
 		Nan::SetPrivate(ctor_func, Nan::New("namespace").ToLocalChecked(), Nan::New(_class).ToLocalChecked());
 		Nan::SetPrivate(ctor_func, Nan::New("executor").ToLocalChecked(), Nan::New<v8::External>(_executor));
-		Nan::SetPrivate(ctor_func, Nan::New("named_property_getter_instance").ToLocalChecked(), Nan::New<v8::External>(_named_property_getter_instance));
+		Nan::SetPrivate(ctor_func, Nan::New("named_property_getter_instance").ToLocalChecked(), Nan::New<v8::External>((void*)_named_property_getter_instance));
 		
 		_target->Set(Nan::New(_class).ToLocalChecked(), ctor_func);
 		_executor->type_system.register_type<T>(_ctor,_class,_class);
