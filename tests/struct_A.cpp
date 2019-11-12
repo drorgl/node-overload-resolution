@@ -31,7 +31,7 @@ v8::Local<v8::Object> struct_A::New() {
 }
 
 
-v8::Local<v8::Object> struct_A::New(std::string prop1, std::string prop2) {
+v8::Local<v8::Object> struct_A::New(std::string &&prop1, std::string &&prop2) {
 	auto a = std::make_shared<struct_A>();// a;
 	a->prop1 = prop1;
 	a->prop2 = prop2;

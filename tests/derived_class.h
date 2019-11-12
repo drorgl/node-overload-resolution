@@ -17,7 +17,7 @@ public:
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 
-	virtual v8::Local<v8::Function> get_constructor();
+	virtual v8::Local<v8::Function> get_constructor() override;
 
 	static std::shared_ptr<derived_class> New();
 

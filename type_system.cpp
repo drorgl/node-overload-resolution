@@ -24,8 +24,9 @@ namespace overres {
 
 	std::unordered_set<std::string> type_system::primitive_types = { "Number","String","Boolean","Date","Buffer","Function","Map","Set","Null","Promise","Proxy","RegExp","Array" };
 
-	type_system::type_system() {
-		_structured_factory = std::make_shared<Factory<IStructuredObject>>();
+	type_system::type_system():
+		_structured_factory (std::make_shared<Factory<IStructuredObject>>()) {
+		
 	}
 
 	void type_system::reset() {
@@ -100,7 +101,7 @@ namespace overres {
 
 
 
-	void type_system::split_generic_types(std::string type, std::vector<std::string> &types) {
+	void type_system::split_generic_types(const std::string &type, std::vector<std::string> &types) {
 		Log(LogLevel::TRACE, [&type, types]() {return "splitting generic types " + type; });
 		auto genericBegin = type.find("<");
 		if (genericBegin == std::string::npos) {
@@ -276,7 +277,7 @@ namespace overres {
 		return "Unknown";
 	}
 
-	bool type_system::isArrayConvertibleTo(v8::Local<v8::Value> param, std::string &param_type, const std::string type) {
+	bool type_system::isArrayConvertibleTo(v8::Local<v8::Value> param, const std::string &param_type, const std::string &type) {
 		Log(LogLevel::TRACE, [&param_type, &type]() {return "is array convertible " + param_type + " > " + type; });
 
 
@@ -315,7 +316,7 @@ namespace overres {
 		return true;
 	}
 
-	bool type_system::isConvertibleTo(v8::Local<v8::Value> param, std::string &param_type, const std::string type) {
+	bool type_system::isConvertibleTo(v8::Local<v8::Value> param,const std::string &param_type, const std::string &type) {
 		Log(LogLevel::TRACE, [&param, &type]() {return "checking if object " + std::string(overres::Utf8String(param->ToDetailString())) + " is convertible to " + type; });
 		//if converting to number, check that the numbervalue is not nan
 		if (type == "Number") {
@@ -439,7 +440,7 @@ namespace overres {
 	}
 
 
-	Nan::MaybeLocal<v8::Value>  type_system::GetFromObject(v8::Local<v8::Value> obj, const std::string key) {
+	Nan::MaybeLocal<v8::Value>  type_system::GetFromObject(v8::Local<v8::Value> obj, const std::string &key) {
 		auto mctx = Nan::GetCurrentContext();
 		
 		Nan::MaybeLocal<v8::Value> ret;
@@ -462,7 +463,7 @@ namespace overres {
 		return ret;
 	}
 
-	std::shared_ptr<object_type> type_system::get_type(std::string &type) {
+	std::shared_ptr<object_type> type_system::get_type(std::string &&type) {
 		auto res = _types.find(type);
 		if (res == std::end(_types)) {
 			return nullptr;
@@ -482,12 +483,14 @@ namespace overres {
 				//for each class 
 				for (auto fn = std::begin(cls->second->functions); fn != std::end(cls->second->functions); fn++) {
 					//for each function
-					for (std::vector<std::shared_ptr< o_r_function>>::iterator fnoverload = std::begin(fn->second); fnoverload != std::end(fn->second); fnoverload++) {
+					for (auto fnoverload : fn->second){
+					//for (std::vector<std::shared_ptr< o_r_function>>::iterator fnoverload = std::begin(fn->second); fnoverload != std::end(fn->second); fnoverload++) {
 						//for each function overload
 						//TODO: add duplicate parameters testing
-						for (std::vector<std::shared_ptr<overload_info>>::iterator olinfo = std::begin(fnoverload->get()->parameters); olinfo != std::end(fnoverload->get()->parameters); olinfo++) {
+						//for (std::vector<std::shared_ptr<overload_info>>::iterator olinfo = std::begin(fnoverload->get()->parameters); olinfo != std::end(fnoverload->get()->parameters); olinfo++) {
+						for (auto olinfo : fnoverload->parameters){
 							//for each overload parameter
-							auto type = drill_type_aliases(olinfo->get()->type);
+							auto type = drill_type_aliases(olinfo->type);
 
 							if ((_types.count(type) == 0) &&
 								(!_structured_factory->has_type(type)) &&
@@ -501,8 +504,8 @@ namespace overres {
 									if ((_types.count(separate_type) == 0) &&
 										(!_structured_factory->has_type(separate_type.c_str())) &&
 										(primitive_types.count(separate_type) == 0) && (separate_type != "Object")) {
-										printf("cannot find type %s in %s::%s::%s\r\n", separate_type.c_str(), ns->second->name.c_str(), cls->second->className.c_str(), (*fnoverload)->functionName.c_str());
-										Log(LogLevel::ERROR, [&separate_type, &ns, &cls, &fnoverload]() {return "cannot find type " + separate_type + " in " + ns->second->name + "::" + cls->second->className + "::" + (*fnoverload)->functionName; });
+										printf("cannot find type %s in %s::%s::%s\r\n", separate_type.c_str(), ns->second->name.c_str(), cls->second->className.c_str(), fnoverload->functionName.c_str());
+										Log(LogLevel::ERROR, [&separate_type, &ns, &cls, &fnoverload]() {return "cannot find type " + separate_type + " in " + ns->second->name + "::" + cls->second->className + "::" + fnoverload->functionName; });
 										valid = false;
 									}
 								}
@@ -562,7 +565,7 @@ namespace overres {
 	}
 
 
-	void type_system::addOverload(const std::string ns, const std::string className, const std::string name, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
+	void type_system::addOverload(const std::string &ns, const std::string &className, const std::string &name, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
 		Log(LogLevel::DEBUG, [&ns, &className, &name, &arguments]() {
 			return "add overload " + ns + "::" + className + "::" + name + "(" +
 				tracer::join(arguments, [](const std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ")
@@ -583,7 +586,7 @@ namespace overres {
 		add_overload(ns, className, functionName, f);
 	}
 
-	void type_system::addStaticOverload(const std::string ns, const std::string className, const std::string name, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
+	void type_system::addStaticOverload(const std::string &ns, const std::string &className, const std::string &name, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
 		Log(LogLevel::DEBUG, [&ns, &className, &name, &arguments]() {
 			return "add static overload " + ns + "::" + className + "::" + name + "(" +
 				tracer::join(arguments, [](const std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ")
@@ -603,7 +606,7 @@ namespace overres {
 		add_overload(ns, className, functionName, f);
 	}
 
-	void type_system::addOverloadConstructor(const std::string ns, const std::string className, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
+	void type_system::addOverloadConstructor(const std::string &ns, const std::string &className, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
 		Log(LogLevel::DEBUG, [&ns, &className, &arguments]() {
 			return "add constructor overload " + ns + "::" + className + "::" + "(" +
 				tracer::join(arguments, [](const std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ")

@@ -62,12 +62,12 @@ overload_resolution::~overload_resolution() {
 #endif
 }
 
-void overload_resolution::LogDebug(std::function<std::string()> message) {
-	Log(LogLevel::DEBUG, message);
-}
-void overload_resolution::LogWarn(std::function<std::string()> message) {
-	Log(LogLevel::WARN, message);
-}
+//void overload_resolution::LogDebug(std::function<std::string()> message) {
+//	Log(LogLevel::DEBUG, message);
+//}
+//void overload_resolution::LogWarn(std::function<std::string()> message) {
+//	Log(LogLevel::WARN, message);
+//}
 
 
 std::shared_ptr<namespace_wrap> overload_resolution::register_module(v8::Handle<v8::Object> target) {
@@ -75,11 +75,11 @@ std::shared_ptr<namespace_wrap> overload_resolution::register_module(v8::Handle<
 }
 
 
-void overload_resolution::add_type_alias(std::string alias, std::string type) {
+void overload_resolution::add_type_alias(std::string &&alias, std::string &&type) {
 	assert(!alias.empty() && "alias can not be empty");
 	assert(!type.empty() && "alias type can not be empty");
 	Log(LogLevel::DEBUG, [&alias, &type]() {return "adding alias " + alias + " for " + type; });
-	_executor->type_system.add_type_alias(alias, type);
+	_executor->type_system.add_type_alias(std::move(alias), std::move(type));
 }
 
 
@@ -90,18 +90,18 @@ bool overload_resolution::validate_type_registrations() {
 }
 
 
-void overload_resolution::addOverload(const std::string ns, const std::string className, const std::string name, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
+void overload_resolution::addOverload(const std::string &&ns, const std::string &&className, const std::string &&name, std::vector<std::shared_ptr<overload_info>> &&arguments, PolyFunctionCallback callback) {
 	_executor->type_system.addOverload(ns, className, name, arguments, callback);
 }
 
-void overload_resolution::addStaticOverload(const std::string ns, const std::string className, const std::string name, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
+void overload_resolution::addStaticOverload(const std::string &&ns, const std::string &&className, const std::string &&name, std::vector<std::shared_ptr<overload_info>> &&arguments, PolyFunctionCallback callback) {
 	_executor->type_system.addStaticOverload(ns, className, name, arguments, callback);
 }
 
-void overload_resolution::addOverloadConstructor(const std::string ns, const std::string className, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
+void overload_resolution::addOverloadConstructor(const std::string &&ns, const std::string &&className, std::vector<std::shared_ptr<overload_info>> &&arguments, PolyFunctionCallback callback) {
 	_executor->type_system.addOverloadConstructor(ns, className, arguments, callback);
 }
 
-Nan::NAN_METHOD_RETURN_TYPE overload_resolution::execute(const std::string name_space, Nan::NAN_METHOD_ARGS_TYPE info) {
-	return _executor->execute(name_space, info);
+Nan::NAN_METHOD_RETURN_TYPE overload_resolution::execute(const std::string &&name_space, Nan::NAN_METHOD_ARGS_TYPE info) {
+	return _executor->execute(std::move(name_space), info);
 }

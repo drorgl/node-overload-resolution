@@ -181,7 +181,7 @@ namespace overres_value_converter {
 	}
 
 	void RegisterORTesters(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
-		auto loverload = overload;
+		//auto loverload = overload;
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<int>("a","int") }, value_converter_number);
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<std::string>("a","string") }, value_converter_string);
 		overload->addOverload("or_value_converter", "", "value_converter", { make_param<bool>("a","Boolean") }, value_converter_bool);

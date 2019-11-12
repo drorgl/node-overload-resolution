@@ -11,17 +11,17 @@ class Factory
 {
 public:
 	template <typename TDerived>
-	void register_type(std::string name)
+	void register_type(const std::string &&name)
 	{
 		static_assert(std::is_base_of<T, TDerived>::value, "Factory::register_type doesn't accept this type because doesn't derive from base class");
 		_createFuncs[name] = &createFunc<TDerived>;
 	}
 
-	bool has_type(std::string name) {
+	bool has_type(const std::string &name) {
 		return (_createFuncs .find(name) != std::end(_createFuncs));
 	}
 
-	std::shared_ptr<T> create(std::string name) {
+	std::shared_ptr<T> create(const std::string &&name) {
 		typename std::map<std::string, PCreateFunc>::const_iterator it = _createFuncs.find(name);
 		if (it != _createFuncs.end()) {
 			return it.value()();

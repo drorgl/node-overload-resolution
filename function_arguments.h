@@ -33,7 +33,7 @@ namespace overres {
 
 		bool is_array(size_t index);
 
-		bool is_convertible_to(size_t index, std::string &alias) const;
+		bool is_convertible_to(size_t index, const std::string &alias);
 
 
 	};

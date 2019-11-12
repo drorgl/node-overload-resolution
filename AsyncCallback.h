@@ -24,13 +24,13 @@ namespace overres {
 	class AsyncCallback {
 
 	public:
-		AsyncCallback() {
-			_callback = std::make_shared<Nan::Callback>();
+		AsyncCallback() 
+			:_callback(std::make_shared<Nan::Callback>()){
 			_uvasync = std::make_unique<overres_utilities::uvasync>(AsyncCallback::async_uv_callback, this);
 		}
 
-		AsyncCallback(const v8::Local<v8::Function> &fn) {
-			_callback = std::make_shared<Nan::Callback>(fn);
+		explicit AsyncCallback(const v8::Local<v8::Function> &fn)
+			:_callback(std::make_shared<Nan::Callback>(fn)) {
 			_uvasync = std::make_unique<overres_utilities::uvasync>(AsyncCallback::async_uv_callback, this);
 		}
 
@@ -72,9 +72,9 @@ namespace overres {
 
 			while (_calls.dequeue(call_data) ){
 				std::vector<v8::Local<v8::Value>> params;
-				for (auto param : call_data) {
-					params.push_back(param->Get());
-				}
+				std::transform(std::begin(call_data), std::end(call_data), std::back_inserter(params), [](const auto param) {
+					return param->Get();
+				});
 				this->Call(params.size(), &params[0]);
 			}
 		}

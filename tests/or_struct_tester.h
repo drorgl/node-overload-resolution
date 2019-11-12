@@ -40,7 +40,7 @@ namespace overres_struct_tester {
 	}
 
 	void RegisterORTesters(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
-		auto loverload = overload;
+		//auto loverload = overload;
 		overload->addOverload("or_struct_tester", "", "structs_testers", {}, structs_testers);
 		overload->addOverload("or_struct_tester", "", "structs_testers", { make_param("a","struct_A",Nan::Undefined()) }, structs_testers_struct_A);
 		overload->addOverload("or_struct_tester", "", "structs_testers", { make_param("a","struct_B",Nan::Undefined()) }, structs_testers_struct_B);

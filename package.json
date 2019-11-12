@@ -6,17 +6,18 @@
   "version": "1.3.0",
   "main": "include_dirs.js",
   "scripts": {
-    "configure": "node-gyp configure && node-gyp build",
+    "configure": "npx node-gyp configure && npx node-gyp build",
     "install": "echo call configure to build",
     "test": "node --expose-gc tests/tester.js"
   },
   "dependencies": {
-    "nan": "^2.7.0",
-    "node-addon-tracer": "drorgl/node-addon-tracer"
+    "@drorgl/node-addon-tracer": "^1.0.1",
+    "nan": "^2.14.0"
   },
   "devDependencies": {
-    "chalk": "^2.2.0",
-    "tape": "^4.8.0",
-    "node-gyp": "3.6.2"
+    "chalk": "^3.0.0",
+    "tape": "^4.11.0",
+    "node-gyp": "6.0.1",
+    "npx": "^10.2.0"
   }
 }

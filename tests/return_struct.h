@@ -35,7 +35,7 @@ public:
 		_v8_value_type = v8_value_type;
 		_definition = {
 			make_param("type","String") ,
-			make_param("value",v8_value_type)
+			make_param("value",std::move(v8_value_type))
 		};
 	}
 

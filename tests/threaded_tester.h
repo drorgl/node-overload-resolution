@@ -12,9 +12,10 @@
 class ThreadedTester {
 private:
 	struct cb_data {
-		cb_data(int times_, std::function<void(void)> callbacks_) {
-			times = times_;
-			callback = callbacks_;
+		cb_data(int times_, std::function<void(void)> callbacks_):
+			times (times_),
+			callback (callbacks_) {
+			
 		}
 		int times;
 		std::function<void(void)> callback;
@@ -46,8 +47,8 @@ private:
 		}
 	}
 public:
-	ThreadedTester() {
-		_execute = true;
+	ThreadedTester():
+		_execute(true) {
 		
 	}
 

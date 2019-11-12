@@ -10,7 +10,7 @@ public:
 	static void Init(std::shared_ptr<namespace_wrap> overload);
 
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
-	virtual v8::Local<v8::Function> get_constructor();
+	virtual v8::Local<v8::Function> get_constructor() override;
 
 	std::string _test_property;
 

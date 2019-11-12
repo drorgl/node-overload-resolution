@@ -21,10 +21,10 @@ namespace overres_default_parameters_tester {
 		auto global = Nan::GetCurrentContext()->Global();
 
 		auto JSON = global->Get(Nan::New<v8::String>("JSON").ToLocalChecked()).As<v8::Object>();
-		auto stringify = JSON->Get(Nan::New<v8::String>("stringify").ToLocalChecked()).As<v8::Function>();
+		auto stringifyFunc = JSON->Get(Nan::New<v8::String>("stringify").ToLocalChecked()).As<v8::Function>();
 
 		v8::Local<v8::Value> args[] = { val };
-		v8::Local<v8::String> result = v8::Local<v8::String>::Cast(stringify->Call(JSON, 1, args));
+		v8::Local<v8::String> result = v8::Local<v8::String>::Cast(stringifyFunc->Call(JSON, 1, args));
 		return result;
 	}
 
@@ -1146,7 +1146,7 @@ namespace overres_default_parameters_tester {
 
 	void RegisterORTesters(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
 
-		auto loverload = overload;
+		//auto loverload = overload;
 		
 		//register function in overload resolution engine
 		overload->addOverload("or_default_tester", "", "default_testers_number", { make_param("a","Number",Nan::Undefined()),make_param("a","Number",Nan::New<v8::Number>(1)) }, number_testers_number_number);

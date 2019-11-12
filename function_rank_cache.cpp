@@ -8,7 +8,7 @@ namespace overres {
 		return fargs.get_type_key();
 	}
 
-	std::string function_rank_cache::get_overload_key(const std::string &ns, std::vector<std::string> &classNames, const std::string &name) const {
+	std::string function_rank_cache::get_overload_key(const std::string &ns,const std::vector<std::string> &classNames, const std::string &name) const {
 		std::string ret = ns + "::(";
 		for (size_t i = 0; i < classNames.size(); i++) {
 			if (i != 0) {
@@ -29,7 +29,7 @@ namespace overres {
 		_cache.clear();
 	}
 
-	std::weak_ptr<o_r_function> function_rank_cache::get_function(const std::string &ns, std::vector<std::string> &classNames, const std::string &name, function_arguments &fargs) const {
+	std::weak_ptr<o_r_function> function_rank_cache::get_function(const std::string &ns,const std::vector<std::string> &classNames, const std::string &name, const function_arguments &fargs) const {
 		auto overload_key = get_overload_key(ns, classNames, name);
 		auto function_key = get_function_arguments_key(fargs);
 
@@ -49,7 +49,7 @@ namespace overres {
 		return std::weak_ptr<o_r_function>();;
 	}
 
-	void function_rank_cache::cache_function(const std::string &ns, std::vector<std::string> &classNames, const std::string &name, function_arguments &fargs, std::weak_ptr<o_r_function> func) {
+	void function_rank_cache::cache_function(const std::string &ns,const std::vector<std::string> &classNames, const std::string &name,const function_arguments &fargs, std::weak_ptr<o_r_function> func) {
 		auto overload_key = get_overload_key(ns, classNames, name);
 		auto function_key = get_function_arguments_key(fargs);
 

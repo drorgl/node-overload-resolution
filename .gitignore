@@ -2,3 +2,6 @@ build
 node_modules/
 npm-debug.log*
 node-addon-tracer
+/-cppcheck-build-dir
+/.vscode
+/.cppcheck

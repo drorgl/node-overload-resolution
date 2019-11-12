@@ -26,11 +26,11 @@ v8::Local<v8::Value> struct_B::ToObject() {
 }
 
 v8::Local<v8::Object> struct_B::New() {
-	struct_B b;
+	struct_B b = {};
 	return b.ToObject().As<v8::Object>();
 }
 
-v8::Local<v8::Object> struct_B::New(std::string prop1, int prop2) {
+v8::Local<v8::Object> struct_B::New(std::string &&prop1, int prop2) {
 	struct_B b;
 	b.prop1 = prop1;
 	b.prop2 = prop2;

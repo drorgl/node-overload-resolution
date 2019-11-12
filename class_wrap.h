@@ -6,16 +6,16 @@
 
 class class_wrap {
 private:
-	v8::Handle<v8::Object> _target;
+	const v8::Handle<v8::Object> _target;
 	overload_executor * _executor;
-	std::string _class;
+	const std::string _class;
 	v8::Local<v8::FunctionTemplate> _ctor;
 
 	Nan::PropertyGetterCallback _named_property_getter_instance;
 	static NAN_PROPERTY_GETTER(named_property_getter_wrapper);
 	
 public:
-	class_wrap(v8::Handle<v8::Object> target, overload_executor * executor, const std::string class_name);
+	class_wrap(v8::Handle<v8::Object> target, overload_executor * executor, const std::string &&class_name);
 
 	//when class definitions is done, this must be executed to hook the executor, namespace and register the class in the type system
 	template<typename T>
@@ -34,13 +34,13 @@ public:
 	void add_overload_constructor(std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
 
 	//adds an overload function
-	void add_overload(const std::string functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
+	void add_overload(const std::string &&functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
 
 	//adds an overload for a static function
-	void add_static_overload(const std::string functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
+	void add_static_overload(const std::string &&functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
 
 	//adds a property accessor
-	void add_property(const std::string propertyName, Nan::GetterCallback getter, Nan::SetterCallback setter = 0, v8::Local<v8::Value> data = v8::Local<v8::Value>());
+	void add_property(const std::string &&propertyName, Nan::GetterCallback getter, Nan::SetterCallback setter = 0, v8::Local<v8::Value> data = v8::Local<v8::Value>());
 
 	//adds a numeric indexer
 	void add_numeric_indexer(Nan::IndexGetterCallback getter, Nan::IndexSetterCallback setter = 0, Nan::IndexQueryCallback query = 0, Nan::IndexDeleterCallback deleter = 0

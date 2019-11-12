@@ -44,7 +44,7 @@ namespace overres {
 		return false;
 	}
 
-	bool function_arguments::is_convertible_to(size_t index, std::string &alias) const {
+	bool function_arguments::is_convertible_to(size_t index,const std::string &alias) {
 		auto param_type = get_type(index);
 		auto convertible_key = param_type + ":" + alias;
 

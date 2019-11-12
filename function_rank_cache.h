@@ -22,14 +22,14 @@ namespace overres {
 
 		std::string get_function_arguments_key(const function_arguments &fargs) const;
 
-		std::string get_overload_key(const std::string &ns, std::vector<std::string> &classNames, const std::string &name) const;
+		std::string get_overload_key(const std::string &ns,const std::vector<std::string> &classNames, const std::string &name) const;
 
 	public:
 		void reset();
 
-		std::weak_ptr<o_r_function> get_function(const std::string &ns, std::vector<std::string> &classNames, const std::string &name, function_arguments &fargs) const;
+		std::weak_ptr<o_r_function> get_function(const std::string &ns,const std::vector<std::string> &classNames, const std::string &name,const function_arguments &fargs) const;
 
-		void cache_function(const std::string &ns, std::vector<std::string> &classNames, const std::string &name, function_arguments &fargs, std::weak_ptr<o_r_function> func);
+		void cache_function(const std::string &ns, const std::vector<std::string> &classNames, const std::string &name,const function_arguments &fargs, std::weak_ptr<o_r_function> func);
 	};
 
 };

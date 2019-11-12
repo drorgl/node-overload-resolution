@@ -858,7 +858,7 @@ namespace overres_two_parameters_tester {
 
 
 	void RegisterORTesters(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
-		auto loverload = overload;
+		//auto loverload = overload;
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Number",Nan::Undefined()),make_param("a","Number",Nan::Undefined()) }, number_testers_number_number);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Number",Nan::Undefined()),make_param("a","String",Nan::Undefined()) }, number_testers_number_string);
 		overload->addOverload("or_two_tester", "", "two_testers", { make_param("a","Number",Nan::Undefined()),make_param("a","Boolean",Nan::Undefined()) }, number_testers_number_bool);

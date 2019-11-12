@@ -54,8 +54,8 @@ namespace overres {
 
 class overload_resolution {
 private:
-	static void LogDebug(std::function<std::string()> message);
-	static void LogWarn(std::function<std::string()> message);
+	//static void LogDebug(std::function<std::string()> message);
+	//static void LogWarn(std::function<std::string()> message);
 
 	std::shared_ptr<overload_executor> _executor;
 public:
@@ -67,29 +67,29 @@ public:
 	//should add to it all the basics, string, number, integer, boolean, array, object(?), buffer (?), function (is it possible to know the function signature?), promises(?)
 	//in case of array, which type is inside it, what to do if multiple types are in the array?
 	template <typename TObjectWrap>
-	void register_type(v8::Local<v8::FunctionTemplate> functionTemplate, const std::string ns, const std::string name) {
+	void register_type(v8::Local<v8::FunctionTemplate> functionTemplate, const std::string &&ns, const std::string &&name) {
 		_executor->type_system.register_type<TObjectWrap>(functionTemplate, ns, name);
 	}
 
 	//register struct
 	template <typename TDerived>
-	void register_type(const std::string ns, const std::string name) {	
-		_executor->type_system.register_type<TDerived>(ns, name);
+	void register_type(const std::string &&ns, const std::string &&name) {	
+		_executor->type_system.register_type<TDerived>(std::move(ns),std::move(name));
 	}
 
 	//add type alias
-	void add_type_alias(std::string alias, std::string type);
+	void add_type_alias(std::string &&alias, std::string &&type);
 
 	bool validate_type_registrations();
 
 	//adds an overload function
-	void addOverload(const std::string ns, const std::string className, const std::string functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
+	void addOverload(const std::string &&ns, const std::string &&className, const std::string &&functionName, std::vector<std::shared_ptr<overload_info>> &&arguments, PolyFunctionCallback callback);
 
 	//adds an overload for a static function
-	void addStaticOverload(const std::string ns, const std::string className, const std::string functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
+	void addStaticOverload(const std::string &&ns, const std::string &&className, const std::string &&functionName, std::vector<std::shared_ptr<overload_info>> &&arguments, PolyFunctionCallback callback);
 
 	//adds an overload constructor
-	void addOverloadConstructor(const std::string ns, const std::string className, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
+	void addOverloadConstructor(const std::string &&ns, const std::string &&className, std::vector<std::shared_ptr<overload_info>> &&arguments, PolyFunctionCallback callback);
 
 	std::shared_ptr<namespace_wrap> register_module(v8::Handle<v8::Object> target);
 
@@ -101,7 +101,7 @@ public:
 
 
 	//catch-all function, looks up the function in the overloads collections and executing the right one
-	Nan::NAN_METHOD_RETURN_TYPE execute(const std::string name_space, Nan::NAN_METHOD_ARGS_TYPE info);
+	Nan::NAN_METHOD_RETURN_TYPE execute(const std::string &&name_space, Nan::NAN_METHOD_ARGS_TYPE info);
 };
 
 #endif

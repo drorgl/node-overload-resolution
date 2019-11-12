@@ -51,7 +51,7 @@ void overload_executor::clear() {
 	_function_cache.reset();
 }
 
-int overload_executor::MatchOverload(std::vector<std::string> &classNames, std::shared_ptr<o_r_function> func, overres::function_arguments &fargs) {
+int overload_executor::MatchOverload(const std::vector<std::string> &classNames, std::shared_ptr<o_r_function> func, overres::function_arguments &fargs) {
 	//TODO: add parameters + static/constructor to log
 	Log(LogLevel::TRACE, [&func]() {return "matching overload for " + func->className + "::" + func->functionName; });
 	int parameterLength = (std::max)((int)func->parameters.size(), fargs.length());
@@ -160,7 +160,7 @@ int overload_executor::MatchOverload(std::vector<std::string> &classNames, std::
 
 
 
-void overload_executor::execute_overload(const std::string &ns, std::vector<std::string> &classNames, const std::string &name, std::shared_ptr<o_r_function> function, Nan::NAN_METHOD_ARGS_TYPE info) {
+void overload_executor::execute_overload(const std::string &ns,const std::vector<std::string> &classNames, const std::string &name, std::shared_ptr<o_r_function> function, Nan::NAN_METHOD_ARGS_TYPE info) {
 
 	auto parametersLength = (std::max)(info.Length(), (int)function->parameters.size());
 	std::vector<v8::Local<v8::Value>> info_params;
@@ -191,7 +191,7 @@ void overload_executor::execute_overload(const std::string &ns, std::vector<std:
 	std::shared_ptr< overres::value_converter_base> this_converter;
 
 	if (function->className != "") {
-		auto this_type = type_system.get_type(function->className);
+		auto this_type = type_system.get_type(std::move(function->className));
 		if (this_type != nullptr) {
 			this_converter = this_type->value_converter;
 		}
@@ -238,7 +238,7 @@ void overload_executor::execute_overload(const std::string &ns, std::vector<std:
 	}
 }
 
-void overload_executor::executeBestOverload(const std::string &ns, std::vector<std::string> &classNames, const std::string &name, Nan::NAN_METHOD_ARGS_TYPE info) {
+void overload_executor::executeBestOverload(const std::string &&ns, const std::vector<std::string> &&classNames, const std::string &&name, Nan::NAN_METHOD_ARGS_TYPE info) {
 	//TODO: add arguments to the log
 	Log(LogLevel::DEBUG, [&ns, &classNames, &name, &info]() {
 		std::string arguments = "";
@@ -277,7 +277,7 @@ void overload_executor::executeBestOverload(const std::string &ns, std::vector<s
 			errclass += "::";
 		}
 
-		errclass += "(" + std::accumulate(std::begin(classNames), std::end(classNames), std::string(), [](std::string &ss, std::string &s) {return ss.empty() ? s : ss + "," + s; }) + ")";
+		errclass += "(" + std::accumulate(std::begin(classNames), std::end(classNames), std::string(), [](const std::string &ss, const std::string &s) {return ss.empty() ? s : ss + "," + s; }) + ")";
 
 
 		if (name != "") {
@@ -346,7 +346,7 @@ void overload_executor::executeBestOverload(const std::string &ns, std::vector<s
 }
 
 
-Nan::NAN_METHOD_RETURN_TYPE overload_executor::execute(const std::string name_space, Nan::NAN_METHOD_ARGS_TYPE info) {
+Nan::NAN_METHOD_RETURN_TYPE overload_executor::execute(const std::string &&name_space, Nan::NAN_METHOD_ARGS_TYPE info) {
 	//TODO: add info to log entry
 	Log(LogLevel::TRACE, [&name_space]() {return "executing in namespace " + name_space; });
 
@@ -402,6 +402,6 @@ Nan::NAN_METHOD_RETURN_TYPE overload_executor::execute(const std::string name_sp
 
 	Log(LogLevel::DEBUG, [&name_space, &prototypeClassChain, &functionName]() {return "executing " + name_space + "::(" + tracer::join(prototypeClassChain, "/") + ")" + functionName; });
 
-	return executeBestOverload(name_space, prototypeClassChain, functionName, info);
+	return executeBestOverload(std::move(name_space),std::move(prototypeClassChain), std::move(functionName), info);
 }
 

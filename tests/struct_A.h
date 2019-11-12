@@ -28,13 +28,13 @@ public:
 	std::string prop1;
 	std::string prop2;
 
-	virtual bool verify(overres::type_system * ovres, v8::Local<v8::Value> obj);
-	virtual bool parse(v8::Local<v8::Value> obj);
+	virtual bool verify(overres::type_system * ovres, v8::Local<v8::Value> obj) override;
+	virtual bool parse(v8::Local<v8::Value> obj) override;
 
-	 v8::Local<v8::Value> ToObject();
+	 v8::Local<v8::Value> ToObject() override;
 
 	 static v8::Local<v8::Object> New();
-	 static v8::Local<v8::Object> New(std::string prop1, std::string prop2);
+	 static v8::Local<v8::Object> New(std::string &&prop1, std::string &&prop2);
 
 	 virtual ~struct_A() {}
 };

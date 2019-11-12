@@ -128,7 +128,7 @@ POLY_METHOD(array_fallback_testers_array) {
 }
 
 	void RegisterORTesters(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
-		auto loverload = overload;
+		//auto loverload = overload;
 		overload->addOverload("or_array_tester", "", "array_fallback_testers", { make_param("a","Array<int>") }, array_fallback_testers_array);
 		Nan::SetMethod(target, "array_fallback_testers", general_callback::tester_callback);
 

@@ -7,11 +7,15 @@
 
 namespace overres {
 
-	class async_worker {
+	class async_worker
+ {
 	public:
 		uv_work_t request;
 
-		async_worker(PolyFunctionCallback &func, std::shared_ptr< overres::FunctionCallbackInfo<v8::Value>> params, std::shared_ptr< overres::Callback> async_cb) :_func(func), _params(params), _async_cb(async_cb) {
+		async_worker(PolyFunctionCallback &func, std::shared_ptr< overres::FunctionCallbackInfo<v8::Value>> params, std::shared_ptr< overres::Callback> async_cb) :
+			_func(func), 
+			_params(params), 
+			_async_cb(async_cb) {
 			request.data = this;
 			_params->prefetch();
 		}

@@ -14,18 +14,16 @@ namespace overres {
 
 	public:
 		DateTime() {}
-		DateTime(v8::Local<v8::Date> date) {
-			double n = date->NumberValue();
-			
-			_datetime = (std::time_t)(n / 1000);
+		explicit DateTime(v8::Local<v8::Date> date) :
+			_datetime ((std::time_t)(date->NumberValue() / 1000)) {
 		}
 
-		DateTime(std::time_t datetime) {
-			_datetime = datetime;
+		explicit DateTime(std::time_t datetime):
+			_datetime(datetime){
 		}
 
-		DateTime(std::tm &t) {
-			_datetime = (std::time_t)std::mktime(&t);
+		explicit DateTime(std::tm &t):
+			_datetime((std::time_t)std::mktime(&t) ){
 		}
 
 		tm to_tm() {

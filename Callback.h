@@ -9,14 +9,16 @@ namespace overres {
 	class Callback {
 
 	public:
-		Callback() {
-			_callback = std::make_shared<Nan::Callback>();
-			is_async = false;
+		Callback():
+			_callback(std::make_shared<Nan::Callback>()),
+			is_async(false) {
+			
 		}
 
-		Callback(const v8::Local<v8::Function> &fn) {
-			_callback = std::make_shared<Nan::Callback>(fn);
-			is_async = false;
+		explicit Callback(const v8::Local<v8::Function> &fn):
+			_callback(std::make_shared<Nan::Callback>(fn)),
+			is_async(false) {
+			
 		}
 
 		virtual ~Callback() {
@@ -38,9 +40,12 @@ namespace overres {
 		void Call(std::vector<std::shared_ptr<generic_value_holder>> args) {
 			if (!is_async) {
 				std::vector<v8::Local<v8::Value>> params;
-				for (auto param : args) {
+				std::transform(std::begin(args), std::end(args), std::back_inserter(params), [](auto param) {
+					return param->Get();
+					});
+				/*for (auto param : args) {
 					params.push_back(param->Get());
-				}
+				}*/
 				this->Call(params.size(), &params[0]);
 
 				//TODO: how to handle callback return values?
@@ -60,9 +65,12 @@ namespace overres {
 			if (_calls != nullptr) {
 				for (auto cb_vals : *_calls) {
 					std::vector<v8::Local<v8::Value>> params;
-					for (auto param : cb_vals) {
+					std::transform(std::begin(cb_vals), std::end(cb_vals), std::back_inserter(params), [](auto param) {
+						return param->Get();
+						});
+					/*for (auto param : cb_vals) {
 						params.push_back(param->Get());
-					}
+					}*/
 					return_value = this->Call(params.size(), &params[0]);
 				}
 			}

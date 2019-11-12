@@ -8,7 +8,7 @@
 			"<!(node -e \"require('nan')\")"
 		],
 		"dependencies":[
-			"<!(node -e \"require('node-addon-tracer')\"):node-addon-tracer"
+			"<!(node -e \"require('@drorgl/node-addon-tracer')\"):node-addon-tracer"
 		  ],
 		"direct_dependent_settings":{
 			"include_dirs":[
@@ -80,7 +80,7 @@
       "target_name": "overload-tester",
 	  "dependencies":[
 		"node-overload-resolution",
-		"<!(node -e \"require('node-addon-tracer')\"):node-addon-tracer"
+		"<!(node -e \"require('@drorgl/node-addon-tracer')\"):node-addon-tracer"
 	  ],
       "sources": [ 
 		  "tests/tester.cc"

@@ -111,7 +111,7 @@ namespace overres_tester {
 
 
 	void RegisterORTesters(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
-		auto loverload = overload;
+		//auto loverload = overload;
 		overload->addOverload("or_tester", "", "number_testers", { make_param("a","int") }, number_testers_number);
 		overload->addOverload("or_tester", "", "number_testers", { make_param("a","string") }, number_testers_string);
 		overload->addOverload("or_tester", "", "number_testers", { make_param("a","Boolean") }, number_testers_bool);

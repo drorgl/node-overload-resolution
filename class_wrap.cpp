@@ -32,10 +32,10 @@ static void class_callback_function(const Nan::FunctionCallbackInfo<v8::Value>& 
 	executor->execute(*Nan::Utf8String(ns.ToLocalChecked()), info);
 }
 
-class_wrap::class_wrap(v8::Handle<v8::Object> target, overload_executor * executor, const std::string class_name) {
-	_target = target;
+class_wrap::class_wrap(v8::Handle<v8::Object> target, overload_executor * executor, const std::string &&class_name):
+	_target (target),
+	_class (class_name){
 	_executor = executor;
-	_class = class_name;
 
 	_ctor = Nan::New<v8::FunctionTemplate>(class_callback_function);
 	_ctor->InstanceTemplate()->SetInternalFieldCount(1);
@@ -46,17 +46,17 @@ void class_wrap::add_overload_constructor(std::vector<std::shared_ptr<overload_i
 	_executor->type_system.addOverloadConstructor(_class, _class, arguments, callback);
 }
 
-void class_wrap::add_overload(const std::string functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
+void class_wrap::add_overload(const std::string &&functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
 	_executor->type_system.addOverload(_class, _class, functionName, arguments, callback);
 	Nan::SetPrototypeMethod(_ctor, functionName.c_str(), class_callback_function);
 }
 
-void class_wrap::add_static_overload(const std::string functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
+void class_wrap::add_static_overload(const std::string &&functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
 	_executor->type_system.addStaticOverload(_class, _class, functionName, arguments, callback);
 	Nan::SetMethod(_ctor, functionName.c_str(), class_callback_function);
 }
 
-void class_wrap::add_property(const std::string propertyName, Nan::GetterCallback getter, Nan::SetterCallback setter, v8::Local<v8::Value> data){
+void class_wrap::add_property(const std::string &&propertyName, Nan::GetterCallback getter, Nan::SetterCallback setter, v8::Local<v8::Value> data){
 	Nan::SetAccessor(_ctor->InstanceTemplate(),Nan::New( propertyName).ToLocalChecked(), getter, setter,data);
 }
 

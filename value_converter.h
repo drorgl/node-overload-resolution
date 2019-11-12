@@ -62,12 +62,12 @@ namespace overres {
 			throw std::runtime_error(("not implemented, need template specialization for "s + GetTypeName<T>()).c_str());
 		}
 
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from)override {
 			auto from_value = std::dynamic_pointer_cast<value_holder<T>>(from);
 			return Nan::New(from_value->Value);
 		}
 
-		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val)override {
 			auto parsed_value = std::make_shared<value_holder<T>>();
 			parsed_value->Value = convert(val);
 			return parsed_value;
@@ -102,12 +102,12 @@ namespace overres {
 			return from->GetFunction();
 		}
 
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from)override {
 			auto from_value = std::dynamic_pointer_cast<value_holder<std::shared_ptr<T>>>(from);
 			return from_value->Value->GetFunction();
 		}
 
-		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) override {
 			auto parsed_value = std::make_shared<value_holder<std::shared_ptr<T>>>();
 			parsed_value->Value = convert(val);
 			return parsed_value;
@@ -142,12 +142,12 @@ namespace overres {
 			return from->GetFunction();
 		}
 
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) override{
 			auto from_value = std::dynamic_pointer_cast<value_holder<std::shared_ptr<T>>>(from);
 			return from_value->Value->GetFunction();
 		}
 
-		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) override {
 			auto parsed_value = std::make_shared<value_holder<std::shared_ptr<T>>>();
 			parsed_value->Value = convert(val);
 			return parsed_value;
@@ -177,12 +177,12 @@ namespace overres {
 			return from->Wrap();
 		}
 
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from)override {
 			auto from_value = std::dynamic_pointer_cast<value_holder<T*>>(from);
 			return from_value->Value->Wrap();
 		}
 
-		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val)override {
 			auto parsed_value = std::make_shared<value_holder<T*>>();
 			parsed_value->Value = convert(val);
 			return parsed_value;
@@ -203,12 +203,12 @@ namespace overres {
 			return from->Wrap();
 		}
 
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) override{
 			auto from_value = std::dynamic_pointer_cast<value_holder<std::shared_ptr<T>>>(from);
 			return from_value->Value->Wrap();
 		}
 
-		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val)override {
 			auto parsed_value = std::make_shared<value_holder<std::shared_ptr<T>>>();
 			parsed_value->Value = convert(val);
 			return parsed_value;
@@ -240,12 +240,12 @@ namespace overres {
 			return from->ToObject();
 		}
 
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from)override {
 			auto from_value = std::dynamic_pointer_cast<value_holder<std::shared_ptr<T>>>(from);
 			return from_value->Value->ToObject();
 		}
 
-		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val)override {
 			auto parsed_value = std::make_shared<value_holder<std::shared_ptr<T>>>();
 			parsed_value->Value = convert(val);
 			return parsed_value;
@@ -316,12 +316,12 @@ namespace overres {
 			
 		}
 
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from)override {
 			auto from_value = std::dynamic_pointer_cast<value_holder<std::shared_ptr<std::vector<T>>>>(from);
 			return convert(from_value->Value);
 		}
 
-		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) override{
 			auto parsed_value = std::make_shared<value_holder<std::shared_ptr<std::vector<T>>>>();
 			parsed_value->Value = convert(val);
 			return parsed_value;
@@ -371,12 +371,12 @@ namespace overres {
 			return map_value;
 		}
 
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from)override {
 			auto from_value = std::dynamic_pointer_cast<value_holder<std::shared_ptr<std::map<std::string, T>>>>(from);
 			return convert(from_value->Value);
 		}
 
-		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) override{
 			auto parsed_value = std::make_shared<value_holder<std::shared_ptr<std::map<std::string, T>>>>();
 			parsed_value->Value = convert(val);
 			return parsed_value;
@@ -427,12 +427,12 @@ namespace overres {
 			return map_value;
 		}
 
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from)override {
 			auto from_value = std::dynamic_pointer_cast<value_holder<std::shared_ptr<std::map<K, T>>>>(from);
 			return convert(from_value->Value);
 		}
 
-		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) override{
 			auto parsed_value = std::make_shared<value_holder<std::shared_ptr<std::map<K, T>>>>();
 			parsed_value->Value = convert(val);
 			return parsed_value;
@@ -479,12 +479,12 @@ namespace overres {
 			return set_value;
 		}
 
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from)override {
 			auto from_value = std::dynamic_pointer_cast<value_holder<std::shared_ptr<std::set<T>>>>(from);
 			return convert(from_value->Value);
 		}
 
-		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val)override {
 			auto parsed_value = std::make_shared<value_holder<std::shared_ptr<std::set<T>>>>();
 			parsed_value->Value = convert(val);
 			return parsed_value;
@@ -511,12 +511,12 @@ namespace overres {
 			return Nan::New(*from).ToLocalChecked();
 		}
 
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from)override {
 			auto from_value = std::dynamic_pointer_cast<value_holder<std::string>>(from);
 			return Nan::New(from_value->Value).ToLocalChecked();
 		}
 
-		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val)override {
 			auto parsed_value = std::make_shared<value_holder<std::string>>();
 			parsed_value->Value = convert(val);
 			return parsed_value;
@@ -544,12 +544,12 @@ namespace overres {
 			return Nan::New(*from);
 		}
 
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from)override {
 			auto from_value = std::dynamic_pointer_cast<value_holder<int>>(from);
 			return Nan::New(from_value->Value);
 		}
 
-		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val)override {
 			auto parsed_value = std::make_shared<value_holder<int>>();
 			parsed_value->Value = convert(val);
 			return parsed_value;
@@ -575,12 +575,12 @@ namespace overres {
 			return Nan::New(*from);
 		}
 
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from)override {
 			auto from_value = std::dynamic_pointer_cast<value_holder<unsigned int>>(from);
 			return Nan::New(from_value->Value);
 		}
 
-		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val)override {
 			auto parsed_value = std::make_shared<value_holder<unsigned int>>();
 			parsed_value->Value = convert(val);
 			return parsed_value;
@@ -608,12 +608,12 @@ namespace overres {
 			return Nan::New((double)*from);
 		}
 
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from)override {
 			auto from_value = std::dynamic_pointer_cast<value_holder<uint64_t>>(from);
 			return Nan::New((double)from_value->Value);
 		}
 
-		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val)override {
 			auto parsed_value = std::make_shared<value_holder<uint64_t>>();
 			parsed_value->Value = convert(val);
 			return parsed_value;
@@ -640,12 +640,12 @@ namespace overres {
 			return Nan::New((double)*from);
 		}
 
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from)override {
 			auto from_value = std::dynamic_pointer_cast<value_holder<int64_t>>(from);
 			return Nan::New((double)from_value->Value);
 		}
 
-		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val)override {
 			auto parsed_value = std::make_shared<value_holder<int64_t>>();
 			parsed_value->Value = convert(val);
 			return parsed_value;
@@ -675,12 +675,12 @@ namespace overres {
 			return Nan::New(*from);
 		}
 
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from)override {
 			auto from_value = std::dynamic_pointer_cast<value_holder<ushort>>(from);
 			return Nan::New(from_value->Value);
 		}
 
-		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val)override {
 			auto parsed_value = std::make_shared<value_holder<ushort>>();
 			parsed_value->Value = convert(val);
 			return parsed_value;
@@ -708,12 +708,12 @@ namespace overres {
 			return Nan::New(*from);
 		}
 
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from)override {
 			auto from_value = std::dynamic_pointer_cast<value_holder<short>>(from);
 			return Nan::New(from_value->Value);
 		}
 
-		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val)override {
 			auto parsed_value = std::make_shared<value_holder<short>>();
 			parsed_value->Value = convert(val);
 			return parsed_value;
@@ -742,12 +742,12 @@ namespace overres {
 			return Nan::New(*from);
 		}
 
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) override{
 			auto from_value = std::dynamic_pointer_cast<value_holder<float>>(from);
 			return Nan::New(from_value->Value);
 		}
 
-		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val)override {
 			auto parsed_value = std::make_shared<value_holder<float>>();
 			parsed_value->Value = convert(val);
 			return parsed_value;
@@ -773,12 +773,12 @@ namespace overres {
 			return Nan::New(*from);
 		}
 
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from)override {
 			auto from_value = std::dynamic_pointer_cast<value_holder<double>>(from);
 			return Nan::New(from_value->Value);
 		}
 
-		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val)override {
 			auto parsed_value = std::make_shared<value_holder<double>>();
 			parsed_value->Value = convert(val);
 			return parsed_value;
@@ -805,12 +805,12 @@ namespace overres {
 			return Nan::New(*from);
 		}
 
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from)override {
 			auto from_value = std::dynamic_pointer_cast<value_holder<uint8_t>>(from);
 			return Nan::New(from_value->Value);
 		}
 
-		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val)override {
 			auto parsed_value = std::make_shared<value_holder<uint8_t>>();
 			parsed_value->Value = convert(val);
 			return parsed_value;
@@ -836,12 +836,12 @@ namespace overres {
 			return Nan::New(*from);
 		}
 
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from)override {
 			auto from_value = std::dynamic_pointer_cast<value_holder<bool>>(from);
 			return Nan::New(from_value->Value);
 		}
 
-		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val)override {
 			auto parsed_value = std::make_shared<value_holder<bool>>();
 			parsed_value->Value = convert(val);
 			return parsed_value;
@@ -866,12 +866,12 @@ namespace overres {
 			return from->to_v8_Date();
 		}
 
-		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) {
+		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from) override{
 			auto from_value = std::dynamic_pointer_cast<value_holder<DateTime>>(from);
 			return from_value->Value.to_v8_Date();
 		}
 
-		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val) {
+		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val)override {
 			auto parsed_value = std::make_shared<value_holder<DateTime>>();
 			parsed_value->Value = convert(val);
 			return parsed_value;

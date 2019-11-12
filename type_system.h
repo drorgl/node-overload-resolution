@@ -60,7 +60,7 @@ namespace overres {
 
 
 		template <typename TObjectWrap>
-		void register_type(v8::Local<v8::FunctionTemplate> functionTemplate, const std::string ns, const std::string name) {
+		void register_type(v8::Local<v8::FunctionTemplate> functionTemplate, const std::string &ns, const std::string &name) {
 			static_assert(std::is_base_of< overres::ObjectWrap, TObjectWrap>::value, "TObjectWrap must inherit from ObjectWrap");
 
 			LogDebug([&ns, &name]() { return "registering type " + ns + "::" + name; });
@@ -78,9 +78,9 @@ namespace overres {
 		}
 
 		template <typename TDerived>
-		void register_type(const std::string ns, const std::string name) {
+		void register_type(const std::string &&ns, const std::string &&name) {
 			LogDebug([&ns, &name]() {return "registering type " + ns + "::" + name; });
-			_structured_factory->register_type<TDerived>(name);
+			_structured_factory->register_type<TDerived>(std::move(name));
 		}
 
 
@@ -101,17 +101,17 @@ namespace overres {
 		//determines the type of param, primitives, registered types, registered structs
 		std::string determineType(v8::Local<v8::Value> param);
 
-		std::shared_ptr<object_type> get_type(std::string &type);
+		std::shared_ptr<object_type> get_type(std::string &&type);
 
 		//takes a generic type in the form of Array<Number> or Array<Array<Number> and returns the list of separate types for type validation
-		void split_generic_types(std::string type, std::vector<std::string> &types);
+		void split_generic_types(const std::string &type, std::vector<std::string> &types);
 
 
 		//check array is convertible to type
-		bool isArrayConvertibleTo(v8::Local<v8::Value> param, std::string &param_type, const std::string type);
+		bool isArrayConvertibleTo(v8::Local<v8::Value> param, const std::string &param_type, const std::string &type);
 
 		//checks if param type is convertible to type
-		bool isConvertibleTo(v8::Local<v8::Value> param, std::string &param_type, const std::string type);
+		bool isConvertibleTo(v8::Local<v8::Value> param,const std::string &param_type, const std::string &type);
 
 		//retrieve a list of class names up the prototype chain
 		void getPrototypeChain(v8::Local<v8::Value> param, std::vector<std::string> &chain);
@@ -120,7 +120,7 @@ namespace overres {
 		bool verifyObject(std::vector<std::shared_ptr<overload_info>> props, v8::Local<v8::Value> val);
 
 		//gets a value from an object/map
-		static Nan::MaybeLocal<v8::Value> GetFromObject(v8::Local<v8::Value> obj, const std::string key);
+		static Nan::MaybeLocal<v8::Value> GetFromObject(v8::Local<v8::Value> obj, const std::string &key);
 
 		void add_overload(const std::string &ns, const std::string &className, const std::string &functionName, std::shared_ptr<o_r_function> func);
 
@@ -134,13 +134,13 @@ namespace overres {
 
 
 		//adds an overload function
-		void addOverload(const std::string ns, const std::string className, const std::string functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
+		void addOverload(const std::string &ns, const std::string &className, const std::string &functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
 
 		//adds an overload for a static function
-		void addStaticOverload(const std::string ns, const std::string className, const std::string functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
+		void addStaticOverload(const std::string &ns, const std::string &className, const std::string &functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
 
 		//adds an overload constructor
-		void addOverloadConstructor(const std::string ns, const std::string className, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
+		void addOverloadConstructor(const std::string &ns, const std::string &className, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
 	};
 
 };

@@ -21,9 +21,9 @@ private:
 	//1. by name
 	//2. by passed parameters, give higher weight to passed parameters, lower weight to default parameters, even lower weight to convertible parameters
 	//3. discard non-matching options
-	int MatchOverload(std::vector<std::string> &classNames, std::shared_ptr<o_r_function> func, overres::function_arguments &fargs);
+	int MatchOverload(const std::vector<std::string> &classNames, std::shared_ptr<o_r_function> func, overres::function_arguments &fargs);
 
-	void execute_overload(const std::string &ns, std::vector<std::string> &classNames, const std::string &name, std::shared_ptr<o_r_function> function, Nan::NAN_METHOD_ARGS_TYPE info);
+	void execute_overload(const std::string &ns, const std::vector<std::string> &classNames, const std::string &name, std::shared_ptr<o_r_function> function, Nan::NAN_METHOD_ARGS_TYPE info);
 
 
 public:
@@ -34,10 +34,10 @@ public:
 
 	void clear();
 
-	void executeBestOverload(const std::string &ns, std::vector<std::string> & className, const std::string &name, Nan::NAN_METHOD_ARGS_TYPE info);
+	void executeBestOverload(const std::string &&ns, const std::vector<std::string> && className, const std::string &&name, Nan::NAN_METHOD_ARGS_TYPE info);
 
 	//catch-all function, looks up the function in the overloads collections and executing the right one
-	Nan::NAN_METHOD_RETURN_TYPE execute(const std::string name_space, Nan::NAN_METHOD_ARGS_TYPE info);
+	Nan::NAN_METHOD_RETURN_TYPE execute(const std::string &&name_space, Nan::NAN_METHOD_ARGS_TYPE info);
 };
 
 #endif
