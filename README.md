@@ -88,7 +88,7 @@ Since its inefficient to write so much code, make sure SetMethod and SetPrototyp
 The wrappers do add overhead to function execution time but it didn't even register when I did performance analysis.
 
 to use the wrappers you'll need to initialize an overload overload_resolution instance normally but also start tracking a root target:
-```
+```C++
 void init(v8::Handle<v8::Object> target) {
 	auto overload = std::make_shared<overload_resolution>();
 	auto base_overload = overload->register_module(target);
@@ -98,16 +98,16 @@ NODE_MODULE(tester, init);
 ```
 
 once you have the base_overload you can start attaching methods:
-```
+```C++
 base_overload->add_overload("standalone_function_construct", {}, standalone_function_construct);
 ```
 nest methods:
-```
+```C++
 auto nested = base_overload->add_namespace("namespace_construct");
 nested->add_overload("nc_standalone_function_construct", {}, nc_standalone_function_construct_nc);
 ```
 add classes:
-```
+```C++
 auto class_def = base_overload->add_class("class_constructs");
 class_def->add_overload_constructor({}, New);
 class_def->add_static_overload("test_static", {}, test_static);
@@ -122,9 +122,6 @@ for now classes can be nested inside namespaces but not the other way around, th
 # Issues
 Currently the project is working but inefficient, it does a lot behind the scenes to determine which overload should be called and hopefully the performance issues will be resolved in the future, the slowest actions are around structs, which are very slow, they were intended as automatic object structure recognition and overload resolution accordingly.
 
-# Tests
-Attempts were made to have as many tests as possible, at the moment of this update there are 2336 tests, all pass.
-
 # Future
 If there will be future development, it should do the following:
 - performance analysis, solve the struct performance, check prototype inheritance performance and correctness, check big arrays performance.
@@ -133,5 +130,3 @@ If there will be future development, it should do the following:
 - add logging and instrumentation
 - add proper v8 exceptions with more information about the failure
 - add tests for function overload detection of convertible types (base/derived)
-
-
