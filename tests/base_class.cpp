@@ -10,7 +10,7 @@ namespace base_class_general_callback {
 
 	Nan::Persistent<v8::FunctionTemplate> base_class::constructor;
 
-	void base_class::Init(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
+	void base_class::Init(v8::Local<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
 		v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(base_class::New);
 		constructor.Reset(ctor);
 		ctor->InstanceTemplate()->SetInternalFieldCount(1);
@@ -44,14 +44,13 @@ namespace base_class_general_callback {
 		base_class_general_callback::overload = overload;
 		Nan::SetPrototypeMethod(ctor, "base_function", base_class_general_callback::overload_callback, Nan::New("base_function").ToLocalChecked());
 
-
-		target->Set(Nan::New("base_class").ToLocalChecked(), ctor->GetFunction());
+		Nan::Set(target,Nan::New("base_class").ToLocalChecked(),Nan::GetFunction(ctor).ToLocalChecked());
 
 		overload->register_type<base_class>(ctor,"", "base_class");
 	};
 
 	 v8::Local<v8::Function> base_class::get_constructor() {
-		return Nan::New(constructor)->GetFunction();
+		return Nan::GetFunction(Nan::New(constructor)).ToLocalChecked();
 	}
 
 	 std::shared_ptr<base_class> base_class::New() {

@@ -29,7 +29,7 @@ using namespace std::literals::string_literals;
 namespace overres {
 	typedef unsigned short ushort;
 
-	inline std::string Utf8String(v8::Handle<v8::Value> from) {
+	inline std::string Utf8String(v8::Local<v8::Value> from) {
 #if NODE_MODULE_VERSION >= NODE_0_12_MODULE_VERSION
 		return *Nan::Utf8String(from);
 #else
@@ -265,7 +265,7 @@ namespace overres {
 				auto converter = std::make_shared<value_converter<T>>();
 				auto fromArray = from.As<v8::Array>();
 				for (uint32_t i = 0; i < fromArray->Length(); i++) {
-					arr->push_back(converter->convert(fromArray->Get(i)));
+					arr->push_back(converter->convert(Nan::Get(fromArray,i).ToLocalChecked()));
 				}
 
 				return arr;
@@ -309,7 +309,7 @@ namespace overres {
 			if (from != nullptr) {
 				auto converter = std::make_shared<value_converter<T>>();
 				for (size_t i = 0; i < from->size(); i++) {
-					v8array->Set(i, converter->convert((*from)[i]));
+					Nan::Set(v8array,i, converter->convert((*from)[i]));
 				}
 			}
 			return v8array;
@@ -349,8 +349,8 @@ namespace overres {
 			auto from_map = from.As<v8::Map>()->AsArray();
 			assert((from_map->Length() % 2) == 0 && "v8::Map::AsArray returned length other than % 2");
 			for (uint32_t i = 0; i < from_map->Length(); i+=2) {
-				auto key = overres::Utf8String(from_map->Get(i));
-				auto value = converter->convert(from_map->Get(i + 1));
+				auto key = overres::Utf8String(Nan::Get(from_map,i).ToLocalChecked());
+				auto value = converter->convert(Nan::Get(from_map,i + 1).ToLocalChecked());
 
 				(*map_value)[key] = value;
 			}
@@ -458,7 +458,7 @@ namespace overres {
 			auto set_value = std::make_shared<std::set<T>>();
 			auto from_set = from.As<v8::Set>()->AsArray();
 			for (uint32_t i = 0; i < from_set->Length(); i ++) {
-				auto value = converter->convert(from_set->Get(i));
+				auto value = converter->convert(Nan::Get(from_set,i).ToLocalChecked());
 
 				set_value->insert(value);
 			}
@@ -500,7 +500,7 @@ namespace overres {
 	public:
 
 		virtual std::string convert(v8::Local<v8::Value> from) {
-			return overres::Utf8String(from->ToString());
+			return overres::Utf8String(from);
 		}
 
 		virtual v8::Local<v8::Value> convert(std::string from) {
@@ -532,7 +532,7 @@ namespace overres {
 
 		virtual int convert(v8::Local<v8::Value> from) {
 			//TODO: decide if value should be checked against std::numeric_limits<T>::max() and std::numeric_limits<T>::min() 
-			return from->IntegerValue();
+			return Nan::To<int32_t>(from).FromJust();
 		}
 
 		virtual v8::Local<v8::Value> convert(int from) {
@@ -563,7 +563,7 @@ namespace overres {
 
 		virtual unsigned int convert(v8::Local<v8::Value> from) {
 			//TODO: decide if value should be checked against std::numeric_limits<T>::max() and std::numeric_limits<T>::min() 
-			return from->IntegerValue();
+			return Nan::To<uint32_t>(from).FromJust();
 		}
 
 		virtual v8::Local<v8::Value> convert(unsigned int from) {
@@ -595,7 +595,7 @@ namespace overres {
 
 		virtual uint64_t convert(v8::Local<v8::Value> from) {
 			//TODO: decide if value should be checked against std::numeric_limits<T>::max() and std::numeric_limits<T>::min() 
-			return from->IntegerValue();
+			return Nan::To<double>(from).FromJust();
 		}
 
 		virtual v8::Local<v8::Value> convert(uint64_t from) {
@@ -627,7 +627,7 @@ namespace overres {
 
 		virtual int64_t convert(v8::Local<v8::Value> from) {
 			//TODO: decide if value should be checked against std::numeric_limits<T>::max() and std::numeric_limits<T>::min() 
-			return from->IntegerValue();
+			return Nan::To<int64_t>(from).FromJust();
 		}
 
 		virtual v8::Local<v8::Value> convert(int64_t from) {
@@ -663,7 +663,7 @@ namespace overres {
 
 		virtual ushort convert(v8::Local<v8::Value> from) {
 			//TODO: decide if value should be checked against std::numeric_limits<T>::max() and std::numeric_limits<T>::min() 
-			return from->NumberValue();
+			return Nan::To<uint32_t>(from).FromJust();
 		}
 
 		virtual v8::Local<v8::Value> convert(ushort from) {
@@ -696,7 +696,7 @@ namespace overres {
 
 		virtual short convert(v8::Local<v8::Value> from) {
 			//TODO: decide if value should be checked against std::numeric_limits<T>::max() and std::numeric_limits<T>::min() 
-			return from->NumberValue();
+			return Nan::To<int32_t>(from).FromJust();
 		}
 
 		virtual v8::Local<v8::Value> convert(short from) {
@@ -730,7 +730,7 @@ namespace overres {
 
 		virtual double convert(v8::Local<v8::Value> from) {
 			//TODO: decide if value should be checked against std::numeric_limits<T>::max() and std::numeric_limits<T>::min() 
-			return from->NumberValue();
+			return Nan::To<double>(from).FromJust();
 		}
 
 		virtual v8::Local<v8::Value> convert(float from) {
@@ -761,7 +761,7 @@ namespace overres {
 
 		virtual double convert(v8::Local<v8::Value> from) {
 			//TODO: decide if value should be checked against std::numeric_limits<T>::max() and std::numeric_limits<T>::min() 
-			return from->NumberValue();
+			return Nan::To<double>(from).FromJust();
 		}
 
 		virtual v8::Local<v8::Value> convert(double from) {
@@ -794,7 +794,7 @@ namespace overres {
 
 		virtual uint8_t convert(v8::Local<v8::Value> from) {
 			//TODO: decide if value should be checked against std::numeric_limits<T>::max() and std::numeric_limits<T>::min() 
-			return from->IntegerValue();
+			return Nan::To<uint32_t>(from).FromJust();
 		}
 
 		virtual v8::Local<v8::Value> convert(uint8_t from) {
@@ -825,7 +825,7 @@ namespace overres {
 	public:
 
 		virtual bool convert(v8::Local<v8::Value> from) {
-			return from->BooleanValue();
+			return Nan::To<bool>(from).FromJust();
 		}
 
 		virtual v8::Local<v8::Value> convert(bool from) {

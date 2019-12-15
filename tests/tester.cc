@@ -26,7 +26,7 @@ NAN_METHOD(testfunction_no_overload_resolution) {
 	info.GetReturnValue().Set(Nan::New<v8::String>("testfunction_no_overload_resolution").ToLocalChecked());
 }
 
-void init(v8::Handle<v8::Object> target) {
+void init(v8::Local<v8::Object> target) {
 	//assert(false);
 	node_addon_tracer::tracer::Init(target);
 	

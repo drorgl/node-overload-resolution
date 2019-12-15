@@ -11,7 +11,7 @@ namespace derived_class_general_callback {
 
 Nan::Persistent<v8::FunctionTemplate> derived_class::constructor;
 
-void derived_class::Init(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
+void derived_class::Init(v8::Local<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
 	derived_class_general_callback::overload = overload;
 
 
@@ -52,13 +52,12 @@ void derived_class::Init(v8::Handle<v8::Object> target, std::shared_ptr<overload
 	overload->addOverload("", "derived_class", "this_check", {}, this_check);
 	
 	
-
-	target->Set(Nan::New("derived_class").ToLocalChecked(), ctor->GetFunction());
+	Nan::Set(target,Nan::New("derived_class").ToLocalChecked(), Nan::GetFunction(ctor).ToLocalChecked());
 	overload->register_type<derived_class>(ctor,"", "derived_class");
 };
 
 v8::Local<v8::Function> derived_class::get_constructor() {
-	return Nan::New(constructor)->GetFunction();
+	return Nan::GetFunction(Nan::New(constructor)).ToLocalChecked();
 }
 
 std::shared_ptr<derived_class> derived_class::New() {

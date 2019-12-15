@@ -6,7 +6,7 @@
 
 class class_wrap {
 private:
-	const v8::Handle<v8::Object> _target;
+	const v8::Local<v8::Object> _target;
 	overload_executor * _executor;
 	const std::string _class;
 	v8::Local<v8::FunctionTemplate> _ctor;
@@ -15,18 +15,18 @@ private:
 	static NAN_PROPERTY_GETTER(named_property_getter_wrapper);
 	
 public:
-	class_wrap(v8::Handle<v8::Object> target, overload_executor * executor, const std::string &&class_name);
+	class_wrap(v8::Local<v8::Object> target, overload_executor * executor, const std::string &&class_name);
 
 	//when class definitions is done, this must be executed to hook the executor, namespace and register the class in the type system
 	template<typename T>
 	v8::Local<v8::FunctionTemplate> done() {
-		auto ctor_func = _ctor->GetFunction();
+		auto ctor_func = Nan::GetFunction(_ctor).ToLocalChecked();
 
 		Nan::SetPrivate(ctor_func, Nan::New("namespace").ToLocalChecked(), Nan::New(_class).ToLocalChecked());
 		Nan::SetPrivate(ctor_func, Nan::New("executor").ToLocalChecked(), Nan::New<v8::External>(_executor));
 		Nan::SetPrivate(ctor_func, Nan::New("named_property_getter_instance").ToLocalChecked(), Nan::New<v8::External>((void*)_named_property_getter_instance));
 		
-		_target->Set(Nan::New(_class).ToLocalChecked(), ctor_func);
+		Nan::Set(_target,Nan::New(_class).ToLocalChecked(), ctor_func);
 		_executor->type_system.register_type<T>(_ctor,_class,_class);
 		return _ctor;
 	}

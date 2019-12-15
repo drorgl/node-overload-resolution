@@ -12,7 +12,7 @@ bool struct_B::verify(overres::type_system * ovres, v8::Local<v8::Value> obj) {
 
 bool struct_B::parse(v8::Local<v8::Value> obj) {
 	this->prop1 = *Nan::Utf8String(overres::type_system::GetFromObject(obj, "prop1").ToLocalChecked());
-	this->prop2 = overres::type_system::GetFromObject(obj, "prop2").ToLocalChecked()->IntegerValue();
+	this->prop2 = Nan::To<int32_t>(overres::type_system::GetFromObject(obj, "prop2").ToLocalChecked()).FromJust();
 
 	return true;
 }
@@ -20,8 +20,8 @@ bool struct_B::parse(v8::Local<v8::Value> obj) {
 
 v8::Local<v8::Value> struct_B::ToObject() {
 	auto retval = Nan::New<v8::Object>();
-	retval->Set(Nan::New<v8::String>("prop1").ToLocalChecked(), Nan::New<v8::String>(this->prop1).ToLocalChecked());
-	retval->Set(Nan::New<v8::String>("prop2").ToLocalChecked(), Nan::New<v8::Number>(this->prop2));
+	Nan::Set(retval,Nan::New<v8::String>("prop1").ToLocalChecked(), Nan::New<v8::String>(this->prop1).ToLocalChecked());
+	Nan::Set(retval,Nan::New<v8::String>("prop2").ToLocalChecked(), Nan::New<v8::Number>(this->prop2));
 	return retval;
 }
 

@@ -8,11 +8,11 @@
 
 class namespace_wrap {
 private:
-	v8::Handle<v8::Object> _target;
+	v8::Local<v8::Object> _target;
 	overload_executor * _executor;
 	const std::string _namespace;
 public:
-	namespace_wrap(v8::Handle<v8::Object> target, overload_executor * executor, const std::string &&ns);
+	namespace_wrap(v8::Local<v8::Object> target, overload_executor * executor, const std::string &&ns);
 
 	std::shared_ptr<namespace_wrap> add_namespace(const std::string &&namespace_name);
 

@@ -15,7 +15,7 @@ namespace overres {
 	public:
 		DateTime() {}
 		explicit DateTime(v8::Local<v8::Date> date) :
-			_datetime ((std::time_t)(date->NumberValue() / 1000)) {
+			_datetime ((std::time_t)(Nan::To<double>(date).FromJust() / 1000)) {
 		}
 
 		explicit DateTime(std::time_t datetime):

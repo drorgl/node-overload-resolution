@@ -20,11 +20,12 @@ namespace overres_default_parameters_tester {
 	v8::Local<v8::String> JSONstringify(v8::Local<v8::Value> val) {
 		auto global = Nan::GetCurrentContext()->Global();
 
-		auto JSON = global->Get(Nan::New<v8::String>("JSON").ToLocalChecked()).As<v8::Object>();
-		auto stringifyFunc = JSON->Get(Nan::New<v8::String>("stringify").ToLocalChecked()).As<v8::Function>();
+		auto JSON = Nan::To<v8::Object>(Nan::Get(global,Nan::New<v8::String>("JSON").ToLocalChecked()).ToLocalChecked()).ToLocalChecked();
+		auto stringifyFunc = Nan::To<v8::Function>(Nan::Get(JSON,Nan::New<v8::String>("stringify").ToLocalChecked()).ToLocalChecked()).ToLocalChecked();
 
 		v8::Local<v8::Value> args[] = { val };
-		v8::Local<v8::String> result = v8::Local<v8::String>::Cast(stringifyFunc->Call(JSON, 1, args));
+		auto callResult = Nan::Call(stringifyFunc,JSON, 1, args);
+		v8::Local<v8::String> result = Nan::To<v8::String>(callResult.ToLocalChecked()).ToLocalChecked();
 		return result;
 	}
 
@@ -1144,7 +1145,7 @@ namespace overres_default_parameters_tester {
 	
 
 
-	void RegisterORTesters(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
+	void RegisterORTesters(v8::Local<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
 
 		//auto loverload = overload;
 		

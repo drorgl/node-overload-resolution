@@ -57,10 +57,10 @@ public:
 
 	virtual v8::Local<v8::Value> ToObject() {
 		auto retval = Nan::New<v8::Object>();
-		retval->Set(Nan::New<v8::String>("type").ToLocalChecked(), Nan::New<v8::String>(this->type).ToLocalChecked());
+		Nan::Set(retval,Nan::New<v8::String>("type").ToLocalChecked(), Nan::New<v8::String>(this->type).ToLocalChecked());
 
 		auto vconverter = std::make_shared< overres::value_converter<T>>();
-		retval->Set(Nan::New<v8::String>("value").ToLocalChecked(), vconverter->convert( this->value ));
+		Nan::Set(retval,Nan::New<v8::String>("value").ToLocalChecked(), vconverter->convert( this->value ));
 		//retval->Set(Nan::New<v8::String>("value").ToLocalChecked(), Nan::New<v8::String>(this->value).ToLocalChecked());
 		return retval;
 	}

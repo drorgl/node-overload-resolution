@@ -12,7 +12,7 @@ private:
 	std::string _constructor_type;
 
 public:
-	static void Init(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload);
+	static void Init(v8::Local<v8::Object> target, std::shared_ptr<overload_resolution> overload);
 
 	std::shared_ptr<std::string> _data;
 

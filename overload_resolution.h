@@ -91,7 +91,7 @@ public:
 	//adds an overload constructor
 	void addOverloadConstructor(const std::string &&ns, const std::string &&className, std::vector<std::shared_ptr<overload_info>> &&arguments, PolyFunctionCallback callback);
 
-	std::shared_ptr<namespace_wrap> register_module(v8::Handle<v8::Object> target);
+	std::shared_ptr<namespace_wrap> register_module(v8::Local<v8::Object> target);
 
 
 

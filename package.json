@@ -11,7 +11,7 @@
     "test": "node --expose-gc tests/tester.js"
   },
   "dependencies": {
-    "@drorgl/node-addon-tracer": "^1.0.1",
+    "@drorgl/node-addon-tracer": "^1.0.2",
     "nan": "github:nodejs/nan"
   },
   "devDependencies": {

@@ -24,7 +24,7 @@ void class_constructs::Init(std::shared_ptr<namespace_wrap> overload) {
 
 
 v8::Local<v8::Function> class_constructs::get_constructor() {
-	return Nan::New(constructor)->GetFunction();
+	return Nan::GetFunction(Nan::New(constructor)).ToLocalChecked();
 }
 
 POLY_METHOD(class_constructs::New) {
@@ -59,13 +59,13 @@ NAN_GETTER(class_constructs::test_property_getter) {
 NAN_SETTER(class_constructs::test_property_setter) {
 	class_constructs* interceptor = ObjectWrap::Unwrap<class_constructs>(info.Holder());
 	printf("class_constructs::test_property_setter\r\n");
-	interceptor->_test_property = *v8::String::Utf8Value(value);
+	interceptor->_test_property = *Nan::Utf8String(value);
 }
 
 NAN_PROPERTY_GETTER(class_constructs::test_named_index_getter) {
 	class_constructs* interceptor = ObjectWrap::Unwrap<class_constructs>(info.Holder());
 	printf("class_constructs::test_named_index_getter\r\n");
-	auto property_name = *v8::String::Utf8Value(property);
+	auto property_name = *Nan::Utf8String(property);
 
 	if (interceptor->_test_string_indexer.find(property_name) == std::end(interceptor->_test_string_indexer)) {
 		info.GetReturnValue().SetNull();
@@ -79,9 +79,9 @@ NAN_PROPERTY_GETTER(class_constructs::test_named_index_getter) {
 NAN_PROPERTY_SETTER(class_constructs::test_named_index_setter) {
 	class_constructs* interceptor = ObjectWrap::Unwrap<class_constructs>(info.Holder());
 	printf("class_constructs::test_named_index_setter\r\n");
-	auto property_name = *v8::String::Utf8Value(property);
+	auto property_name = *Nan::Utf8String(property);
 
-	interceptor->_test_string_indexer[property_name] = *v8::String::Utf8Value(value);
+	interceptor->_test_string_indexer[property_name] = *Nan::Utf8String(value);
 }
 
 NAN_INDEX_GETTER(class_constructs::test_index_getter) {
@@ -98,5 +98,5 @@ NAN_INDEX_GETTER(class_constructs::test_index_getter) {
 NAN_INDEX_SETTER(class_constructs::test_index_setter) {
 	class_constructs* interceptor = ObjectWrap::Unwrap<class_constructs>(info.Holder());
 	printf("class_constructs::test_index_setter\r\n");
-	interceptor->_test_numeric_indexer[index] = *v8::String::Utf8Value(value);
+	interceptor->_test_numeric_indexer[index] = *Nan::Utf8String(value);
 }

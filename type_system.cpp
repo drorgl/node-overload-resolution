@@ -130,12 +130,12 @@ namespace overres {
 		//speed optimization, could create problems for large inconsistent arrays
 		if (v8arr->Length() <= 10) {
 			for (uint32_t i = 0; i < v8arr->Length(); i++) {
-				types.insert(drill_type_aliases(determineType(v8arr->Get(i))));
+				types.insert(drill_type_aliases(determineType(Nan::Get(v8arr,i).ToLocalChecked())));
 			}
 		}
 		else {
 			for (uint32_t i = 0; i < v8arr->Length(); i += (v8arr->Length() / 10)) {
-				types.insert(drill_type_aliases(determineType(v8arr->Get(i))));
+				types.insert(drill_type_aliases(determineType(Nan::Get(v8arr,i).ToLocalChecked())));
 			}
 		}
 		//TODO: add arr?... could be problematic
@@ -320,7 +320,7 @@ namespace overres {
 		Log(LogLevel::TRACE, [&param, &type]() {return "checking if object " + std::string(overres::Utf8String(Nan::ToDetailString(param).ToLocalChecked())) + " is convertible to " + type; });
 		//if converting to number, check that the numbervalue is not nan
 		if (type == "Number") {
-			if (std::isnan(param->NumberValue())) {
+			if (std::isnan(Nan::To<double>(param).FromJust())) {
 				return false;
 			}
 			else {

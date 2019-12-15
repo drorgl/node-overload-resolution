@@ -12,7 +12,7 @@ namespace constructor_class_tester_general_callback {
 
 Nan::Persistent<v8::FunctionTemplate> constructor_class_tester::constructor;
 
-void constructor_class_tester::Init(v8::Handle<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
+void constructor_class_tester::Init(v8::Local<v8::Object> target, std::shared_ptr<overload_resolution> overload) {
 	constructor_class_tester_general_callback::overload = overload;
 
 	v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(constructor_class_tester_general_callback::overload_callback);
@@ -104,13 +104,12 @@ void constructor_class_tester::Init(v8::Handle<v8::Object> target, std::shared_p
 	overload->addStaticOverload("", "constructor_class_tester", "static_function", { make_param("a","Array",Nan::Undefined()) },         static_function_static_array);
 
 
-
-	target->Set(Nan::New("constructor_class_tester").ToLocalChecked(), ctor->GetFunction());
+	Nan::Set(target,Nan::New("constructor_class_tester").ToLocalChecked(),Nan::GetFunction(ctor).ToLocalChecked());
 	overload->register_type<constructor_class_tester>(ctor,"", "constructor_class_tester");
 };
 
 v8::Local<v8::Function> constructor_class_tester::get_constructor() {
-	return Nan::New(constructor)->GetFunction();
+	return Nan::GetFunction(Nan::New(constructor)).ToLocalChecked();
 }
 
 v8::Local<v8::Object> constructor_class_tester::New() {

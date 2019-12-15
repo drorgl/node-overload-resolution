@@ -20,8 +20,8 @@ bool struct_A::parse(v8::Local<v8::Value> obj) {
 
 v8::Local<v8::Value> struct_A::ToObject() {
 	auto retval = Nan::New<v8::Object>();
-	retval->Set(Nan::New<v8::String>("prop1").ToLocalChecked(), Nan::New<v8::String>(this->prop1).ToLocalChecked());
-	retval->Set(Nan::New<v8::String>("prop2").ToLocalChecked(), Nan::New<v8::String>(this->prop2).ToLocalChecked());
+	Nan::Set(retval,Nan::New<v8::String>("prop1").ToLocalChecked(), Nan::New<v8::String>(this->prop1).ToLocalChecked());
+	Nan::Set(retval,Nan::New<v8::String>("prop2").ToLocalChecked(), Nan::New<v8::String>(this->prop2).ToLocalChecked());
 	return retval;
 }
 

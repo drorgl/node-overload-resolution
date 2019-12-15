@@ -16,11 +16,11 @@ static void ns_callback_function(const Nan::FunctionCallbackInfo<v8::Value>& inf
 	executor->execute(*Nan::Utf8String(ns.ToLocalChecked()), info);
 }
 
-namespace_wrap::namespace_wrap(v8::Handle<v8::Object> target, overload_executor * executor, const std::string &&ns):
+namespace_wrap::namespace_wrap(v8::Local<v8::Object> target, overload_executor * executor, const std::string &&ns):
 	_namespace(ns){
 	if (ns != "") {
 		_target = Nan::New<v8::Object>();
-		target->Set(Nan::New(ns).ToLocalChecked(), _target);
+		Nan::Set(target,Nan::New(ns).ToLocalChecked(), _target);
 	}
 	else {
 		_target = target;
@@ -51,9 +51,9 @@ void namespace_wrap::add_overload(const std::string &&functionName, std::vector<
 
 void namespace_wrap::add_enum(const std::string &&enumName, std::vector<std::pair<std::string, double>> values) {
 	auto obj = Nan::New<v8::Object>();
-	_target->Set(Nan::New(enumName).ToLocalChecked(), obj);
+	Nan::Set(_target,Nan::New(enumName).ToLocalChecked(), obj);
 
 	for (auto value : values) {
-		obj->Set(Nan::New(value.first).ToLocalChecked(), Nan::New(value.second));
+		Nan::Set(obj,Nan::New(value.first).ToLocalChecked(), Nan::New(value.second));
 	}
 }

@@ -4,7 +4,8 @@ static void class_callback_function(const Nan::FunctionCallbackInfo<v8::Value>& 
 
 	//if executing member callback
 	auto this_ = info.This();
-	auto holder = this_->GetPrototype().As<v8::Object>()->Get(Nan::New("constructor").ToLocalChecked()).As<v8::Function>();
+	auto prototype = Nan::To<v8::Object>(this_->GetPrototype()).ToLocalChecked();
+	auto holder = Nan::To<v8::Function>(Nan::Get(prototype,Nan::New("constructor").ToLocalChecked()).ToLocalChecked()).ToLocalChecked();
 
 	auto executor_object = Nan::GetPrivate(holder, Nan::New("executor").ToLocalChecked());
 	if (executor_object.IsEmpty()) {
@@ -32,7 +33,7 @@ static void class_callback_function(const Nan::FunctionCallbackInfo<v8::Value>& 
 	executor->execute(*Nan::Utf8String(ns.ToLocalChecked()), info);
 }
 
-class_wrap::class_wrap(v8::Handle<v8::Object> target, overload_executor * executor, const std::string &&class_name):
+class_wrap::class_wrap(v8::Local<v8::Object> target, overload_executor * executor, const std::string &&class_name):
 	_target (target),
 	_class (class_name){
 	_executor = executor;
@@ -73,7 +74,8 @@ NAN_PROPERTY_GETTER(class_wrap::named_property_getter_wrapper) {
 	}
 
 	auto this_ = info.This();
-	auto holder = this_->GetPrototype().As<v8::Object>()->Get(Nan::New("constructor").ToLocalChecked()).As<v8::Function>();
+	auto prototype = Nan::To<v8::Object>(this_->GetPrototype()).ToLocalChecked();
+	auto holder = Nan::To<v8::Function>(Nan::Get(prototype,Nan::New("constructor").ToLocalChecked()).ToLocalChecked()).ToLocalChecked();
 
 	auto named_property_getter_instance_object = Nan::GetPrivate(holder, Nan::New("named_property_getter_instance").ToLocalChecked());
 	if (!named_property_getter_instance_object.IsEmpty()) {
