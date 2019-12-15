@@ -42,7 +42,7 @@ namespace base_class_general_callback {
 
 
 		base_class_general_callback::overload = overload;
-		Nan::SetPrototypeMethod(ctor, "base_function", base_class_general_callback::overload_callback);
+		Nan::SetPrototypeMethod(ctor, "base_function", base_class_general_callback::overload_callback, Nan::New("base_function").ToLocalChecked());
 
 
 		target->Set(Nan::New("base_class").ToLocalChecked(), ctor->GetFunction());

@@ -23,7 +23,7 @@ void constructor_class_tester::Init(v8::Handle<v8::Object> target, std::shared_p
 	assert(!derived_class::constructor.IsEmpty() && "must initialize base class before derived class!");
 	ctor->Inherit(Nan::New(derived_class::constructor));
 
-	Nan::SetPrototypeMethod(ctor, "ctype", ctype_function);
+	Nan::SetPrototypeMethod(ctor, "ctype", ctype_function, Nan::New("ctype").ToLocalChecked());
 
 
 
@@ -52,7 +52,7 @@ void constructor_class_tester::Init(v8::Handle<v8::Object> target, std::shared_p
 	overload->addOverloadConstructor("", "constructor_class_tester", { make_param("a","Array",Nan::Undefined()) },         New_array);
 
 	//register v8 instance callback
-	Nan::SetPrototypeMethod(ctor, "static_function", constructor_class_tester_general_callback::overload_callback);
+	Nan::SetPrototypeMethod(ctor, "static_function", constructor_class_tester_general_callback::overload_callback, Nan::New("static_function").ToLocalChecked());
 
 	//register instance overloads
 	overload->addOverload("", "constructor_class_tester", "static_function", {}, static_function_instance);
@@ -78,7 +78,7 @@ void constructor_class_tester::Init(v8::Handle<v8::Object> target, std::shared_p
 	overload->addOverload("", "constructor_class_tester", "static_function", { make_param("a","Array",Nan::Undefined()) },         static_function_instance_array);
 
 	//register v8 static callback
-	Nan::SetMethod(ctor, "static_function", constructor_class_tester_general_callback::overload_callback);
+	Nan::SetMethod(ctor, "static_function", constructor_class_tester_general_callback::overload_callback, Nan::New("static_function").ToLocalChecked());
 
 	//register static overloads
 	overload->addStaticOverload("", "constructor_class_tester", "static_function", {}, static_function_static);

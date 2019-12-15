@@ -46,7 +46,7 @@ void init(v8::Handle<v8::Object> target) {
 	overload->register_type<struct_A>("", "struct_A");
 	overload->register_type<struct_B>("", "struct_B");
 
-	Nan::SetMethod(target, "testfunction_no_overload_resolution", testfunction_no_overload_resolution);
+	Nan::SetMethod(target, "testfunction_no_overload_resolution", testfunction_no_overload_resolution, Nan::New("testfunction_no_overload_resolution").ToLocalChecked());
 
 	base_class::Init(target,overload);
 	derived_class::Init(target,overload);

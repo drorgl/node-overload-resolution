@@ -51,7 +51,7 @@ namespace overres_struct_tester {
 		overload->addOverload("or_struct_tester", "", "structs_testers", { make_param("a","struct_B",Nan::Undefined()),make_param("a","struct_A",Nan::Undefined()) }, structs_testers_struct_B_struct_A);
 
 		general_callback::overload = overload;
-		Nan::SetMethod(target, "structs_testers", general_callback::tester_callback);
+		Nan::SetMethod(target, "structs_testers", general_callback::tester_callback, Nan::New("structs_testers").ToLocalChecked());
 	}
 
 }

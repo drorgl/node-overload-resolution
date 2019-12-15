@@ -212,8 +212,8 @@ namespace overres_value_converter {
 		}, value_converter_async_callback);
 
 		general_callback::overload = overload;
-		Nan::SetMethod(target, "value_converter", general_callback::tester_callback);
-		Nan::SetMethod(target, "async_callback", general_callback::tester_callback);
+		Nan::SetMethod(target, "value_converter", general_callback::tester_callback, Nan::New("value_converter").ToLocalChecked());
+		Nan::SetMethod(target, "async_callback", general_callback::tester_callback, Nan::New("async_callback").ToLocalChecked());
 	}
 
 }

@@ -1199,7 +1199,7 @@ namespace overres_two_parameters_tester {
 		overload->addOverload("or_two_tester", "", "two_testers", {}, number_testers);
 
 		general_callback::overload = overload;
-		Nan::SetMethod(target, "two_testers", general_callback::tester_callback);
+		Nan::SetMethod(target, "two_testers", general_callback::tester_callback, Nan::New("two_testers").ToLocalChecked());
 	}
 
 }

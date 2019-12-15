@@ -23,7 +23,7 @@ void derived_class::Init(v8::Handle<v8::Object> target, std::shared_ptr<overload
 	assert(!base_class::constructor.IsEmpty() && "must initialize base class before derived class!");
 	ctor->Inherit(Nan::New(base_class::constructor));
 
-	Nan::SetPrototypeMethod(ctor, "derived_function", derived_function);
+	Nan::SetPrototypeMethod(ctor, "derived_function", derived_function, Nan::New("derived_function").ToLocalChecked());
 
 	overload->addOverload("", "derived_class", "base_function", {}, base_function);
 	overload->addOverload("", "derived_class", "base_function", { make_param("a","Number") }, base_function_number);
@@ -48,7 +48,7 @@ void derived_class::Init(v8::Handle<v8::Object> target, std::shared_ptr<overload
 	overload->addOverload("", "derived_class", "base_function", { make_param("a","Array") }, base_function_array);
 
 
-	Nan::SetPrototypeMethod(ctor, "this_check", derived_class_general_callback::overload_callback);
+	Nan::SetPrototypeMethod(ctor, "this_check", derived_class_general_callback::overload_callback, Nan::New("this_check").ToLocalChecked());
 	overload->addOverload("", "derived_class", "this_check", {}, this_check);
 	
 	

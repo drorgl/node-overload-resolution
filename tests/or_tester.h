@@ -135,7 +135,7 @@ namespace overres_tester {
 		overload->addOverload("or_tester", "", "number_testers", {}, number_testers);
 
 		general_callback::overload = overload;
-		Nan::SetMethod(target, "number_testers", general_callback::tester_callback);
+		Nan::SetMethod(target, "number_testers", general_callback::tester_callback, Nan::New("number_testers").ToLocalChecked());
 	}
 
 }

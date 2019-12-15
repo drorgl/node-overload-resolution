@@ -144,7 +144,7 @@ namespace overres {
 
 	std::string type_system::determineType(v8::Local<v8::Value> param) {
 		//TODO: serialize param
-		Log(LogLevel::TRACE, [&param]() {return "determine type " + std::string(overres::Utf8String(param->ToDetailString())); });
+		Log(LogLevel::TRACE, [&param]() {return "determine type " + std::string(overres::Utf8String(Nan::ToDetailString(param).ToLocalChecked())); });
 		if (param->IsArray()) {
 			std::set <std::string> arrtypes;
 			get_array_types(param, arrtypes);
@@ -317,7 +317,7 @@ namespace overres {
 	}
 
 	bool type_system::isConvertibleTo(v8::Local<v8::Value> param,const std::string &param_type, const std::string &type) {
-		Log(LogLevel::TRACE, [&param, &type]() {return "checking if object " + std::string(overres::Utf8String(param->ToDetailString())) + " is convertible to " + type; });
+		Log(LogLevel::TRACE, [&param, &type]() {return "checking if object " + std::string(overres::Utf8String(Nan::ToDetailString(param).ToLocalChecked())) + " is convertible to " + type; });
 		//if converting to number, check that the numbervalue is not nan
 		if (type == "Number") {
 			if (std::isnan(param->NumberValue())) {
@@ -370,13 +370,13 @@ namespace overres {
 
 		chain.push_back(constructorName);
 		getPrototypeChain(pobject->GetPrototype(), chain);
-		Log(LogLevel::TRACE, [&param, &chain]() {return "checking prototype chain for " + std::string(overres::Utf8String(param->ToDetailString())) + ": " + tracer::join(chain, ", "); });
+		Log(LogLevel::TRACE, [&param, &chain]() {return "checking prototype chain for " + std::string(overres::Utf8String(Nan::ToDetailString(param).ToLocalChecked()) + ": " + tracer::join(chain, ", ")); });
 	}
 
 
 	bool type_system::verifyObject(std::vector<std::shared_ptr<overload_info>> props, v8::Local<v8::Value> val) {
 		//TODO: add default values
-		Log(LogLevel::TRACE, [&props, &val]() {return "verifying object " + tracer::join(props, [](const std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ") + std::string(overres::Utf8String(val->ToDetailString())); });
+		Log(LogLevel::TRACE, [&props, &val]() {return "verifying object " + tracer::join(props, [](const std::shared_ptr<overload_info> oi) {return oi->type + " " + oi->parameterName; }, ", ") + std::string(overres::Utf8String(Nan::ToDetailString(val).ToLocalChecked())); });
 
 		auto mctx = Nan::GetCurrentContext();
 #if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
@@ -416,7 +416,7 @@ namespace overres {
 			for (auto &&pit : props) {
 				auto oi = pit;
 
-				if (!obj->HasOwnProperty(Nan::New<v8::String>(oi->parameterName).ToLocalChecked())) {
+				if (!Nan::HasOwnProperty(obj,Nan::New<v8::String>(oi->parameterName).ToLocalChecked()).FromMaybe(false)) {
 					return false;
 				}
 
@@ -458,7 +458,7 @@ namespace overres {
 			ret = Nan::Undefined();
 		}
 
-		Log(LogLevel::TRACE, [&obj, &key, &ret]() {return "retrieving " + key + " = " + ((!ret.IsEmpty()) ? std::string(overres::Utf8String(ret.ToLocalChecked()->ToDetailString())) : "unknown") + " from " + std::string(overres::Utf8String(obj->ToDetailString())); });
+		Log(LogLevel::TRACE, [&obj, &key, &ret]() {return "retrieving " + key + " = " + ((!ret.IsEmpty()) ? std::string(overres::Utf8String(Nan::ToDetailString(ret.ToLocalChecked()).ToLocalChecked())) : "unknown") + " from " + std::string(overres::Utf8String(Nan::ToDetailString(obj).ToLocalChecked())); });
 
 		return ret;
 	}

@@ -8,7 +8,7 @@ namespace overres {
 			return Nan::New(this->persistent());
 		}
 
-		auto return_object = get_constructor()->NewInstance();
+		auto return_object = Nan::NewInstance(get_constructor()).ToLocalChecked();
 		assert(!return_object.IsEmpty() && "problem with constructor, not generating new instance, most probably missing constructor or not initialized yet");
 		//auto return_object = Nan::New<v8::Object>();
 		//return_object->InternalFieldCount ->SetInternalFieldCount(1)

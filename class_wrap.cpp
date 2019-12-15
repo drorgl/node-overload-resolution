@@ -48,12 +48,12 @@ void class_wrap::add_overload_constructor(std::vector<std::shared_ptr<overload_i
 
 void class_wrap::add_overload(const std::string &&functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
 	_executor->type_system.addOverload(_class, _class, functionName, arguments, callback);
-	Nan::SetPrototypeMethod(_ctor, functionName.c_str(), class_callback_function);
+	Nan::SetPrototypeMethod(_ctor, functionName.c_str(), class_callback_function,Nan::New(functionName.c_str()).ToLocalChecked());
 }
 
 void class_wrap::add_static_overload(const std::string &&functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback) {
 	_executor->type_system.addStaticOverload(_class, _class, functionName, arguments, callback);
-	Nan::SetMethod(_ctor, functionName.c_str(), class_callback_function);
+	Nan::SetMethod(_ctor, functionName.c_str(), class_callback_function,Nan::New(functionName).ToLocalChecked());
 }
 
 void class_wrap::add_property(const std::string &&propertyName, Nan::GetterCallback getter, Nan::SetterCallback setter, v8::Local<v8::Value> data){
@@ -66,9 +66,9 @@ void class_wrap::add_numeric_indexer(Nan::IndexGetterCallback getter, Nan::Index
 }
 
 NAN_PROPERTY_GETTER(class_wrap::named_property_getter_wrapper) {
-	auto real_property = info.This()->GetRealNamedProperty(property);
+	auto real_property = Nan::GetRealNamedProperty(info.This(),property);
 	if (!real_property.IsEmpty()) {
-		info.GetReturnValue().Set(real_property);
+		info.GetReturnValue().Set(real_property.ToLocalChecked());
 		return;
 	}
 

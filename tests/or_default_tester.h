@@ -1525,22 +1525,22 @@ namespace overres_default_parameters_tester {
 
 		//register functions in v8
 		general_callback::overload = overload;
-		Nan::SetMethod(target, "default_testers_number", general_callback::tester_callback);
-		Nan::SetMethod(target, "default_testers_string", general_callback::tester_callback);
-		Nan::SetMethod(target, "default_testers_bool", general_callback::tester_callback);
-		Nan::SetMethod(target, "default_testers_date", general_callback::tester_callback);
-		Nan::SetMethod(target, "default_testers_function", general_callback::tester_callback);
-		Nan::SetMethod(target, "default_testers_buffer", general_callback::tester_callback);
-		Nan::SetMethod(target, "default_testers_map", general_callback::tester_callback);
-		Nan::SetMethod(target, "default_testers_set", general_callback::tester_callback);
-		Nan::SetMethod(target, "default_testers_promise", general_callback::tester_callback);
-		Nan::SetMethod(target, "default_testers_proxy", general_callback::tester_callback);
-		Nan::SetMethod(target, "default_testers_regexp", general_callback::tester_callback);
-		Nan::SetMethod(target, "default_testers_base_class", general_callback::tester_callback);
-		Nan::SetMethod(target, "default_testers_derived_class", general_callback::tester_callback);
-		Nan::SetMethod(target, "default_testers_struct_A", general_callback::tester_callback);
-		Nan::SetMethod(target, "default_testers_struct_B", general_callback::tester_callback);
-		Nan::SetMethod(target, "default_testers_array", general_callback::tester_callback);
+		Nan::SetMethod(target, "default_testers_number", general_callback::tester_callback, Nan::New("default_testers_number").ToLocalChecked());
+		Nan::SetMethod(target, "default_testers_string", general_callback::tester_callback, Nan::New("default_testers_string").ToLocalChecked());
+		Nan::SetMethod(target, "default_testers_bool", general_callback::tester_callback, Nan::New("default_testers_bool").ToLocalChecked());
+		Nan::SetMethod(target, "default_testers_date", general_callback::tester_callback, Nan::New("default_testers_date").ToLocalChecked());
+		Nan::SetMethod(target, "default_testers_function", general_callback::tester_callback, Nan::New("default_testers_function").ToLocalChecked());
+		Nan::SetMethod(target, "default_testers_buffer", general_callback::tester_callback, Nan::New("default_testers_buffer").ToLocalChecked());
+		Nan::SetMethod(target, "default_testers_map", general_callback::tester_callback, Nan::New("default_testers_map").ToLocalChecked());
+		Nan::SetMethod(target, "default_testers_set", general_callback::tester_callback, Nan::New("default_testers_set").ToLocalChecked());
+		Nan::SetMethod(target, "default_testers_promise", general_callback::tester_callback, Nan::New("default_testers_promise").ToLocalChecked());
+		Nan::SetMethod(target, "default_testers_proxy", general_callback::tester_callback, Nan::New("default_testers_proxy").ToLocalChecked());
+		Nan::SetMethod(target, "default_testers_regexp", general_callback::tester_callback, Nan::New("default_testers_regexp").ToLocalChecked());
+		Nan::SetMethod(target, "default_testers_base_class", general_callback::tester_callback, Nan::New("default_testers_base_class").ToLocalChecked());
+		Nan::SetMethod(target, "default_testers_derived_class", general_callback::tester_callback, Nan::New("default_testers_derived_class").ToLocalChecked());
+		Nan::SetMethod(target, "default_testers_struct_A", general_callback::tester_callback, Nan::New("default_testers_struct_A").ToLocalChecked());
+		Nan::SetMethod(target, "default_testers_struct_B", general_callback::tester_callback, Nan::New("default_testers_struct_B").ToLocalChecked());
+		Nan::SetMethod(target, "default_testers_array", general_callback::tester_callback, Nan::New("default_testers_array").ToLocalChecked());
 	}
 
 }

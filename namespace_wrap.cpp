@@ -46,7 +46,7 @@ void namespace_wrap::add_overload(const std::string &&functionName, std::vector<
 	//auto bb = std::bind(&namespace_alias::_ns_callback, this, std::placeholders::_1);
 	_executor->type_system.addOverload(_namespace, "", functionName, arguments, callback);
 
-	Nan::SetMethod(_target, functionName.c_str(), ns_callback_function);
+	Nan::SetMethod(_target, functionName.c_str(), ns_callback_function, Nan::New(functionName.c_str()).ToLocalChecked());
 }
 
 void namespace_wrap::add_enum(const std::string &&enumName, std::vector<std::pair<std::string, double>> values) {

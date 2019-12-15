@@ -246,7 +246,7 @@ void overload_executor::executeBestOverload(const std::string &&ns, const std::v
 			if (i > 0) {
 				arguments += ", ";
 			}
-			arguments += overres::Utf8String(info[i]->ToDetailString());
+			arguments += overres::Utf8String(Nan::ToDetailString(info[i]).ToLocalChecked());
 		}
 		return "executing best overload for " + ns + "::(" + tracer::join(classNames, "/") + ")::" + name + "(" + arguments + ")";
 	});
@@ -352,7 +352,10 @@ Nan::NAN_METHOD_RETURN_TYPE overload_executor::execute(const std::string &&name_
 
 	bool isConstructorCall = info.IsConstructCall();
 
-	std::string functionName = overres::Utf8String(info.Callee()->GetName());
+	std::string functionName = (info.Data()->IsNullOrUndefined()) ? name_space : overres::Utf8String(info.Data());
+	if (isConstructorCall && functionName.empty()) {
+		functionName = overres::Utf8String(info.This()->GetConstructorName());
+	}
 
 	std::string className = "";
 	bool isStatic = false;

@@ -1,5 +1,5 @@
 {
-  "name": "node-overload-resolution",
+  "name": "@drorgl/node-overload-resolution",
   "url": "https://github.com/drorgl/node-overload-resolution",
   "author": "Dror Gluska",
   "license": "MIT",
@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@drorgl/node-addon-tracer": "^1.0.1",
-    "nan": "^2.14.0"
+    "nan": "github:nodejs/nan"
   },
   "devDependencies": {
     "chalk": "^3.0.0",
