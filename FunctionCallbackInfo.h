@@ -48,10 +48,6 @@ namespace overres {
 			return argprefetcher->convert(_params[i]);
 		}
 
-		inline v8::Local<v8::Function> Callee() const {
-			return _info.Callee();
-		}
-
 		template<typename TThis>
 		inline TThis This() const{
 			if (_this != nullptr && _this->value != nullptr) {

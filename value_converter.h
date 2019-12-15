@@ -404,8 +404,8 @@ namespace overres {
 			auto from_map = from.As<v8::Map>()->AsArray();
 			assert((from_map->Length() % 2) == 0 && "v8::Map::AsArray returned length other than % 2");
 			for (auto i = 0; i < from_map->Length(); i += 2) {
-				auto key = key_convert->convert(from_map->Get(i));
-				auto value = value_convert->convert(from_map->Get(i + 1));
+				auto key = key_convert->convert(Nan::Get(from_map,i).ToLocalChecked());
+				auto value = value_convert->convert(Nan::Get(from_map,i + 1).ToLocalChecked());
 
 				(*map_value)[key] = value;
 			}
