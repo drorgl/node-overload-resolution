@@ -33,10 +33,10 @@ static void class_callback_function(const Nan::FunctionCallbackInfo<v8::Value>& 
 	executor->execute(*Nan::Utf8String(ns.ToLocalChecked()), info);
 }
 
-class_wrap::class_wrap(v8::Local<v8::Object> target, overload_executor * executor, const std::string &&class_name):
+class_wrap::class_wrap(v8::Local<v8::Object> target, std::shared_ptr<overload_executor> executor, const std::string &&class_name):
 	_target (target),
-	_class (class_name){
-	_executor = executor;
+	_class (class_name),
+	_executor(executor){
 
 	_ctor = Nan::New<v8::FunctionTemplate>(class_callback_function);
 	_ctor->InstanceTemplate()->SetInternalFieldCount(1);

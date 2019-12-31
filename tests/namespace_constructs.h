@@ -14,7 +14,7 @@ public:
 
 		auto nc = overload->add_namespace("namespace_construct");
 		nc->add_overload("nc_standalone_function_construct", {}, nc_standalone_function_construct_nc);
-		nc->add_overload("standalone_function_construct", {}, standalone_function_construct_nc);
+		nc->add_overload("standalone_function_construct_nc", {}, standalone_function_construct_nc);
 
 	}
 

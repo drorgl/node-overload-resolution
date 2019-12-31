@@ -16,8 +16,9 @@ static void ns_callback_function(const Nan::FunctionCallbackInfo<v8::Value>& inf
 	executor->execute(*Nan::Utf8String(ns.ToLocalChecked()), info);
 }
 
-namespace_wrap::namespace_wrap(v8::Local<v8::Object> target, overload_executor * executor, const std::string &&ns):
-	_namespace(ns){
+namespace_wrap::namespace_wrap(v8::Local<v8::Object> target,std::shared_ptr< overload_executor> executor, const std::string &&ns):
+	_namespace(ns),
+	_executor(executor){
 	if (ns != "") {
 		_target = Nan::New<v8::Object>();
 		Nan::Set(target,Nan::New(ns).ToLocalChecked(), _target);
@@ -26,10 +27,10 @@ namespace_wrap::namespace_wrap(v8::Local<v8::Object> target, overload_executor *
 		_target = target;
 	}
 
-	Nan::SetPrivate(_target, Nan::New("executor").ToLocalChecked(), Nan::New<v8::External>(executor));
+	Nan::SetPrivate(_target, Nan::New("executor").ToLocalChecked(), Nan::New<v8::External>(executor.get()));
 	Nan::SetPrivate(_target, Nan::New("namespace").ToLocalChecked(), Nan::New(_namespace).ToLocalChecked());
 
-	_executor = executor;
+	
 }
 
 std::shared_ptr<namespace_wrap> namespace_wrap::add_namespace(const std::string && namespace_name) {

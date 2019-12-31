@@ -71,7 +71,7 @@ overload_resolution::~overload_resolution() {
 
 
 std::shared_ptr<namespace_wrap> overload_resolution::register_module(v8::Local<v8::Object> target) {
-	return std::make_shared<namespace_wrap>(target, _executor.get(),"");
+	return std::make_shared<namespace_wrap>(target, _executor,"");
 }
 
 

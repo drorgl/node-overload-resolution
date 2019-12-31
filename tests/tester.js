@@ -759,7 +759,7 @@ for (var i = 0; i < 1; i++) {
         t.equals(addon.standalone_function_construct(), "standalone_function_construct", "standalone function construct");
 
         t.equals(addon.namespace_construct.nc_standalone_function_construct(), "nc_standalone_function_construct_nc", "nc standalone function construct 1");
-        t.equals(addon.namespace_construct.standalone_function_construct(), "standalone_function_construct_nc", "nc standalone function construct 2");
+        t.equals(addon.namespace_construct.standalone_function_construct_nc(), "standalone_function_construct_nc", "nc standalone function construct 2");
 
         t.equals(addon.class_constructs.test_static(), "test_static", "test static");
 
