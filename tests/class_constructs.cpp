@@ -1,6 +1,6 @@
 #include "class_constructs.h"
 
-Nan::Persistent<v8::FunctionTemplate> class_constructs::constructor;
+std::shared_ptr<overres::object_type> class_constructs::typeinfo;
 
 void class_constructs::Init(std::shared_ptr<namespace_wrap> overload) {
 	auto class_def = overload->add_class("class_constructs");
@@ -14,7 +14,7 @@ void class_constructs::Init(std::shared_ptr<namespace_wrap> overload) {
 
 	class_def->add_numeric_indexer(test_index_getter, test_index_setter);
 
-	constructor.Reset(class_def->done<class_constructs>());
+	typeinfo = class_def->done<class_constructs>();
 
 	overload->add_enum("test_enum", {
 		{"e1", 1},
@@ -24,7 +24,7 @@ void class_constructs::Init(std::shared_ptr<namespace_wrap> overload) {
 
 
 v8::Local<v8::Function> class_constructs::get_constructor() {
-	return Nan::GetFunction(Nan::New(constructor)).ToLocalChecked();
+	return Nan::GetFunction(Nan::New(typeinfo->function_template)).ToLocalChecked();
 }
 
 POLY_METHOD(class_constructs::New) {

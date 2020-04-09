@@ -60,7 +60,7 @@ namespace overres {
 
 
 		template <typename TObjectWrap>
-		void register_type(v8::Local<v8::FunctionTemplate> functionTemplate, const std::string &ns, const std::string &name) {
+		std::shared_ptr<object_type> register_type(v8::Local<v8::FunctionTemplate> functionTemplate, const std::string &ns, const std::string &name) {
 			static_assert(std::is_base_of< overres::ObjectWrap, TObjectWrap>::value, "TObjectWrap must inherit from ObjectWrap");
 
 			LogDebug([&ns, &name]() { return "registering type " + ns + "::" + name; });
@@ -75,6 +75,8 @@ namespace overres {
 			ot->name = name;
 			ot->value_converter = std::make_shared < overres::value_converter<TObjectWrap*>>();
 			_types[name] = ot;
+
+			return ot;
 		}
 
 		template <typename TDerived>

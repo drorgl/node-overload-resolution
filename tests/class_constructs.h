@@ -9,7 +9,7 @@ class class_constructs : public overres::ObjectWrap {
 public:
 	static void Init(std::shared_ptr<namespace_wrap> overload);
 
-	static Nan::Persistent<v8::FunctionTemplate> constructor;
+	static std::shared_ptr<overres::object_type> typeinfo;
 	virtual v8::Local<v8::Function> get_constructor() override;
 
 	std::string _test_property;

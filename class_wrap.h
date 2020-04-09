@@ -19,7 +19,7 @@ public:
 
 	//when class definitions is done, this must be executed to hook the executor, namespace and register the class in the type system
 	template<typename T>
-	v8::Local<v8::FunctionTemplate> done() {
+	std::shared_ptr<overres::object_type> done() {
 		auto ctor_func = Nan::GetFunction(_ctor).ToLocalChecked();
 
 		Nan::SetPrivate(ctor_func, Nan::New("namespace").ToLocalChecked(), Nan::New(_class).ToLocalChecked());
@@ -27,8 +27,8 @@ public:
 		Nan::SetPrivate(ctor_func, Nan::New("named_property_getter_instance").ToLocalChecked(), Nan::New<v8::External>((void*)_named_property_getter_instance));
 		
 		Nan::Set(_target,Nan::New(_class).ToLocalChecked(), ctor_func);
-		_executor->type_system.register_type<T>(_ctor,_class,_class);
-		return _ctor;
+		return _executor->type_system.register_type<T>(_ctor,_class,_class);
+		//return _ctor;
 	}
 
 	void add_overload_constructor(std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
