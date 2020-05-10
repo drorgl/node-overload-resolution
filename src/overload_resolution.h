@@ -26,6 +26,10 @@
 //#include <vector>
 //#include <functional>
 
+/**
+ * @defgroup overload_resolution Overload Resolution Function Overload Callback Resolution, determines best matches and automagically converts from/to V8 to C++ types
+ */
+
 /** 
  * @addtogroup overload_resolution
  * @{

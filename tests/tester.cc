@@ -21,6 +21,11 @@
 
 #include <tracer.h>
 
+/**
+ * @defgroup tests Tests and Examples on how to use the library and how it works internally
+ */
+
+
 
 NAN_METHOD(testfunction_no_overload_resolution) {
 	info.GetReturnValue().Set(Nan::New<v8::String>("testfunction_no_overload_resolution").ToLocalChecked());

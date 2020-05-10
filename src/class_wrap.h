@@ -26,7 +26,13 @@ private:
 public:
 	class_wrap(v8::Local<v8::Object> target, std::shared_ptr<overload_executor> executor, const std::string &&class_name);
 
-	//when class definitions is done, this must be executed to hook the executor, namespace and register the class in the type system
+	/**
+	 * @brief should be called when class definitions is done
+	 * this function must be executed to hook the executor, namespace and register the class in the type system
+	 * 
+	 * @tparam T 
+	 * @return std::shared_ptr<overres::object_type> 
+	 */
 	template<typename T>
 	std::shared_ptr<overres::object_type> done() {
 		auto ctor_func = Nan::GetFunction(_ctor).ToLocalChecked();

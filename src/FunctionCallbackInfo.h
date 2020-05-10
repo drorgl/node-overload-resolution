@@ -12,12 +12,32 @@
 
 namespace overres {
 
+	/**
+	 * @brief overload resolution polymorphic function callback info and arguments
+	 * similar to Nan::FunctionCallbackInfo but extended to support async functionality by converting all 
+	 * argument parameters to c++ types before transferring the function to libuv for execution
+	 * 
+	 * @tparam T typically v8:Value
+	 */
 	template<typename T>
 	class FunctionCallbackInfo {
 	public:
+		/**
+		 * @brief number of argument parameters passed
+		 * 
+		 * @return int 
+		 */
 		inline int Length() const {
 			return _params.size();
 		}
+
+		/**
+		 * @brief indexed access to the v8 argument parameters
+		 * @note this function does not work in async, use at<T>
+		 * 
+		 * @param i index of the argument parameter
+		 * @return v8::Local<v8::Value> the v8 value
+		 */
 		inline v8::Local<v8::Value> operator[](size_t i) const {
 			if (is_async) {
 				throw std::runtime_error("info[] does not work in async, use at<T> instead");
@@ -31,6 +51,13 @@ namespace overres {
 			}
 		}
 
+		/**
+		 * @brief indexed access to the c++ argument parameter
+		 * 
+		 * @tparam atT convert the argument parameter to C++ of type atT
+		 * @param i index of the argument parameter
+		 * @return atT C++ value
+		 */
 		template<typename atT>
 		inline atT at(size_t i) const {
 			//attempt to get converted value first
@@ -48,6 +75,12 @@ namespace overres {
 			return argprefetcher->convert(_params[i]);
 		}
 
+		/**
+		 * @brief This converted to C++ type
+		 * 
+		 * @tparam TThis type of this
+		 * @return TThis this converted to TThis
+		 */
 		template<typename TThis>
 		inline TThis This() const{
 			if (_this != nullptr && _this->value != nullptr) {
@@ -68,6 +101,12 @@ namespace overres {
 
 		}
 
+		/**
+		 * @brief return this v8 object
+		 * @note this function does not work in async, use This<TThis>() instead
+		 * 
+		 * @return v8::Local<v8::Object> 
+		 */
 		inline v8::Local<v8::Object> This() const {
 			if (is_async) {
 				throw std::runtime_error("This does not work in async, use This<T> instead");
@@ -75,6 +114,7 @@ namespace overres {
 
 			return _info.This();
 		}
+
 		inline v8::Local<v8::Object> Holder() const {
 			return _info.Holder();
 		}
@@ -88,10 +128,22 @@ namespace overres {
 			return _info.GetIsolate();
 		}
 
+		/**
+		 * @brief Set the Return Value for the function called
+		 * @note this function does not work in async, use SetReturnValue<>() instead
+		 * 
+		 * @param returnValue 
+		 */
 		inline void SetReturnValue(v8::Local<v8::Value> returnValue) {
 			_info.GetReturnValue().Set(returnValue);
 		}
 
+		/**
+		 * @brief Set the C++ Return Value for the function called
+		 * 
+		 * @tparam retT C++ type of value 
+		 * @param returnValue the value
+		 */
 		template<typename retT>
 		inline void SetReturnValue(retT returnValue) const {
 			_return = std::make_shared<generic_value_holder>(std::make_shared < overres::value_converter<retT>>(), std::make_shared < overres::value_holder<retT>>(returnValue));
@@ -119,7 +171,10 @@ namespace overres {
 
 
 
-		//stores a local cache of c++ objects from passed v8 arguments
+		/**
+		 * @brief stores a local cache of c++ objects from passed v8 arguments
+		 * 
+		 */
 		void prefetch() {
 			//Store This
 			if (_this != nullptr && _this->prefetcher != nullptr) {
@@ -170,26 +225,44 @@ namespace overres {
 		}
 
 
-		//indicator if call is being executed in async
+		/**
+		 * @brief indicator if call is being executed in async
+		 * 
+		 */
 		const bool is_async;
 
 	protected:
 
 		Nan::NAN_METHOD_ARGS_TYPE _info;
 
-		//v8 values passed to the function
+		/**
+		 * @brief v8 values passed to the function
+		 * 
+		 */
 		std::vector<v8::Local<v8::Value>> &_params;
 
-		//argument info
+		/**
+		 * @brief argument info
+		 * 
+		 */
 		std::vector<std::shared_ptr<overload_info>> &_arguments;
 
-		//parsed values, cached before using async methods
+		/**
+		 * @brief parsed values, cached before using async methods
+		 * 
+		 */
 		std::vector<std::shared_ptr< overres::value_holder_base>> _values;
 
-		//return values, should be converted back to v8 objects when function returns
+		/**
+		 * @brief return values, should be converted back to v8 objects when function returns
+		 * 
+		 */
 		mutable std::shared_ptr<generic_value_holder> _return;
 
-		//"This" holder
+		/**
+		 * @brief "This" holder
+		 * 
+		 */
 		std::shared_ptr<generic_value_holder> _this;
 	};
 

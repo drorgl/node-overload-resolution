@@ -45,28 +45,55 @@ namespace overres {
 #endif
 	}*/
 
-	//default value
-
+	/**
+	 * @brief default value converter
+	 * does not implement conversion but rather throws an error when its being called which means the specific type T is not implemented
+	 * 
+	 * @tparam T 
+	 * @tparam void 
+	 */
 	template<typename T, class = void>
 	class value_converter : public value_converter_base {
 	public:
-
+		/**
+		 * @brief converts a value from v8 value to T
+		 * 
+		 * @param from the v8 value
+		 * @return T the C++ value
+		 */
 		virtual T convert(v8::Local<v8::Value> from) {
 //#pragma message "not implemented, need template specialization "
 			throw std::runtime_error(("not implemented, need template specialization for "s + GetTypeName<T>()).c_str());
 		}
 
-
+		/**
+		 * @brief converts a value from T to v8 value
+		 * 
+		 * @param from the C++ value
+		 * @return v8::Local<v8::Value> the v8 value
+		 */
 		virtual v8::Local<v8::Value> convert(T from) {
 //#pragma message "not implemented, need template specialization "
 			throw std::runtime_error(("not implemented, need template specialization for "s + GetTypeName<T>()).c_str());
 		}
 
+		/**
+		 * @brief converts a value from value holder to v8 value
+		 * 
+		 * @param from the value holder value
+		 * @return v8::Local<v8::Value> the v8 value
+		 */
 		virtual v8::Local<v8::Value> convert(std::shared_ptr<value_holder_base> from)override {
 			auto from_value = std::dynamic_pointer_cast<value_holder<T>>(from);
 			return Nan::New(from_value->Value);
 		}
 
+		/**
+		 * @brief converts a value from v8 to value holder of T
+		 * 
+		 * @param val the v8 value
+		 * @return std::shared_ptr<value_holder_base> the value holder instance
+		 */
 		virtual std::shared_ptr<value_holder_base> read(v8::Local<v8::Value> val)override {
 			auto parsed_value = std::make_shared<value_holder<T>>();
 			parsed_value->Value = convert(val);
@@ -75,9 +102,11 @@ namespace overres {
 
 	};
 
-	//Callback
-
-
+	/**
+	 * @brief Callback value converter
+	 * 
+	 * @tparam T 
+	 */
 	template<typename T>
 	class value_converter<std::shared_ptr<T>, typename std::enable_if<std::is_base_of<Callback, T>::value>::type> : public value_converter_base {
 	public:
@@ -93,6 +122,11 @@ namespace overres {
 			return std::make_shared<T>(from.As<v8::Function>());
 		}
 
+		/**
+		 * @brief empty v8 function callback
+		 * 
+		 * @param info 
+		 */
 		static void EmptyFunctionCallback(const Nan::FunctionCallbackInfo<v8::Value>& info) {}
 
 		virtual v8::Local<v8::Value> convert(std::shared_ptr<T> from) {
@@ -115,9 +149,11 @@ namespace overres {
 
 	};
 
-	//async callback
-
-
+	/**
+	 * @brief Async function callback converter
+	 * 
+	 * @tparam T 
+	 */
 	template<typename T>
 	class value_converter<std::shared_ptr<T>, typename std::enable_if<std::is_base_of<AsyncCallback, T>::value>::type> : public value_converter_base {
 	public:
@@ -156,8 +192,11 @@ namespace overres {
 	};
 
 
-	//ObjectWrap
-
+	/**
+	 * @brief ObjectWrap pointer converter
+	 * 
+	 * @tparam T 
+	 */
 	template<typename T>
 	class value_converter<T*, typename std::enable_if<std::is_base_of<ObjectWrap, T>::value>::type> : public value_converter_base {
 	public:
@@ -190,6 +229,11 @@ namespace overres {
 
 	};
 
+	/**
+	 * @brief ObjectWrap shared_ptr converter
+	 * 
+	 * @tparam T 
+	 */
 	template<typename T>
 	class value_converter<std::shared_ptr<T>, typename std::enable_if<std::is_base_of<ObjectWrap, T>::value>::type> : public value_converter_base {
 	public:
@@ -216,8 +260,11 @@ namespace overres {
 
 	};
 
-	//IStructuredObject
-
+	/**
+	 * @brief IStructuredObject converter
+	 * 
+	 * @tparam T 
+	 */
 	template<typename T>
 	class value_converter<std::shared_ptr<T>,typename std::enable_if<std::is_base_of<IStructuredObject,T>::value>::type> : public value_converter_base {
 	public:
@@ -253,8 +300,11 @@ namespace overres {
 
 	};
 
-	//vector/array
-
+	/**
+	 * @brief Vector/Array converter
+	 * 
+	 * @tparam T 
+	 */
 	template<typename T>
 	class value_converter<std::shared_ptr<std::vector<T>>> : public value_converter_base {
 	public:
@@ -332,7 +382,10 @@ namespace overres {
 
 
 
-	//map <K, V>
+	/**
+	 * @brief Map<string,T> Converter
+	 * 
+	 */
 #if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
 	template<typename T>
 	class value_converter<std::shared_ptr<std::map<std::string, T>>> : public value_converter_base {
@@ -385,8 +438,13 @@ namespace overres {
 	};
 #endif
 
-	//map <K, V>
 #if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
+	/**
+	 * @brief Map Converter
+	 * 
+	 * @tparam K 
+	 * @tparam T 
+	 */
 	template<typename K, typename T>
 	class value_converter<std::shared_ptr<std::map<K, T>>> : public value_converter_base {
 	public:
@@ -441,8 +499,12 @@ namespace overres {
 	};
 #endif
 
-	//set <T>
 #if NODE_MODULE_VERSION >= NODE_4_0_MODULE_VERSION
+	/**
+	 * @brief Set Converter
+	 * 
+	 * @tparam T 
+	 */
 	template<typename T>
 	class value_converter<std::shared_ptr<std::set<T>>> : public value_converter_base {
 	public:
@@ -493,8 +555,12 @@ namespace overres {
 	};
 #endif
 
-	//string
 
+	/**
+	 * @brief String Converter
+	 * 
+	 * @tparam  std::string
+	 */
 	template<>
 	class value_converter<std::string> : public value_converter_base {
 	public:
@@ -524,8 +590,11 @@ namespace overres {
 
 	};
 
-	//int/Number
-
+	/**
+	 * @brief number/int converter
+	 * 
+	 * @tparam  int
+	 */
 	template<>
 	class value_converter<int> : public value_converter_base {
 	public:
@@ -557,6 +626,11 @@ namespace overres {
 
 	};
 
+	/**
+	 * @brief number/unsigned int converter
+	 * 
+	 * @tparam  unsigned int
+	 */
 	template<>
 	class value_converter<unsigned int> : public value_converter_base {
 	public:
@@ -589,6 +663,11 @@ namespace overres {
 	};
 
 
+	/**
+	 * @brief number/uint64_t converter
+	 * 
+	 * @tparam  uint64_t
+	 */
 	template<>
 	class value_converter<uint64_t> : public value_converter_base {
 	public:
@@ -621,6 +700,11 @@ namespace overres {
 
 	};
 
+	/**
+	 * @brief number/int64_t converter
+	 * 
+	 * @tparam  int64_t
+	 */
 	template<>
 	class value_converter<int64_t> : public value_converter_base {
 	public:
@@ -654,9 +738,11 @@ namespace overres {
 	};
 
 
-	//ushort
-	
-
+	/**
+	 * @brief number/ushort converter
+	 * 
+	 * @tparam  ushort
+	 */
 	template<>
 	class value_converter<ushort> : public value_converter_base {
 	public:
@@ -688,8 +774,11 @@ namespace overres {
 
 	};
 
-	//short
-
+	/**
+	 * @brief number/short converter
+	 * 
+	 * @tparam  short
+	 */
 	template<>
 	class value_converter<short> : public value_converter_base {
 	public:
@@ -722,8 +811,11 @@ namespace overres {
 	};
 
 
-	//float
-
+	/**
+	 * @brief number/float converter
+	 * 
+	 * @tparam  float
+	 */
 	template<>
 	class value_converter<float> : public value_converter_base {
 	public:
@@ -755,6 +847,11 @@ namespace overres {
 
 	};
 
+	/**
+	 * @brief number/double converter
+	 * 
+	 * @tparam  double
+	 */
 	template<>
 	class value_converter<double> : public value_converter_base {
 	public:
@@ -786,8 +883,11 @@ namespace overres {
 
 	};
 
-	//uint8_t / number
-
+	/**
+	 * @brief number/uint8_t converter
+	 * 
+	 * @tparam  uint8_t
+	 */
 	template<>
 	class value_converter<uint8_t> : public value_converter_base {
 	public:
@@ -818,8 +918,11 @@ namespace overres {
 
 	};
 
-	//bool
-
+	/**
+	 * @brief bool converter
+	 * 
+	 * @tparam  bool
+	 */
 	template<>
 	class value_converter<bool> : public value_converter_base {
 	public:
@@ -849,7 +952,11 @@ namespace overres {
 
 	};
 
-
+	/**
+	 * @brief Date/DateTime converter
+	 * 
+	 * @tparam  DateTime
+	 */
 	template<>
 	class value_converter<DateTime> : public value_converter_base {
 	public:
