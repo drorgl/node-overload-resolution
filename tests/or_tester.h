@@ -2,7 +2,15 @@
 #define _O_R_TESTER_H_
 #include "../overload_resolution.h"
 
+/** 
+ * @addtogroup tests
+ * @{
+ */
 
+/**
+ * @brief example code for testing basic 1 parameter type resolution
+ * 
+ */
 namespace overres_tester {
 
 	namespace general_callback {
@@ -140,4 +148,5 @@ namespace overres_tester {
 
 }
 
+/** @}*/
 #endif

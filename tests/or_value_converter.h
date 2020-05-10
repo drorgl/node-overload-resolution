@@ -8,7 +8,15 @@
 
 #include "threaded_tester.h"
 
+/** 
+ * @addtogroup tests
+ * @{
+ */
 
+/**
+ * @brief example code for testing value conversion from V8 to C++
+ * 
+ */
 namespace overres_value_converter {
 	ThreadedTester _threaded_tester;
 
@@ -217,5 +225,5 @@ namespace overres_value_converter {
 	}
 
 }
-
+/** @}*/
 #endif

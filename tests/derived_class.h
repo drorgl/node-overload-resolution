@@ -7,6 +7,15 @@
 #include "base_class.h"
 
 
+/** 
+ * @addtogroup tests
+ * @{
+ */
+
+/**
+ * @brief example class for testing correct behavior on derived classes from base classes
+ * 
+ */
 class derived_class : public base_class {
 private:
 
@@ -49,5 +58,5 @@ public:
 
 };
 
-
+/** @}*/
 #endif

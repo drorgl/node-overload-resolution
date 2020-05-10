@@ -7,7 +7,7 @@
 
 namespace overres {
 
-
+	
 	class value_holder_base {
 	public:
 		value_holder_base() {}

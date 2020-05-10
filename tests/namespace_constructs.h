@@ -5,8 +5,15 @@
 #include <string>
 #include "../overload_resolution.h"
 
+/** 
+ * @addtogroup tests
+ * @{
+ */
 
-
+/**
+ * @brief example class for testin correct behavior on namespace wrapping
+ * 
+ */
 class namespace_constructs {
 public:
 	static void Init(std::shared_ptr<namespace_wrap> overload) {
@@ -32,5 +39,5 @@ public:
 	}
 
 };
-
+/** @}*/
 #endif

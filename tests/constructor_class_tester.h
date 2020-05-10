@@ -5,8 +5,15 @@
 #include <string>
 #include "../overload_resolution.h"
 
+/** 
+ * @addtogroup tests
+ * @{
+ */
 
-
+/**
+ * @brief example class for testing correct behavior on class constructor and static functions
+ * 
+ */
 class constructor_class_tester : public overres::ObjectWrap {
 private:
 	std::string _constructor_type;
@@ -87,5 +94,5 @@ public:
 
 };
 
-
+/** @}*/
 #endif

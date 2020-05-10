@@ -2,6 +2,15 @@
 #define _O_R_ARRAY_TESTER_H_
 #include "../overload_resolution.h"
 
+/** 
+ * @addtogroup tests
+ * @{
+ */
+
+/**
+ * @brief example code for testing correct behavior on array types resolution
+ * 
+ */
 namespace overres_array_tester {
 
 	namespace general_callback {
@@ -182,5 +191,5 @@ POLY_METHOD(array_fallback_testers_array) {
 	}
 
 }
-
+/** @}*/
 #endif

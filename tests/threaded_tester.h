@@ -9,6 +9,15 @@
 
 #include <uv.h>
 
+/** 
+ * @addtogroup tests
+ * @{
+ */
+
+/**
+ * @brief example code for testing threaded handling of return values and async callbacks
+ * 
+ */
 class ThreadedTester {
 private:
 	struct cb_data {
@@ -69,5 +78,5 @@ public:
 		_callbacks.push_back(std::make_shared<cb_data>( times, callback ));
 	}
 };
-
+/** @}*/
 #endif

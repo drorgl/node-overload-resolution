@@ -8,10 +8,13 @@
   "scripts": {
     "configure": "npx node-gyp configure && npx node-gyp build",
     "install": "echo call configure to build",
-    "test": "node --expose-gc tests/tester.js"
+    "test": "node --expose-gc tests/tester.js",
+    "dox": "doxygen",
+    "generate-docs": "doxygen --docs --configPath=doxygen.doxcfg"
   },
   "dependencies": {
     "@drorgl/node-addon-tracer": "^1.0.2",
+    "doxygen": "^0.3.2",
     "nan": "github:nodejs/nan"
   },
   "devDependencies": {

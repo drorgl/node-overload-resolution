@@ -16,8 +16,15 @@
 
 #include "../type_system.h"
 
+/** 
+ * @addtogroup tests
+ * @{
+ */
 
-
+/**
+ * @brief example struct for struct resolution tests
+ * 
+ */
 class struct_B : public IStructuredObject {
 private:
 	static std::vector<std::shared_ptr<overload_info>> _definition;
@@ -35,5 +42,5 @@ public:
 	 static v8::Local<v8::Object> New(std::string &&prop1, int prop2);
 };
 
-
+/** @}*/
 #endif

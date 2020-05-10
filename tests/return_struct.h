@@ -18,8 +18,16 @@
 
 #include "../type_system.h"
 
+/** 
+ * @addtogroup tests
+ * @{
+ */
 
-
+/**
+ * @brief example struct for returning structs
+ * 
+ * @tparam T 
+ */
 template <typename T>
 class return_struct : public IStructuredObject {
 private:
@@ -67,5 +75,5 @@ public:
 
 };
 
-
+/** @}*/
 #endif

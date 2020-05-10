@@ -42,6 +42,12 @@ namespace overres {
 	}
 }
 
+/**
+ * @brief Get the Type Name for T
+ * 
+ * @tparam T C++ type to find its name
+ * @return const std::string 
+ */
 template <typename T>
 const std::string GetTypeName(void)
 {

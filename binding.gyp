@@ -17,60 +17,60 @@
 			],
 		},
 		"sources":[			
-			  "overload_resolution.h"
-			, "overload_resolution.cpp"
+			  "src/overload_resolution.h"
+			, "src/overload_resolution.cpp"
 			
-			, "overload_executor.cpp"
-			, "overload_executor.h"
+			, "src/overload_executor.cpp"
+			, "src/overload_executor.h"
 						
-			, "class_wrap.cpp"
-			, "class_wrap.h"
+			, "src/class_wrap.cpp"
+			, "src/class_wrap.h"
 			
-			, "namespace_wrap.cpp"
-			, "namespace_wrap.h"
+			, "src/namespace_wrap.cpp"
+			, "src/namespace_wrap.h"
 						
-			, "function_arguments.h"
-			, "function_arguments.cpp"
+			, "src/function_arguments.h"
+			, "src/function_arguments.cpp"
 			
-			, "function_rank_cache.h"
-			, "function_rank_cache.cpp"
+			, "src/function_rank_cache.h"
+			, "src/function_rank_cache.cpp"
 			
-			, "type_system.h"
-			, "type_system.cpp"
+			, "src/type_system.h"
+			, "src/type_system.cpp"
 			
-			, "overload_resolution_types.h"
+			, "src/overload_resolution_types.h"
 			
-			, "object_type.h"
-			, "overload_info.h"
-			, "overload_info.cpp"
+			, "src/object_type.h"
+			, "src/overload_info.h"
+			, "src/overload_info.cpp"
 			
 			
-			, "IStructuredObject.h"
+			, "src/IStructuredObject.h"
 			
-			, "FunctionCallbackInfo.h"
+			, "src/FunctionCallbackInfo.h"
 			
-			, "ObjectWrap.cpp"
-			, "ObjectWrap.h"
+			, "src/ObjectWrap.cpp"
+			, "src/ObjectWrap.h"
 			
-			, "AsyncCallback.h"
-			, "Callback.h"
+			, "src/AsyncCallback.h"
+			, "src/Callback.h"
 			
-			, "DateTime.h"
+			, "src/DateTime.h"
 			
-			, "value_converter_base.h"
-			, "value_converter.h"
-			, "value_holder.h"
+			, "src/value_converter_base.h"
+			, "src/value_converter.h"
+			, "src/value_holder.h"
 			
-			, "generic_value_holder.h"
+			, "src/generic_value_holder.h"
 			
-			, "factory.h"
+			, "src/factory.h"
 			
-			, "class_typename.h"
+			, "src/class_typename.h"
 			
-			, "async_worker.h"
-			, "utilities/threadsafe_queue.h"
-			, "utilities/uvasync.cpp"
-			, "utilities/uvasync.h"
+			, "src/async_worker.h"
+			, "src/utilities/threadsafe_queue.h"
+			, "src/utilities/uvasync.cpp"
+			, "src/utilities/uvasync.h"
 			
 			, "README.md"
 			, "package.json"

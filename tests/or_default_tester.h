@@ -8,6 +8,15 @@
 #include "struct_A.h"
 #include "struct_B.h"
 
+/** 
+ * @addtogroup tests
+ * @{
+ */
+
+/**
+ * @brief example code for testing correct behavior of default values for function parameters
+ * 
+ */
 namespace overres_default_parameters_tester {
 
 	namespace general_callback {
@@ -1545,5 +1554,5 @@ namespace overres_default_parameters_tester {
 	}
 
 }
-
+/** @}*/
 #endif

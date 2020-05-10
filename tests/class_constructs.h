@@ -5,6 +5,16 @@
 #include <string>
 #include "../overload_resolution.h"
 
+/** 
+ * @addtogroup tests
+ * @{
+ */
+
+
+/**
+ * @brief example class for testing correct behavior of namespace and class wrapping
+ * 
+ */
 class class_constructs : public overres::ObjectWrap {
 public:
 	static void Init(std::shared_ptr<namespace_wrap> overload);
@@ -34,5 +44,6 @@ public:
 	static NAN_INDEX_SETTER(test_index_setter);
 
 };
+/** @}*/
 
 #endif

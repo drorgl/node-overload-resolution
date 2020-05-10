@@ -16,10 +16,17 @@
 
 #include "../type_system.h"
 
+/** 
+ * @addtogroup tests
+ * @{
+ */
 
 
 
-
+/**
+ * @brief example struct for struct resolution tests
+ * 
+ */
 class struct_A : public IStructuredObject {
 private:
 	static std::vector<std::shared_ptr<overload_info>> _definition;
@@ -39,5 +46,5 @@ public:
 	 virtual ~struct_A() {}
 };
 
-
+/** @}*/
 #endif

@@ -6,6 +6,10 @@
 #include "generic_value_holder.h"
 
 namespace overres {
+	/**
+	 * @brief callback holds a javascript function and the parameters to call it with
+	 * 
+	 */
 	class Callback {
 
 	public:
@@ -59,7 +63,11 @@ namespace overres {
 			_calls->push_back(args);
 		}
 
-
+		/**
+		 * @brief post process is called when the time comes for executing the callback
+		 * 
+		 * @return v8::Local<v8::Value> return value from the javascript function
+		 */
 		v8::Local<v8::Value> post_process() {
 			v8::Local<v8::Value> return_value;
 			if (_calls != nullptr) {

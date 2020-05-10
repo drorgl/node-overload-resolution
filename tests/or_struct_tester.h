@@ -2,6 +2,15 @@
 #define _O_R_STRUCT_TESTER_H_
 #include "../overload_resolution.h"
 
+/** 
+ * @addtogroup tests
+ * @{
+ */
+
+/**
+ * @brief example code for testing structs as function parameters
+ * 
+ */
 namespace overres_struct_tester {
 
 	namespace general_callback {
@@ -55,5 +64,5 @@ namespace overres_struct_tester {
 	}
 
 }
-
+/** @}*/
 #endif

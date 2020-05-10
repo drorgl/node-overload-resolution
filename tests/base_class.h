@@ -6,9 +6,16 @@
 #include "../overload_resolution.h"
 
 
+/** 
+ * @addtogroup tests
+ * @{
+ */
 
 
-
+	/**
+	 * @brief example class for testing correct behavior on class inheritance
+	 * 
+	 */
 	class base_class : public overres::ObjectWrap {
 	private:
 
@@ -46,4 +53,5 @@
 		static POLY_METHOD(base_function_array);
 	};
 
+/** @}*/
 #endif
