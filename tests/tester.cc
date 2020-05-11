@@ -22,7 +22,7 @@
 #include <tracer.h>
 
 /**
- * @defgroup tests Tests and Examples on how to use the library and how it works internally
+ * @defgroup tests Tests and Examples
  */
 
 

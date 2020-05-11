@@ -1,0 +1,182 @@
+.sm-dox {
+    background-image: none;
+    background-color: #2980B9;
+    color: white;
+}
+
+.sm-dox a, .sm-dox a:focus, .sm-dox a:hover, .sm-dox a:active {
+    /* padding: 0 12px; */
+    /* padding-right: 43px; */
+    /* font-family: "Lucida Grande","Geneva","Helvetica",Arial,sans-serif; */
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 36px;
+    text-decoration: none;
+    text-shadow: none;
+    color: white;
+    outline: 0;
+}
+
+.sm-dox a:hover{
+    background-image: url(tab_s.png);
+    background-repeat: no-repeat;
+    /* padding-right: 0; */
+}
+
+.sm-dox ul a:hover {
+    background-image: none;
+    /* background-repeat: repeat-x; */
+    color: white;
+    text-shadow: none;
+    background-color: #4b4b4b;
+}
+
+#MSearchField {
+    display: block;
+    position: absolute;
+    height: 19px;
+    background: none;
+    background-color: white;
+    border: none;
+    width: 115px;
+    margin-left: 20px;
+    padding-left: 4px;
+    color: #909090;
+    outline: none;
+    font: 9pt Arial, Verdana, sans-serif;
+    -webkit-border-radius: 0px;
+}
+
+#MSearchBox .left {
+    display: block;
+    position: absolute;
+    left: 10px;
+    width: 20px;
+    height: 19px;
+    background: none;
+    background-color: white;
+    background-position: right;
+}
+
+#MSearchBox .right {
+    display: block;
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    width: 20px;
+    height: 19px;
+    background: none;
+    background-color:white;
+    background-position: left;
+}
+
+#nav-tree .selected {
+    background-image: none;
+    background-color: gray;
+    color: #fff;
+    text-shadow: 0px 1px 1px rgba(0, 0, 0, 1.0);
+}
+
+.memtitle {
+    padding: 8px;
+    border-top: 1px solid #A8B8D9;
+    border-left: 1px solid #A8B8D9;
+    border-right: 1px solid #A8B8D9;
+    border-top-right-radius: 2px;
+    border-top-left-radius: 2px;
+    margin-bottom: -1px;
+    background-image: none;
+
+    /* background-image: url(nav_f.png);
+    background-repeat: repeat-x;
+    background-repeat-x: repeat;
+    background-repeat-y: no-repeat; */
+    background-color: #f1f4fa;
+    line-height: 1.25;
+    font-weight: 300;
+    float: left;
+}
+
+.memproto, dl.reflist dt {
+    border-top: 1px solid #A8B8D9;
+    border-left: 1px solid #A8B8D9;
+    border-right: 1px solid #A8B8D9;
+    padding: 6px 0px 6px 0px;
+    color: #253555;
+    font-weight: bold;
+    text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.9);
+    background-color: #f1f4fa;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.15);
+    border-top-right-radius: 4px;
+    -moz-box-shadow: rgba(0, 0, 0, 0.15) 5px 5px 5px;
+    -moz-border-radius-topright: 4px;
+    -webkit-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.15);
+    -webkit-border-top-right-radius: 4px;
+}
+
+.ui-resizable-e {
+    background-image: none;
+    background-color: #4b4b4b;
+    cursor: ew-resize;
+    height: 100%;
+    right: 0;
+    top: 0;
+    width: 6px;
+}
+
+#nav-tree .selected {
+    /* background-image: none;
+    background-color: gray;
+    color: #fff; */
+    text-shadow: none;
+}
+
+code{
+    font-family: Consolas,"Andale Mono WT","Andale Mono","Lucida Console","Lucida Sans Typewriter","DejaVu Sans Mono","Bitstream Vera Sans Mono","Liberation Mono","Nimbus Mono L",Monaco,"Courier New",Courier,monospace;
+}
+
+#MSearchResultsWindow {
+    background-color: white;
+}
+/* 
+.SRSymbol{
+    font-family: Consolas,"Andale Mono WT","Andale Mono","Lucida Console","Lucida Sans Typewriter","DejaVu Sans Mono","Bitstream Vera Sans Mono","Liberation Mono","Nimbus Mono L",Monaco,"Courier New",Courier,monospace;
+}
+.SRScope {
+    font-family: Consolas,"Andale Mono WT","Andale Mono","Lucida Console","Lucida Sans Typewriter","DejaVu Sans Mono","Bitstream Vera Sans Mono","Liberation Mono","Nimbus Mono L",Monaco,"Courier New",Courier,monospace;
+} */
+.sm-dox ul {
+    -moz-border-radius: 2px!important;
+    -webkit-border-radius: 2px;
+    border-radius: 2px!important;
+}
+
+.memSeparator {
+    border-bottom: 1px solid #8cc6ff;
+}
+
+a {
+    color: #0000a6;
+}
+
+.contents a:visited {
+    color: #0000a6;
+}
+
+.paramname {
+    color: #00a653;
+}
+
+
+.memdoc, dl.reflist dd {
+    -moz-border-radius-bottomleft: 2px;
+    -moz-border-radius-bottomright: 2px;
+    -webkit-border-bottom-left-radius: 2px;
+    -webkit-border-bottom-right-radius: 2px;
+}
+
+.memproto, dl.reflist dt {
+    border-top-right-radius: 2px;
+    -moz-border-radius-topright: 2px;
+    -webkit-border-top-right-radius: 2px;
+}

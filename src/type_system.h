@@ -83,7 +83,15 @@ namespace overres {
 		~type_system();
 
 
-
+		/**
+		 * @brief Register Class Type
+		 * 
+		 * @tparam TObjectWrap derived class from ObjectWrap
+	     * @param functionTemplate the function template for the class
+	     * @param ns the namespace
+	 	 * @param name the name of the class
+		 * @return std::shared_ptr<object_type> registered class type
+		 */
 		template <typename TObjectWrap>
 		std::shared_ptr<object_type> register_type(v8::Local<v8::FunctionTemplate> functionTemplate, const std::string &ns, const std::string &name) {
 			static_assert(std::is_base_of< overres::ObjectWrap, TObjectWrap>::value, "TObjectWrap must inherit from ObjectWrap");
@@ -104,6 +112,13 @@ namespace overres {
 			return ot;
 		}
 
+		/**
+		 * @brief register struct
+		 * 
+		 * @tparam TDerived derived struct from IStructuredObject
+		 * @param ns the namespace
+		 * @param name the struct name
+		 */
 		template <typename TDerived>
 		void register_type(const std::string &&ns, const std::string &&name) {
 			LogDebug([&ns, &name]() {return "registering type " + ns + "::" + name; });
@@ -211,34 +226,99 @@ namespace overres {
 		/**
 		 * @brief verifies an object/map structure against a list of properties
 		 * 
-		 * @param props 
-		 * @param val 
-		 * @return true 
-		 * @return false 
+		 * @param props list of properties that should be on the object
+		 * @param val the v8 object
+		 * @return true if the v8 object can be mapped to the properties
+		 * @return false if the v8 object cannot be mapped to the properties
 		 */
 		bool verifyObject(std::vector<std::shared_ptr<overload_info>> props, v8::Local<v8::Value> val);
 
-		//gets a value from an object/map
+		/**
+		 * @brief gets a value from an object/map
+		 * 
+		 * @param obj v8 object
+		 * @param key named property
+		 * @return Nan::MaybeLocal<v8::Value> v8 value
+		 */
 		static Nan::MaybeLocal<v8::Value> GetFromObject(v8::Local<v8::Value> obj, const std::string &key);
 
+		/**
+		 * @brief Add function overload
+		 * 
+		 * @param ns namespace
+		 * @param className class name
+		 * @param functionName function name
+		 * @param func function overload information
+		 */
 		void add_overload(const std::string &ns, const std::string &className, const std::string &functionName, std::shared_ptr<o_r_function> func);
 
+		/**
+		 * @brief Validate type registrations
+		 * 
+		 * @return true if the type registry is valid
+		 * @return false if the type registry is invalid, i.e. missing types
+		 */
 		bool validate_type_registrations();
 
+		/**
+		 * @brief Make sure the namespace, class name and function name collections are instantiated
+		 * 
+		 * @param ns namespace
+		 * @param className class name
+		 * @param functionName function name
+		 */
 		void create_function_store(const std::string &ns, const std::string &className, const std::string &functionName);
 
-
+		/**
+		 * @brief Get classes matching the namespace and class names provided
+		 * 
+		 * @param ns namespace
+		 * @param classNames class names to look for
+		 * @param classes empty vector to put the matching classes in
+		 */
 		void get_classes(const std::string &ns, const std::vector<std::string> &classNames, std::vector < std::shared_ptr< o_r_class>> &classes);
+
+		/**
+		 * @brief Get functions matching the namespace, class names and function name provided
+		 * 
+		 * @param ns namespace
+		 * @param classNames class names to look inside
+		 * @param functionName function name to look for
+		 * @param implementations empty vector to put the matching functions in
+		 */
 		void get_functions(const std::string &ns, const std::vector<std::string> &classNames, const std::string &functionName, std::vector<std::shared_ptr< o_r_function>> &implementations);
 
 
-		//adds an overload function
+		/**
+		 * @brief adds an overload function
+		 * 
+		 * @param ns namespace
+		 * @param className class name
+		 * @param functionName function name
+		 * @param arguments function argument types
+		 * @param callback POLY_METHOD callback
+		 */
 		void addOverload(const std::string &ns, const std::string &className, const std::string &functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
 
-		//adds an overload for a static function
+		/**
+		 * @brief adds an overload for a static function
+		 * 
+		 * @param ns namespace
+		 * @param className class name
+		 * @param functionName function name
+		 * @param arguments function argument types
+		 * @param callback POLY_METHOD callback
+		 */
 		void addStaticOverload(const std::string &ns, const std::string &className, const std::string &functionName, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
 
-		//adds an overload constructor
+		/**
+		 * @brief adds an overload constructor
+		 * 
+		 * @param ns namespace
+		 * @param className class name
+		 * @param arguments constructor argument types
+		 * @param callback POLY_METHOD callback
+		 */
 		void addOverloadConstructor(const std::string &ns, const std::string &className, std::vector<std::shared_ptr<overload_info>> arguments, PolyFunctionCallback callback);
 	};
 

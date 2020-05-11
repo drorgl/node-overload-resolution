@@ -57,6 +57,15 @@ public:
 
 	void clear();
 
+	/**
+	 * @brief Executes the best overload for provided namespace, class name, function name and arguments
+	 * @note uses the argument types to determine what is the best match
+	 * 
+	 * @param ns namespace
+	 * @param className class name
+	 * @param name function name
+	 * @param info function arguments
+	 */
 	void executeBestOverload(const std::string &&ns, const std::vector<std::string> && className, const std::string &&name, Nan::NAN_METHOD_ARGS_TYPE info);
 
 

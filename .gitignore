@@ -5,4 +5,5 @@ node-addon-tracer
 /-cppcheck-build-dir
 /.vscode
 /.cppcheck
-/docs
+/docs/html
+

@@ -9,16 +9,27 @@ namespace overres {
 	/**
 	 * @brief callback holds a javascript function and the parameters to call it with
 	 * 
+	 * @note see AsyncCallback as well
+	 * 
 	 */
 	class Callback {
 
 	public:
+		/**
+		 * @brief Construct a new Callback instance with NOP function
+		 * 
+		 */
 		Callback():
 			_callback(std::make_shared<Nan::Callback>()),
 			is_async(false) {
 			
 		}
 
+		/**
+		 * @brief Construct a new Callback instance with v8 function
+		 * 
+		 * @param fn 
+		 */
 		explicit Callback(const v8::Local<v8::Function> &fn):
 			_callback(std::make_shared<Nan::Callback>(fn)),
 			is_async(false) {
@@ -28,10 +39,22 @@ namespace overres {
 		virtual ~Callback() {
 		}
 
+		/**
+		 * @brief Get the v8 Function 
+		 * 
+		 * @return v8::Local<v8::Function> 
+		 */
 		v8::Local<v8::Function> GetFunction() const {
 			return _callback->GetFunction();
 		}
 
+		/**
+		 * @brief Call v8 function style
+		 * 
+		 * @param argc number of arguments
+		 * @param argv array of values
+		 * @return v8::Local<v8::Value> 
+		 */
 		v8::Local<v8::Value> Call(int argc, v8::Local<v8::Value> argv[]) {
 			Nan::TryCatch tc;
 			auto returnValue = _callback->Call(argc, argv);
@@ -41,6 +64,11 @@ namespace overres {
 			return returnValue;
 		}
 
+		/**
+		 * @brief Call C++ function style
+		 * 
+		 * @param args array of arguments
+		 */
 		void Call(std::vector<std::shared_ptr<generic_value_holder>> args) {
 			if (!is_async) {
 				std::vector<v8::Local<v8::Value>> params;
