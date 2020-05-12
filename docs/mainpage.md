@@ -128,3 +128,8 @@ If there will be future development, it should do the following:
 - add logging and instrumentation
 - add proper v8 exceptions with more information about the failure
 - add tests for function overload detection of convertible types (base/derived)
+
+
+# License
+
+This project is licensed under  GNU AFFERO GENERAL PUBLIC LICENSE Version 3.
